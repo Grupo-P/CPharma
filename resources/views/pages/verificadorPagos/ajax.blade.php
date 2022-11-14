@@ -54,16 +54,16 @@
         $fecha = date_modify($fecha, '-1day');
         $fecha = date_format($fecha, 'd-M-Y');
 
-        $conn = imap_open($mailbox, $username, $password) or die (imap_last_error());
+        $conn = @imap_open($mailbox, $username, $password) or die (@imap_last_error());
 
-        $search = imap_search($conn, 'SINCE "'.$fecha.'"');
+        $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
 
         $search = is_iterable($search) ? $search : [];
 
         function fix_text_subject($str)
         {
             $asunto = '';
-            $array = imap_mime_header_decode($str);
+            $array = @imap_mime_header_decode($str);
 
             foreach ($array as $object) {
                 $asunto .= utf8_encode(rtrim($object->text, 't'));
@@ -76,9 +76,9 @@
         $i = 0;
 
         foreach ($search as $email) {
-            $overview = imap_fetch_overview($conn, $email);
+            $overview = @imap_fetch_overview($conn, $email);
 
-            $header = imap_header($conn, $email);
+            $header = @imap_header($conn, $email);
 
             $fecha = new DateTime($header->date);
             $fecha->modify('-4hour');
@@ -104,7 +104,7 @@
                 if (strpos($asunto, ' sent you ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
                     $arrayAsunto = explode(' sent you ', $asunto);
 
-                    $body = imap_qprint(imap_body($conn, $email));
+                    $body = @imap_qprint(@imap_body($conn, $email));
 
                     $inicioComentario = strpos($body, '<!-- Zone2 - Begins-->');
                     $finComentario = strpos($body, '<!-- Zone2 - Ends-->');
@@ -129,7 +129,7 @@
                 if (strpos($asunto, ' le ha enviado ') && $header->fromaddress == 'Bank of America <customerservice@ealerts.bankofamerica.com>') {
                     $arrayAsunto = explode(' sent you ', $asunto);
 
-                    $body = imap_qprint(imap_body($conn, $email));
+                    $body = @imap_qprint(@imap_body($conn, $email));
 
                     $inicioComentario = strpos($body, '<!-- Zone2 - Begins-->');
                     $finComentario = strpos($body, '<!-- Zone2 - Ends-->');
@@ -155,7 +155,7 @@
 
                 if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
 
-                    $body = imap_fetchbody($conn, $email, 2);
+                    $body = @imap_fetchbody($conn, $email, 2);
 
                     if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
 
@@ -170,7 +170,7 @@
                         $finMonto = strpos($substr, ' desde ');
                         $monto = substr($substr, 0, $finMonto);
 
-                        $inicioReferencia = (strpos($body, 'referencia:')) + 11;
+                        $inicioReferencia = (strpos($body, 'a:')) + 2;
                         $substr = substr($body, $inicioReferencia);
                         $finReferencia = strpos($substr, ',');
                         $referencia = substr($substr, 0, $finReferencia);
@@ -196,17 +196,17 @@
             }
         }
 
-        $conn = imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die (imap_last_error());
+        $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die (@imap_last_error());
 
         $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-        $search = imap_search($conn, 'SINCE "'.$fecha.'"');
+        $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
         $search = is_iterable($search) ? $search : [];
 
         foreach ($search as $email) {
-            $overview = imap_fetch_overview($conn, $email);
+            $overview = @imap_fetch_overview($conn, $email);
 
-            $header = imap_header($conn, $email);
+            $header = @imap_header($conn, $email);
 
             $fecha = new DateTime($header->date);
             $fecha->modify('-4hour');
@@ -230,7 +230,7 @@
                 }
 
                 if ($asunto == 'Ha recibido un pago' && $item->from == '"service@paypal.com" <service@paypal.com>') {
-                    $body = imap_qprint(imap_body($conn, $email));
+                    $body = @imap_qprint(@imap_body($conn, $email));
 
                     $inicioEnviadoPor = strpos($body, 'Gedaca holding corp:');
                     $finEnviadoPor = strpos($body, ' le ha enviado');
@@ -269,7 +269,7 @@
 
                 if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@ses.binance.com>') {
 
-                    $body = imap_body($conn, $email);
+                    $body = @imap_body($conn, $email);
                     $body = base64_decode($body);
 
                     $inicioEnviadoPor = (strpos($body, 'You have received an incoming Pay transfer from ')) + 48;
@@ -303,7 +303,7 @@
 
                 if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
 
-                    $body = imap_body($conn, $email);
+                    $body = @imap_body($conn, $email);
 
                     $inicioEnviadoPor = (strpos($body, 'incoming Pay transfer from ')) + 27;
                     $substr = substr($body, $inicioEnviadoPor);
@@ -332,7 +332,7 @@
 
                 if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
 
-                    $body = imap_body($conn, $email);
+                    $body = @imap_body($conn, $email);
                     $body = base64_decode($body);
 
                     $inicioEnviadoPor = (strpos($body, 'incoming Pay transfer from ')) + 27;
@@ -349,12 +349,16 @@
 
                     $comentario = '';
 
+                    $decimales = explode('.', (string) $monto);
+                    $decimales = isset($decimales[1]) ? $decimales[1] : '00';
+
                     $pagos[$i]['tipo'] = 'Binance';
                     $pagos[$i]['enviado_por'] = $enviadoPor;
                     $pagos[$i]['monto'] = $monto;
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -364,7 +368,7 @@
 
                 if (strpos($asunto, 'sent you a Zelle® payment.') && $item->from == 'PNC Alerts <pncalerts@pnc.com>') {
 
-                    $body = imap_qprint(imap_body($conn, $email));
+                    $body = @imap_qprint(@imap_body($conn, $email));
 
 
                     $enviadoPor = str_replace('sent you a Zelle® payment.', '', $asunto);
@@ -416,9 +420,12 @@
                 return true;
             }
         });
+
+        $contador = 1;
     }
 
     catch (Exception $excepcion) {
+        dd($excepcion);
         $error = 1;
     }
 
@@ -463,11 +470,11 @@
                 @foreach($pagos as $pago)
                     <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}', '{{ trim($caja) }}', '{{ trim($sede) }}')">
                         <td class="text-center">{{ $contador++ }}</td>
-                        <td class="text-center">{{ $pago['tipo'] }}</td>
-                        <td class="text-center">{{ $pago['enviado_por'] }}</td>
-                        <td class="text-center">{{ $pago['monto'] }}</td>
-                        <td class="text-center">{{ $pago['comentario'] }}</td>
-                        <td class="text-center">{{ $pago['fecha'] }}</td>
+                        <td class="text-center">{{ trim($pago['tipo']) }}</td>
+                        <td class="text-center">{{ trim($pago['enviado_por']) }}</td>
+                        <td class="text-center">{{ trim($pago['monto']) }}</td>
+                        <td class="text-center">{{ trim($pago['comentario']) }}</td>
+                        <td class="text-center">{{ trim($pago['fecha']) }}</td>
                     </tr>
                 @endforeach
 
