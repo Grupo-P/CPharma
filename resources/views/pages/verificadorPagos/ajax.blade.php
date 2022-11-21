@@ -1,4 +1,6 @@
 @php
+    error_reporting(0);
+
     header('Access-Control-Allow-Origin: *');
 
     include(app_path().'\functions\config.php');
@@ -287,7 +289,6 @@
                     $comentario = '';
 
                     $decimales = explode('.', (string) $monto);
-                    $decimales = $decimales[1];
 
                     $pagos[$i]['tipo'] = 'Binance';
                     $pagos[$i]['enviado_por'] = $enviadoPor;
