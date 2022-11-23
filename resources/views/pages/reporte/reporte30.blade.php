@@ -581,7 +581,7 @@
             aria-hidden="true"></i>
         </span>
       </div>
-      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTable()">
+      <input class="form-control my-0 py-1" type="text" placeholder="Buscar..." aria-label="Search" id="myInput" onkeyup="FilterAllTableDoubleHeader()">
       <input type="button" name="imprimir" value="Imprimir" class="btn btn-outline-success btn-sm" onclick="window.print();" style="display: inline; margin-left: 10px;">
     </div>    
     <br/>
@@ -708,7 +708,7 @@
       $CondicionExistencia = 'CON_EXISTENCIA';
       $UltimoLote = $row2["UltimoLote"]; 
       $UltimaVenta = $row2["UltimaVenta"];
-      $Marca = ($row2["Marca"])?$row2["Marca"]:"-";
+      $Marca = ($row2["Marca"])?FG_Limpiar_Texto($row2["Marca"]):"-";
       $FechaCreacion = ($row2["FechaCreacion"])?$row2["FechaCreacion"]:"-";
 
       $nuevo = FG_Rango_Dias($FechaCreacion->format('Y-m-d'),date('Y-m-d'));      
