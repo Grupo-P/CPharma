@@ -187,7 +187,7 @@
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
 
-      @if(auth()->user()->departamento == 'TESORERIA' || auth()->user()->departamento == 'TECNOLOGIA')
+      @if(auth()->user()->departamento == 'TESORERIA' || auth()->user()->departamento == 'TECNOLOGIA' || auth()->user()->departamento == 'ADMINISTRACION')
         <td style="width:15%;" align="center">
           <a href="/bolivaresGP/create?tipo=movimiento" role="button" class="btn btn-outline-info btn-sm"
           style="display: inline; text-align: left;">
