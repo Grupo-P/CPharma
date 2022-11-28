@@ -467,7 +467,7 @@
         echo '<td align="center"><strong>'.intval($contador).'</strong></td>';
         echo '<td align="left">'.FG_Limpiar_Texto($TipoMovimiento).'</td>';
         echo '<td align="left">'.FG_Limpiar_Texto($OrigenMovimiento).'</td>';
-        echo '<td align="left">'.$NumeroMovimiento.'</td>';
+        echo '<td align="left" class="CP-barrido"><a href="reporte42?SEDE='.$_GET['SEDE'].'&numeroAjuste='.$NumeroMovimiento.'" style="text-decoration: none; color: black" target="_blank">'.$NumeroMovimiento.'</a></td>';
         echo '<td align="left" class="CP-barrido">'.$traslado.'</td>';
         echo '<td align="center">'.$FechaMovimiento->format('d-m-Y h:i:s A').'</td>';
         echo '<td align="left">'.$CodigoArticulo.'</td>';
