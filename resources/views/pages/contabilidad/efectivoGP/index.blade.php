@@ -206,7 +206,7 @@
   <table style="width:100%;" class="CP-stickyBar">
     <tr>
 
-      @if(auth()->user()->departamento == 'TESORERIA' || auth()->user()->departamento == 'TECNOLOGIA')
+      @if(auth()->user()->departamento == 'GERENCIA' || auth()->user()->departamento == 'ADMINISTRACION' || auth()->user()->departamento == 'TESORERIA' || auth()->user()->departamento == 'TECNOLOGIA')
         <td style="width:15%;" align="center">
           <a href="/efectivoGP/create?tipo=movimiento" role="button" class="btn btn-outline-info btn-sm"
           style="display: inline; text-align: left;">
