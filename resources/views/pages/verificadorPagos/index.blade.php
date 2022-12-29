@@ -404,6 +404,54 @@
 
                         $i++;
                     }
+
+                    if ($item->subject == 'Money was sent to you with Zelle' && $item->from == 'Truist Alerts <alertnotifications@message.truist.com>') {
+
+                    $body = imap_fetchbody($conn, $email, 1);
+                    $body = imap_base64($body);
+
+                    $inicioEnviadoPor = strpos($body, 'Sent by:');
+                    $finEnviadoPor = strpos($body, 'Amount');
+                    $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
+                    $enviadoPor = strip_tags($enviadoPor);
+                    $enviadoPor = str_replace(['Sent by:', '&nbsp;'], '', $enviadoPor);
+                    $enviadoPor = trim($enviadoPor);
+
+                    $inicioMonto = strpos($body, 'Amount:');
+
+                    $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'This was de') : strpos($body, 'Memo:');
+
+                    $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                    $monto = strip_tags($monto);
+                    $monto = str_replace(['Amount:', '&nbsp;'], '', $monto);
+                    $monto = trim($monto);
+
+                    if (strpos($body, 'Memo:') === false) {
+                        $comentario = '';                   
+                    } else {
+                        $inicioComentario = strpos($body, 'Memo:');
+                        $finComentario = strpos($body, 'This was de');
+                        $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                        $comentario = strip_tags($comentario);
+                        $comentario = str_replace(['Memo:', '&nbsp;'], '', $comentario);
+                        $comentario = trim($comentario);
+                    }
+
+
+                    $decimales = explode('.', (string) $monto);
+                    $decimales = $decimales[1];
+
+                    $pagos[$i]['tipo'] = 'Zelle Truist';
+                    $pagos[$i]['enviado_por'] = $enviadoPor;
+                    $pagos[$i]['monto'] = $monto;
+                    $pagos[$i]['fecha'] = $fecha;
+                    $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                    $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['referencia'] = $i;
+
+                    $i++;
+                }
                 }
             }
 
