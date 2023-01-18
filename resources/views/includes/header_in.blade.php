@@ -398,6 +398,13 @@
           Unidad Minima<span class="sr-only">(current)</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/surtido') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-box"></i>
+          Surtido de gavetas<span class="sr-only">(current)</span>
+        </a>
+      </li>
 
       <?php
         if(Auth::user()->role == 'SUPERVISOR'){

@@ -12,7 +12,7 @@ class Surtido extends Model
      * @var array
      */
     protected $fillable = [
-      'control', 'sku', 'unidades', 'estatus', 'operador_generado', 'operador_procesado', 'fecha_generado', 'fecha_procesado', 'comentario', 'created_at', 'updated_at'
+      'control', 'sku', 'unidades', 'tipo_surtido', 'estatus', 'operador_generado', 'operador_procesado', 'fecha_generado', 'fecha_procesado', 'comentario', 'created_at', 'updated_at'
     ];
 
     public function detalle()

@@ -61,6 +61,34 @@
 
     <form id="form" autocomplete="off" action="" target="_blank">
       <table style="width:100%;">
+
+        <tr>
+          <td>
+            <label>Tipo de surtido *</label>
+          </td>
+
+          <td>
+            
+            <label class="mr-5" for="medicamentos">
+                <input type="radio" name="tipo_surtido" id="medicamentos" value="MEDICAMENTOS"> Medicamentos
+            </label>
+
+            <label class="mr-5" for="otc">
+                <input type="radio" name="tipo_surtido" id="otc" value="OTC - VIT - NAT"> OTC - VIT - NAT
+            </label>
+
+            <label class="mr-5" for="descartables">
+                <input type="radio" name="tipo_surtido" id="descartables" value="DESCARTABLES"> Descartables
+            </label>
+          </td>
+        </tr>
+
+        <tr>
+            <td colspan="4">
+                <hr>
+            </td>
+        </tr>
+
         <tr>
           <td colspan="4">
             <div class="autocomplete" style="width:90%;">
@@ -299,12 +327,19 @@
 
         function procesar() {
             control = $('[name=control]').val();
+            tipo_surtido = $('[name=tipo_surtido]:checked').val();
+
+            if (!$('[name=tipo_surtido]').is(':checked')) {
+                alert('El campo tipo de surtido es obligatorio');
+                return false;
+            }
 
             if (articulos.length > 0) {
                 $.ajax({
                     type: 'POST',
                     data: {
                         articulos: articulos,
+                        tipo_surtido: tipo_surtido,
                         control: control,
                         _token: '{{ csrf_token() }}'
                     },

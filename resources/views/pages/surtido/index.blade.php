@@ -134,6 +134,7 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col" class="CP-sticky">#</th>
+                <th scope="col" class="CP-sticky">Tipo de surtido</th>
                 <th scope="col" class="CP-sticky">Control</th>
                 <th scope="col" class="CP-sticky">Fecha</th>
                 <th scope="col" class="CP-sticky">Estatus</th>
@@ -149,6 +150,7 @@
             @foreach($surtidos as $surtido)
                 <tr>
                     <td class="text-center">{{ $surtido->id }}</td>
+                    <td class="text-center">{{ $surtido->tipo_surtido }}</td>
                     <td class="text-center">{{ $surtido->control }}</td>
                     <td class="text-center">{{ date_create($surtido->fecha_generado)->format('d/m/Y h:i A') }}</td>
                     <td class="text-center">{{ $surtido->estatus }}</td>

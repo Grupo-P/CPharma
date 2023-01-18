@@ -17,7 +17,7 @@ class SurtidoController extends Controller
      */
     public function index()
     {
-        $sql = "SELECT surtidos.id, surtidos.control, surtidos.fecha_generado, surtidos.estatus, surtidos.operador_generado, surtidos.sku, surtidos.unidades, (SELECT surtido_detalles.descripcion FROM surtido_detalles WHERE surtido_detalles.control = surtidos.control ORDER BY descripcion ASC LIMIT 1) AS primero, (SELECT surtido_detalles.descripcion FROM surtido_detalles WHERE surtido_detalles.control = surtidos.control ORDER BY descripcion DESC LIMIT 1) AS ultimo FROM surtidos ";
+        $sql = "SELECT surtidos.id, surtidos.tipo_surtido, surtidos.control, surtidos.fecha_generado, surtidos.estatus, surtidos.operador_generado, surtidos.sku, surtidos.unidades, (SELECT surtido_detalles.descripcion FROM surtido_detalles WHERE surtido_detalles.control = surtidos.control ORDER BY descripcion ASC LIMIT 1) AS primero, (SELECT surtido_detalles.descripcion FROM surtido_detalles WHERE surtido_detalles.control = surtidos.control ORDER BY descripcion DESC LIMIT 1) AS ultimo FROM surtidos ";
 
         if (!isset($_GET['estatus']) || $_GET['estatus'] == 'TODO') {
             $sql = $sql . "ORDER BY id DESC";
@@ -95,6 +95,7 @@ class SurtidoController extends Controller
         $surtido->operador_procesado = auth()->user()->name;
         $surtido->fecha_procesado = date('Y-m-d H:i:s');
         $surtido->estatus = 'GENERADO';
+        $surtido->tipo_surtido = $request->tipo_surtido;
         $surtido->save();
 
         $auditoria = new Auditoria();

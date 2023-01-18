@@ -314,18 +314,17 @@
                     if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
 
                         $body = @imap_body($conn, $email);
+                        $body = imap_qprint($body);
 
-                        $inicioEnviadoPor = (strpos($body, 'incoming Pay transfer from ')) + 27;
+                        $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
                         $substr = substr($body, $inicioEnviadoPor);
-                        $finEnviadoPor = strpos($substr, ', amount of');
+                        $finEnviadoPor = strpos($substr, ' por ');
                         $enviadoPor = substr($substr, 0, $finEnviadoPor);
 
-                        $inicioMonto = (strpos($body, 'amount of ')) + 10;
+                        $inicioMonto = (strpos($body, ' por ')) + 5;
                         $substr = substr($body, $inicioMonto);
-                        $finMonto = strpos($substr, 'USDT');
+                        $finMonto = strpos($substr, '. Ve a la [Aplicación d');
                         $monto = substr($substr, 0, $finMonto);
-                        $monto = str_replace('USDT', '', $monto);
-                        $monto = '$'.$monto;
 
                         $comentario = '';
 

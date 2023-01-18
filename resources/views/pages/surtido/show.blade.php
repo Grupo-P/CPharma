@@ -74,6 +74,7 @@
                 <th scope="row" colspan="3">Código del conteo</th>
                 <th scope="row">SEDE</th>
                 <th scope="row">Operador</th>
+                <th scope="row">Tipo surtido</th>
                 <th scope="row">Estatus</th>
                 <th scope="row">Fecha de generación</th>
                 <th scope="row">SKU</th>
@@ -86,6 +87,7 @@
                 <td colspan="3">{{ $surtido->control }}</td>
                 <td>{{ $sede }}</td>
                 <td>{{ $surtido->operador_generado }}</td>
+                <td>{{ $surtido->tipo_surtido }}</td>
                 <td>{{ $surtido->estatus }}</td>
                 <td>{{ date_create($surtido->fecha_generado)->format('d/m/Y H:i A') }}</td>
                 <td>{{ $surtido->sku }}</td>
