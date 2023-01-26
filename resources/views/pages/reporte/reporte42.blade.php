@@ -214,7 +214,7 @@
       echo '<td align="center">'.$row['fecha']->format('h:i A').'</td>';
       echo '<td align="center">'.$row['numero_ajuste'].'</td>';
       echo '<td align="center">'.$row["estado"].'</td>';
-      echo '<td align="center">'.$row["comentario"].'</td>';
+      echo '<td align="center">'.FG_Limpiar_Texto($row["comentario"]).'</td>';
       echo '<td align="center">'.$row["skup"].'</td>';
       echo '<td align="center">'.intval($row["unidadesp"]).'</td>';
       echo '<td align="center">'.$row["skun"].'</td>';

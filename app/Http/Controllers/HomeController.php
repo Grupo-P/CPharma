@@ -194,31 +194,10 @@ class HomeController extends Controller
                 $fllBs = ContPagoBolivaresFLL::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
                 $fmBs = ContPagoBolivaresFM::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
 
-                $conciliacion = $ftnDs;
+                $conciliacion = collect([$ftnDs, $fauDs, $fllDs, $fmDs, $ftnBs, $fauBs, $fllBs, $fmBs])
+                    ->sortByDesc('fecha_conciliado');
 
-                if (isset($fauDs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fauDs->fecha_conciliado) {
-                    $conciliacion = $fauDs;
-                }
-
-                if (isset($fllDs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fllDs->fecha_conciliado) {
-                    $conciliacion = $fllDs;
-                }
-
-                if (isset($ftnBs->fecha_conciliado) && $conciliacion->fecha_conciliado > $ftnBs->fecha_conciliado) {
-                    $conciliacion = $ftnBs;
-                }
-
-                if (isset($fauBs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fauBs->fecha_conciliado) {
-                    $conciliacion = $fauBs;
-                }
-
-                if (isset($fllBs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fllBs->fecha_conciliado) {
-                    $conciliacion = $fllBs;
-                }
-
-                if (isset($fmBs->fecha_conciliado) && $conciliacion->fecha_conciliado > $fmBs->fecha_conciliado) {
-                    $conciliacion = $fmBs;
-                }
+                $conciliacion = $conciliacion[0];
 
                 return view('home-contabilidad', compact(
                     'pago',
