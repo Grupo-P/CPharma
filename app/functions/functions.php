@@ -1100,6 +1100,20 @@
     }
     /**********************************************************************************/
     /*
+        TITULO: FG_Rango_Dias_Negativo
+        FUNCION: Calcular el rango de diferencia de dias entre el las fechas
+        RETORNO: rango de dias
+        DESARROLLADO POR: NISAUL DELGADO
+     */
+    function FG_Rango_Dias_Negativo($FInicial,$FFinal) {
+        $FechaI = new DateTime($FInicial);
+    $FechaF = new DateTime($FFinal);
+    $Rango = $FechaI->diff($FechaF);
+    $Rango = $Rango->format('%r%a');
+    return $Rango;
+    }
+    /**********************************************************************************/
+    /*
         TITULO: FG_Venta_Diaria
         FUNCION: Calcular la venta al diaria promedio en base al rango de dias
         RETORNO: Venta diaria promedio

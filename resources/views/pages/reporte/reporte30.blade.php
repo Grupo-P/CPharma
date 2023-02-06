@@ -764,7 +764,7 @@
       }
 
       if($row["FechaVencimiento"]!=NULL && $FechaRegistro!=NULL){
-        $VidaUtil = FG_Rango_Dias($row["FechaVencimiento"]->format('Y-m-d'),$FechaRegistro->format('Y-m-d'));  
+        $VidaUtil = FG_Rango_Dias_Negativo($FechaRegistro->format('Y-m-d'), $row["FechaVencimiento"]->format('Y-m-d'));  
         echo '<td align="center">'.$VidaUtil.'</td>';
       }
       else{
