@@ -11,11 +11,18 @@
 |
 */
 
+Route::view('stellar/productos', 'stellar.productos');
+Route::view('stellar/departamentos', 'stellar.departamentos');
+Route::view('stellar/grupos', 'stellar.grupos');
+Route::view('stellar/codigos', 'stellar.codigos');
+
 
 Route::get('/', function() {
     return view('welcome');
 });
 
+
+Route::get('/vuelto/test', 'VueltoController@test');
 Route::get('/vuelto/validar', 'VueltoController@validar');
 Route::get('/vuelto/info', 'VueltoController@info');
 Route::post('/vuelto', 'VueltoController@procesar');
@@ -306,6 +313,8 @@ Route::get('/Generar_Etiqueta_Unica', function() {
 Route::get('/Generar_Etiqueta_Promocion', function() {
     return view('pages.etiqueta.Generar_Etiqueta_Promocion');
 });
+
+Route::get('/etiquetaMovil', 'EtiquetaMovilController@index');
 
 Route::get('/Generar_Etiqueta_Promocion_G', function() {
     return view('pages.etiqueta.Generar_Etiqueta_Promocion_G');
