@@ -28,7 +28,8 @@ define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
 define ("SedeFLL","FARMACIA LA LAGO,C.A.");
 define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
 define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
-define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A");
+define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A.");
+define ("SedeFEC","FARMACIA EL CALLEJON, C.A.");
 define ("SedeGP","Servidor de Testing");
 define ("SedeDBs","Servidor de Desarrollo Nisaul");
 define ("SedeDBsa","Servidor de Desarrollo Sergio");
@@ -39,6 +40,7 @@ define ("SedeFLLOFF","FARMACIA LA LAGO,C.A.<br>OFF-LINE");
 define ("SedeFAUOFF","FARMACIA AVENIDA UNIVERSIDAD, C.A.<br>OFF-LINE");
 define ("SedeKDIOFF","FARMACIA KD EXPRESS, C.A.<br>OFF-LINE");
 define ("SedeFSMOFF","FARMACIA MILLENNIUM 2000, C.A.<br>OFF-LINE");
+define ("SedeFECOFF","FARMACIA EL CALLEJON, C.A.<br>OFF-LINE");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FTN **********************************/
 define ("serverFTN" , "10.100.0.2\SMARTPHARMA,1450");
@@ -74,6 +76,13 @@ define ("userFSM" , "admin");
 define ("passFSM" , "soporte123");
 define ("nameFSM" , "SMARTPHARMA");
 define ("nameFSMOFF" , "cpharmafsm");
+/**********************************************************************************/
+/************************* CONEXION ON LINE FEC **********************************/
+define ("serverFEC" , "192.168.20.0\SMARTPHARMA");
+define ("userFEC" , "admin");
+define ("passFEC" , "soporte123");
+define ("nameFEC" , "smartfec");
+define ("nameFECOFF" , "cpharmafec");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
 define ("serverGP" , "TESTSERVER\TESTINGSERVER");
