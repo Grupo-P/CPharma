@@ -282,8 +282,12 @@
                 return dominio;
             break;
             case 'FSM':
-                $dominio = 'http://cpharmafsm.com/';
-                return $dominio;
+                dominio = 'http://cpharmafsm.com/';
+                return dominio;
+            break;
+            case 'FEC':
+                dominio = 'http://cpharmafec.com/';
+                return dominio;
             break;
         }
     }

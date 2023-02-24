@@ -146,6 +146,10 @@
             case '18':
                 return 'FSM';
         //FIN BLOQUE DE FSM
+        //INICIO BLOQUE DE FEC
+            case '20':
+                return 'FEC';
+        //FIN BLOQUE DE FEC
             default:
                 return 'ARG';
                 //return ''.$Octeto[2];
@@ -3454,6 +3458,10 @@
             break;
             case 'FSM':
                 $dominio = 'http://cpharmafsm.com/';
+                return $dominio;
+            break;
+            case 'FEC':
+                $dominio = 'http://cpharmafec.com/';
                 return $dominio;
             break;
         }
