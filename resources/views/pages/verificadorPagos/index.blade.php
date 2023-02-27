@@ -399,6 +399,39 @@
                         $i++;
                     }
 
+                    if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
+
+                        $body = @imap_body($conn, $email);                    
+
+                        $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pa')) + 41;
+                        $substr = substr($body, $inicioEnviadoPor);
+                        $finEnviadoPor = strpos($substr, ' por ');
+                        $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                        $inicioMonto = (strpos($body, ' por ')) + 5;
+                        $substr = substr($body, $inicioMonto);
+                        $finMonto = strpos($substr, '. Ve a la [Aplicaci');
+                        $monto = substr($substr, 0, $finMonto);/*
+
+                        dd($body);
+
+                        dd($inicioMonto, $finMonto);*/
+
+                        $comentario = '';
+
+                        $decimales = explode('.', (string) $monto);
+
+                        $pagos[$i]['tipo'] = 'Binance';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['referencia'] = $i;
+
+                        $i++;
+                    }
+
 
                     // PNC
 
