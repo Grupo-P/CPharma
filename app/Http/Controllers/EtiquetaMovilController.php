@@ -278,7 +278,14 @@ class EtiquetaMovilController extends Controller
         }
 
         $response['divisor'] = $RowCPharma['divisor'];
-        $response['unidad'] = $RowCPharma['unidad_minima'];        
+        $response['unidad'] = $RowCPharma['unidad_minima'];
+
+        $sqlCPharma = SQL_Etiqueta_Articulo($IdArticulo);
+        $ResultCPharma = mysqli_query($connCPharma,$sqlCPharma);
+        $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
+        $clasificacion = $RowCPharma['clasificacion'];
+
+        $response['clasificacion'] = $clasificacion;
 
         return response()->json($response, 200);
     }
