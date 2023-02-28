@@ -205,6 +205,11 @@
                                 @php $sede = 'FM'; @endphp
                             @endif
 
+                            @if(get_class($pago) == 'compras\ContPagoEfectivoFEC')
+                                Pago dólares efectivo FM
+                                @php $sede = 'FEC'; @endphp
+                            @endif
+
                             @if(get_class($pago) == 'compras\ContPagoBolivaresGP')
                                 Pago bolívares efectivo GP
                                 @php $sede = 'GP'; @endphp

@@ -21,11 +21,19 @@ Route::get('/', function() {
     return view('welcome');
 });
 
+Route::get('/token', function () {
+    echo csrf_token();
+});
 
-Route::get('/vuelto/test', 'VueltoController@test');
-Route::get('/vuelto/validar', 'VueltoController@validar');
-Route::get('/vuelto/info', 'VueltoController@info');
-Route::post('/vuelto', 'VueltoController@procesar');
+Route::get('/vuelto/vdc/test', 'VueltoVDCController@test');
+
+Route::get('/vuelto/vdc/validar', 'VueltoVDCController@validar');
+Route::get('/vuelto/vdc/info', 'VueltoVDCController@info');
+Route::post('/vuelto/vdc', 'VueltoVDCController@procesar');
+
+Route::get('/vuelto/mercantil/validar', 'VueltoMercantilController@validar');
+Route::get('/vuelto/mercantil/info', 'VueltoMercantilController@info');
+Route::post('/vuelto/mercantil', 'VueltoMercantilController@procesar');
 
 Route::resource('falla', 'FallaController');
 
@@ -538,6 +546,11 @@ Route::resource('efectivoGP', 'ContPagoEfectivoGPController');
 Route::get('/efectivoGP/soporte/{id}', 'ContPagoEfectivoGPController@soporte');
 Route::get('/contabilidad/diferidosGP', 'ContPagoEfectivoGPController@diferidos')->name('contabilidad.diferidosGP');
 
+Route::post('/efectivoFEC/validar', 'ContPagoEfectivoFECController@validar');
+Route::resource('efectivoFEC', 'ContPagoEfectivoFECController');
+Route::get('/efectivoFEC/soporte/{id}', 'ContPagoEfectivoFECController@soporte');
+Route::get('/contabilidad/diferidosFEC', 'ContPagoEfectivoFECController@diferidos')->name('contabilidad.diferidosFEC');
+
 Route::post('/efectivoFTN/validar', 'ContPagoEfectivoFTNController@validar');
 Route::resource('efectivoFTN', 'ContPagoEfectivoFTNController');
 Route::get('/efectivoFTN/soporte/{id}', 'ContPagoEfectivoFTNController@soporte');
@@ -562,6 +575,11 @@ Route::post('/bolivaresGP/validar', 'ContPagoBolivaresGPController@validar');
 Route::resource('bolivaresGP', 'ContPagoBolivaresGPController');
 Route::get('/bolivaresGP/soporte/{id}', 'ContPagoBolivaresGPController@soporte');
 Route::get('/contabilidad/diferidosBolivaresGP', 'ContPagoBolivaresGPController@diferidos')->name('contabilidad.diferidosBolivaresGP');
+
+Route::post('/bolivaresFEC/validar', 'ContPagoBolivaresFECController@validar');
+Route::resource('bolivaresFEC', 'ContPagoBolivaresFECController');
+Route::get('/bolivaresFEC/soporte/{id}', 'ContPagoBolivaresFECController@soporte');
+Route::get('/contabilidad/diferidosBolivaresFEC', 'ContPagoBolivaresFECController@diferidos')->name('contabilidad.diferidosBolivaresFEC');
 
 Route::post('/bolivaresFTN/validar', 'ContPagoBolivaresFTNController@validar');
 Route::resource('bolivaresFTN', 'ContPagoBolivaresFTNController');

@@ -68,6 +68,42 @@
                 $pago = $fll;
             }
 
+            $fsm = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FSM
+                WHERE
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fsm = isset($fsm[0]->created_at) ? $fsm[0]->created_at : null;
+
+            if ($pago <= $fsm) {
+                $pago = $fsm;
+            }
+
+            $fec = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FEC
+                WHERE
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fec = isset($fec[0]->created_at) ? $fec[0]->created_at : null;
+
+            if ($pago <= $fec) {
+                $pago = $fsm;
+            }
+
             $bancario = DB::select("
                 SELECT
                     DATE(created_at) AS created_at
@@ -151,7 +187,7 @@
                 SELECT
                     DATE(created_at) AS created_at
                 FROM
-                    {$tabla}_fll
+                    {$tabla}_FLL
                 WHERE
                     id_proveedor = '{$id_proveedor}'
                 ORDER BY
@@ -163,6 +199,42 @@
 
             if ($pago <= $fll) {
                 $pago = $fll;
+            }
+
+            $fsm = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FSM
+                WHERE
+                    id_proveedor = '{$id_proveedor}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fsm = isset($fsm[0]->created_at) ? $fsm[0]->created_at : null;
+
+            if ($pago <= $fsm) {
+                $pago = $fsm;
+            }
+
+            $fec = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FEC
+                WHERE
+                    id_proveedor = '{$id_proveedor}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $fec = isset($fec[0]->created_at) ? $fec[0]->created_at : null;
+
+            if ($pago <= $fec) {
+                $pago = $fec;
             }
 
             $bancario = DB::select("

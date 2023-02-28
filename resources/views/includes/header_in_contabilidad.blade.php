@@ -172,6 +172,16 @@
           </li>
         @endif
 
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFEC') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo dólares FEC<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
         @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'ADMINISTRACION')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('bolivaresGP') }}">
@@ -218,6 +228,16 @@
               <span data-feather="home"></span>
               <i class="fas fa-money-bill-alt"></i>
               Pagos en efectivo bolívares FM<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/bolivaresFEC') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Pagos en efectivo bolívares FEC<span class="sr-only">(current)</span>
             </a>
           </li>
         @endif

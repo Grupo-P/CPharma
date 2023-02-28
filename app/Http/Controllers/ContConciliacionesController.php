@@ -8,11 +8,13 @@ use compras\ContPagoBolivaresFAU;
 use compras\ContPagoBolivaresFLL;
 use compras\ContPagoBolivaresFTN;
 use compras\ContPagoBolivaresGP;
+use compras\ContPagoBolivaresFEC;
 use compras\ContPagoEfectivoFAU;
 use compras\ContPagoEfectivoFLL;
 use compras\ContPagoEfectivoFTN;
 use compras\ContPagoEfectivoFM;
 use compras\ContPagoEfectivoGP;
+use compras\ContPagoEfectivoFEC;
 use Illuminate\Http\Request;
 
 class ContConciliacionesController extends Controller
@@ -219,6 +221,32 @@ class ContConciliacionesController extends Controller
             }
         }
 
+        if (!$request->tipo || $request->tipo == '' || $request->tipo == 'Efectivo dolares FEC') {
+            $dolaresFEC = ContPagoEfectivoFEC::where('fecha_conciliado', '')
+                ->orWhereNull('fecha_conciliado')
+                ->get();
+
+            foreach ($dolaresFEC as $efectivo) {
+                $pagos[$i]['id']                = $efectivo->id;
+                $pagos[$i]['tipo']              = 'Efectivo dolares FEC';
+                $pagos[$i]['emisor']            = $efectivo->sede;
+                $pagos[$i]['nombre_proveedor']  = ($efectivo->proveedor) ? $efectivo->proveedor->nombre_proveedor : '';
+                $pagos[$i]['ci_proveedor']      = ($efectivo->proveedor) ? $efectivo->proveedor->rif_ci : '';
+                $pagos[$i]['monto']             = ($efectivo->egresos) ? $efectivo->egresos : $efectivo->diferido;
+                $pagos[$i]['operador']          = $efectivo->user;
+                $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
+                $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
+                $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
+                $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
+                $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
+                $pagos[$i]['iva']               = $efectivo->iva;
+                $pagos[$i]['monto_banco']       = $efectivo->monto_banco;
+                $pagos[$i]['clase']             = get_class($efectivo);
+                $i                              = $i + 1;
+            }
+        }
+
         if (!$request->tipo || $request->tipo == '' || $request->tipo == 'Efectivo bolivares GP') {
             $bolivaresGP = ContPagoBolivaresGP::where('fecha_conciliado', '')
                 ->orWhereNull('fecha_conciliado')
@@ -305,6 +333,32 @@ class ContConciliacionesController extends Controller
             foreach ($bolivaresFLL as $efectivo) {
                 $pagos[$i]['id']                = $efectivo->id;
                 $pagos[$i]['tipo']              = 'Efectivo bolivares FLL';
+                $pagos[$i]['emisor']            = $efectivo->sede;
+                $pagos[$i]['nombre_proveedor']  = ($efectivo->proveedor) ? $efectivo->proveedor->nombre_proveedor : '';
+                $pagos[$i]['ci_proveedor']      = ($efectivo->proveedor) ? $efectivo->proveedor->rif_ci : '';
+                $pagos[$i]['monto']             = ($efectivo->egresos) ? number_format($efectivo->egresos, 2, ',', '.') : number_format($efectivo->diferido, 2, ',', '.');
+                $pagos[$i]['operador']          = $efectivo->user;
+                $pagos[$i]['fecha']             = date_format(date_create($efectivo->created_at), 'd/m/Y h:ia');
+                $pagos[$i]['estado']            = ($efectivo->deleted_at) ? 'Reversado' : 'Pagado';
+                $pagos[$i]['concepto']          = $efectivo->titular_pago . ' / ' . $efectivo->concepto;
+                $pagos[$i]['retencion_deuda_1'] = $efectivo->retencion_deuda_1;
+                $pagos[$i]['retencion_deuda_2'] = $efectivo->retencion_deuda_2;
+                $pagos[$i]['retencion_iva']     = $efectivo->retencion_iva;
+                $pagos[$i]['iva']               = $efectivo->iva;
+                $pagos[$i]['monto_banco']       = $efectivo->monto_banco;
+                $pagos[$i]['clase']             = get_class($efectivo);
+                $i                              = $i + 1;
+            }
+        }
+
+        if (!$request->tipo || $request->tipo == '' || $request->tipo == 'Efectivo bolivares FEC') {
+            $bolivaresFLL = ContPagoBolivaresFEC::where('fecha_conciliado', '')
+                ->orWhereNull('fecha_conciliado')
+                ->get();
+
+            foreach ($bolivaresFLL as $efectivo) {
+                $pagos[$i]['id']                = $efectivo->id;
+                $pagos[$i]['tipo']              = 'Efectivo bolivares FEC';
                 $pagos[$i]['emisor']            = $efectivo->sede;
                 $pagos[$i]['nombre_proveedor']  = ($efectivo->proveedor) ? $efectivo->proveedor->nombre_proveedor : '';
                 $pagos[$i]['ci_proveedor']      = ($efectivo->proveedor) ? $efectivo->proveedor->rif_ci : '';
