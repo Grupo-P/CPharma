@@ -2,12 +2,16 @@
 
 namespace compras\Http\Controllers;
 
+use DateTime;
 use DB;
 
 class EtiquetaMovilController extends Controller
 {
     public function index()
     {
+
+        $InicioCarga = new DateTime("now");
+
         include(app_path().'\functions\config.php');
         include(app_path().'\functions\functions.php');
         include(app_path().'\functions\querys_mysql.php');
@@ -126,81 +130,7 @@ class EtiquetaMovilController extends Controller
                 InvAtributo.Descripcion = 'Dolarizados'
                 OR  InvAtributo.Descripcion = 'Giordany'
                 OR  InvAtributo.Descripcion = 'giordany')
-                AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado,
-            --Tipo Producto (0 Miscelaneos, Id Articulo Medicinas)
-                (ISNULL((SELECT
-                InvArticuloAtributo.InvArticuloId
-                FROM InvArticuloAtributo
-                WHERE InvArticuloAtributo.InvAtributoId =
-                (SELECT InvAtributo.Id
-                FROM InvAtributo
-                WHERE
-                InvAtributo.Descripcion = 'Medicina')
-                AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Tipo,
-            --Articulo Estrella (0 NO es Articulo Estrella , Id SI es Articulo Estrella)
-                (ISNULL((SELECT
-                InvArticuloAtributo.InvArticuloId
-                FROM InvArticuloAtributo
-                WHERE InvArticuloAtributo.InvAtributoId =
-                (SELECT InvAtributo.Id
-                FROM InvAtributo
-                WHERE
-                InvAtributo.Descripcion = 'Articulo Estrella')
-                AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS ArticuloEstrella,
-            --Marca
-                InvMarca.Nombre as Marca,
-            -- Ultima Venta (Fecha)
-                (SELECT TOP 1
-                CONVERT(DATE,VenFactura.FechaDocumento)
-                FROM VenFactura
-                INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-                WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-                ORDER BY FechaDocumento DESC) AS UltimaVenta,
-            --Tiempo sin Venta (En dias)
-                (SELECT TOP 1
-                DATEDIFF(DAY,CONVERT(DATE,VenFactura.FechaDocumento),GETDATE())
-                FROM VenFactura
-                INNER JOIN VenFacturaDetalle ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
-                WHERE VenFacturaDetalle.InvArticuloId = InvArticulo.Id
-                ORDER BY FechaDocumento DESC) AS TiempoSinVenta,
-            --Ultimo Lote (Fecha)
-                (SELECT TOP 1
-                CONVERT(DATE,InvLote.FechaEntrada) AS UltimoLote
-                FROM InvLote
-                WHERE InvLote.InvArticuloId  = InvArticulo.Id
-                ORDER BY UltimoLote DESC) AS UltimoLote,
-            --Tiempo Tienda (En dias)
-                (SELECT TOP 1
-                DATEDIFF(DAY,CONVERT(DATE,InvLote.FechaEntrada),GETDATE())
-                FROM InvLoteAlmacen
-                INNER JOIN invlote on invlote.id = InvLoteAlmacen.InvLoteId
-                WHERE InvLotealmacen.InvArticuloId = InvArticulo.Id
-                ORDER BY InvLote.Auditoria_FechaCreacion DESC) AS TiempoTienda,
-            --Ultimo Precio Sin Iva
-                (SELECT TOP 1
-                (ROUND(CAST((VenVentaDetalle.M_PrecioNeto) AS DECIMAL(38,2)),2,0))
-                FROM VenVenta
-                INNER JOIN VenVentaDetalle ON VenVentaDetalle.VenVentaId = VenVenta.Id
-                WHERE VenVentaDetalle.InvArticuloId = InvArticulo.Id
-                ORDER BY VenVenta.FechaDocumentoVenta DESC) AS UltimoPrecio,
-            -- Ultimo Proveedor (Id Proveedor)
-                (SELECT TOP 1
-                ComProveedor.Id
-                FROM ComFacturaDetalle
-                INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-                INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-                INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-                WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-                ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorID,
-            -- Ultimo Proveedor (Nombre Proveedor)
-                (SELECT TOP 1
-                GenPersona.Nombre
-                FROM ComFacturaDetalle
-                INNER JOIN ComFactura ON ComFactura.Id = ComFacturaDetalle.ComFacturaId
-                INNER JOIN ComProveedor ON ComProveedor.Id = ComFactura.ComProveedorId
-                INNER JOIN GenPersona ON GenPersona.Id = ComProveedor.GenPersonaId
-                WHERE ComFacturaDetalle.InvArticuloId = InvArticulo.Id
-                ORDER BY ComFactura.FechaDocumento DESC) AS  UltimoProveedorNombre
+                AND InvArticuloAtributo.InvArticuloId = InvArticulo.Id),CAST(0 AS INT))) AS Dolarizado
             --Tabla principal
                 FROM InvArticulo
             --Joins
@@ -286,6 +216,11 @@ class EtiquetaMovilController extends Controller
         $clasificacion = $RowCPharma['clasificacion'];
 
         $response['clasificacion'] = $clasificacion;
+
+        $FinCarga = new DateTime("now");
+        $IntervalCarga = $InicioCarga->diff($FinCarga);
+
+        $response['tiempo'] = $IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 
         return response()->json($response, 200);
     }
