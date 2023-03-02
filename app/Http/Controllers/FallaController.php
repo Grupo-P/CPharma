@@ -51,7 +51,11 @@ class FallaController extends Controller
      */
     public function store(Request $request)
     {
-       try{
+       if (filter_var($request->input('estacion'), FILTER_VALIDATE_IP)) {
+            return back()->with('Error', 'No puede registrar fallas en una sede distinta a la que está');
+       }
+
+       try{ 
             $falla = new Falla();
             $falla->falla = $request->input('falla');
             $falla->usuario = $request->input('usuario');
