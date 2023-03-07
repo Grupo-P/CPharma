@@ -189,11 +189,12 @@ class EtiquetaMovilController extends Controller
         $query1 = mysqli_query($connCPharma, "SELECT * FROM dias_ceros WHERE id_articulo = '$IdArticulo' AND fecha_captura = '$fecha_ayer'");
         $row1 = mysqli_fetch_assoc($query1);
 
-        $response['codigo_barra'] = $row['CodigoBarra'];
-        $response['descripcion'] = $row['Descripcion'];
+        $response['codigo_barra'] = FG_Limpiar_Texto($row['CodigoBarra']);
+        $response['descripcion'] = FG_Limpiar_Texto($row['Descripcion']);
         $response['dolarizado'] = $dolarizado;
         $response['precio'] = number_format($precio, 2);
         $response['precio_ayer'] = null;
+        $response['existencia'] = $row['Existencia'];
 
         if ($row1['precio']) {
             $response['precio_ayer'] = number_format($row1['precio'], 2);
