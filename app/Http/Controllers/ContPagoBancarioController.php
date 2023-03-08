@@ -35,13 +35,16 @@ class ContPagoBancarioController extends Controller
         $selected1000 = ($cantidad == '1000') ? 'selected' : '';
         $selectedTodos = ($cantidad == 'Todos') ? 'selected' : '';
 
+        $numeroRegistro = isset($_GET['numeroRegistro']) ? $_GET['numeroRegistro'] : '';
+
         $pagos = ContPagoBancario::fechaInicio($fechaInicioUrl)
             ->fechaFin($fechaFinUrl)
+            ->numeroRegistro($numeroRegistro)
             ->orderByDesc('id')
             ->cantidad($cantidad);
 
         return view('pages.contabilidad.bancarios.index', compact(
-            'cantidad', 'fechaInicioUrl', 'fechaFinUrl', 'selected50', 'selected100', 'selected200', 'selected500', 'selected1000', 'selectedTodos', 'pagos'
+            'cantidad', 'fechaInicioUrl', 'fechaFinUrl', 'selected50', 'selected100', 'selected200', 'selected500', 'selected1000', 'selectedTodos', 'pagos', 'numeroRegistro'
         ));
     }
 
