@@ -133,7 +133,8 @@
 		      	<th scope="col" class="CP-sticky">Cantidad FTN</th>	
 		      	<th scope="col" class="CP-sticky">Cantidad FLL</th>	
 		      	<th scope="col" class="CP-sticky">Cantidad FAU</th>		
-		      	<th scope="col" class="CP-sticky">Cantidad MC</th>	
+		      	<th scope="col" class="CP-sticky">Cantidad FM</th>	
+		      	<th scope="col" class="CP-sticky">Cantidad FEC</th>	
 		      	<th scope="col" class="CP-sticky">Total Unidades</th>
 		      	<th scope="col" class="CP-sticky">Costo Unitario</th>	
 		      	<th scope="col" class="CP-sticky">Costo Total</th>
@@ -157,6 +158,7 @@
 		      <td>{{$ordenCompraDetalle->sede2}}</td>
 		      <td>{{$ordenCompraDetalle->sede3}}</td>
 		      <td>{{$ordenCompraDetalle->sede4}}</td>
+		      <td>{{$ordenCompraDetalle->sede5}}</td>
 		      <td>{{$ordenCompraDetalle->total_unidades}}</td>		      
 		      <td>{{number_format($ordenCompraDetalle->costo_unitario,2,"," ,"." )}}</td>
 		      <td>{{number_format($ordenCompraDetalle->costo_total,2,"," ,"." )}}</td>
