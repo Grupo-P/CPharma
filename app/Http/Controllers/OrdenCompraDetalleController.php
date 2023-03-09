@@ -83,6 +83,7 @@ class OrdenCompraDetalleController extends Controller
         $ordenCompraDetalles->sede2 = $request->input('sede2');
         $ordenCompraDetalles->sede3 = $request->input('sede3');
         $ordenCompraDetalles->sede4 = $request->input('sede4');
+        $ordenCompraDetalles->sede5 = $request->input('sede5');
         $ordenCompraDetalles->total_unidades = $request->input('totalUnidades');
         $ordenCompraDetalles->costo_unitario = $request->input('costo_unitario');
         $ordenCompraDetalles->costo_total = ( 
