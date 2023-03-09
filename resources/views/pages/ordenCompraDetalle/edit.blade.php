@@ -177,8 +177,12 @@
                 <td>{!! Form::number('sede3', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede3']) !!}</td>
               </tr>
               <tr>
-                <th scope="row">{!! Form::label('sede4', 'Cantidad para MC') !!}</th>
+                <th scope="row">{!! Form::label('sede4', 'Cantidad para FM') !!}</th>
                 <td>{!! Form::number('sede4', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede4']) !!}</td>
+              </tr>
+              <tr>
+                <th scope="row">{!! Form::label('sede5', 'Cantidad para FEC') !!}</th>
+                <td>{!! Form::number('sede5', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede5']) !!}</td>
               </tr>
         <!-- FIN DE CASO FORMULARIO PARA CENTRO DE DISTRIBUCION -->
 
@@ -191,6 +195,7 @@
               {!! Form::hidden('sede2',NULL) !!}
               {!! Form::hidden('sede3',NULL) !!}
               {!! Form::hidden('sede4',NULL) !!}
+              {!! Form::hidden('sede5',NULL) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
                 <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades']) !!}</td>
@@ -253,6 +258,7 @@
             document.getElementById('sede2').value = 0;
             document.getElementById('sede3').value = 0;
             document.getElementById('sede4').value = 0;
+            document.getElementById('sede5').value = 0;
 
             isCDD = document.getElementById('isCDD').value;
 
@@ -267,6 +273,7 @@
             sede2 = parseInt(document.getElementById('sede2').value);
             sede3 = parseInt(document.getElementById('sede3').value);
             sede4 = parseInt(document.getElementById('sede4').value);
+            sede5 = parseInt(document.getElementById('sede5').value);
 
             totalUnidades = document.getElementById('totalUnidades').value;
 
@@ -274,8 +281,9 @@
             var sub2 = isNaN(sede2) ? 0 : sede2;
             var sub3 = isNaN(sede3) ? 0 : sede3;
             var sub4 = isNaN(sede4) ? 0 : sede4;
+            var sub5 = isNaN(sede5) ? 0 : sede5;
 
-            total = sub1+sub2+sub3+sub4;
+            total = sub1+sub2+sub3+sub4+sub5;
 
             totalUnidades = totalUnidades-total;
             document.getElementById('unidadesDisponibles').value = totalUnidades;

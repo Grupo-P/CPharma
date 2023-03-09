@@ -4,6 +4,40 @@
   Reporte
 @endsection
 
+@section('scriptsFoot')
+  <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('.agregarOrdenCompra').on('click', function (event) {
+          event.preventDefault();
+
+          data = $(this).serialize();
+          url = $(this).attr('action');
+
+          $.ajax({
+            url: url,
+            data: data,
+            success: function (response) {
+              if (response == 'ordenNoActiva') {
+                alert('Usted NO posee una orden de compra activa');
+                window.open('/ordenCompra/create', '_blank');
+                return false;
+              }
+              
+              $('#myModal').find('.modal-body').html(response);
+              $('#myModal').modal('show');
+            },
+            error: function (error) {
+              $('body').html(error.responseText);
+            }
+          });
+        });
+    });
+  </script>
+@endsection
+
+
 @section('scriptsHead')
   <style>
   * {
@@ -167,6 +201,27 @@
     </div>
     <br/>
     ';
+
+    echo '
+      <div class="modal" tabindex="-1" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Agregar a orden</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+    ';
+
     echo'<h6 align="center">Periodo desde el '.$FInicialImp.' al '.$FFinalImp.' </h6>';
     echo'<h6 align="center">La data recolectada para el calculo <span style="color:red;">(Real)</span> va desde el <span style="color:red;">'.$DC_FInicialImp.'</span> al <span style="color:red;">'.$DC_FFinalImp.'</span> </h6>';
     echo'
@@ -308,7 +363,7 @@
 
       echo'
       <td style="width:140px;">
-        <form action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
+        <form class="agregarOrdenCompra" action="/ordenCompraDetalle/create" method="PRE" style="display: block; width:100%;" target="_blank">
       ';
       echo'<input type="hidden" name="id_articulo" value="'.$IdArticulo.'">';
       echo'<input type="hidden" name="codigo_articulo" value="'.$CodigoArticulo.'">';
@@ -322,6 +377,7 @@
       echo'<input type="hidden" name="venta_diaria_real" value="'.round($VentaDiariaQuiebre,2).'">';
       echo'<input type="hidden" name="pedir_real" value="-">';
       echo'<input type="hidden" name="dias_pedir" value="-">';
+      echo '<input type="hidden" name="Reporte" value="SI">';
       echo'
           <button type="submit" name="Reporte" role="button" class="btn btn-outline-success btn-sm" value="SI" style="width:100%;">Agregar</button>
         </form>
