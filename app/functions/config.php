@@ -78,10 +78,10 @@ define ("nameFSM" , "SMARTPHARMA");
 define ("nameFSMOFF" , "cpharmafsm");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FEC **********************************/
-define ("serverFEC" , "192.168.20.0\SMARTPHARMA");
+define ("serverFEC" , "10.100.0.50");
 define ("userFEC" , "admin");
 define ("passFEC" , "soporte123");
-define ("nameFEC" , "smartfec");
+define ("nameFEC" , "BD_ELCALLEJON");
 define ("nameFECOFF" , "cpharmafec");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
