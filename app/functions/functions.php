@@ -141,14 +141,17 @@
         //INICIO BLOQUE DE KDI
             case '15':
                 return 'KDI';
+            break;
         //FIN BLOQUE DE KDI
         //INICIO BLOQUE DE FSM
             case '18':
                 return 'FSM';
+            break;
         //FIN BLOQUE DE FSM
         //INICIO BLOQUE DE FEC
             case '20':
                 return 'FEC';
+            break;
         //FIN BLOQUE DE FEC
             default:
                 return 'ARG';
@@ -613,6 +616,17 @@
                 return $conn;
             break;
         //FIN BLOQUE DE KDI
+        //INICIO BLOQUE FEC
+            case 'FEC':
+                $connectionInfo = array(
+                    "Database"=>nameFEC,
+                    "UID"=>userFEC,
+                    "PWD"=>passFEC
+                );
+                $conn = sqlsrv_connect(serverFEC,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE FEC
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $connectionInfo = array(
