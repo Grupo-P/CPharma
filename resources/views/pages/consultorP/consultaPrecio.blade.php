@@ -512,7 +512,7 @@
 
               ultimasUnidades = '<?php echo $ultimasUnidades; ?>';
 
-              if (ultimasUnidades > data.existencia) {
+              if (parseInt(ultimasUnidades) > parseInt(data.existencia)) {
                 $('.trUltimoStock').html('<td colspan="5" align="center" style="font-size:1.5rem" class="text-danger CP-Latir" colspan="3"><b><p><i class="fas fa-exclamation-triangle"></i> ¡ÚLTIMAS UNIDADES EN EXISTENCIA!</p></b></td>');
               }
             }
