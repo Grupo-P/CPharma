@@ -304,6 +304,10 @@
                 return $sede;
             break;
         //FIN BLOQUE DE GRUPO P
+            case 'FEC':
+                $sede = SedeFEC;
+                return $sede;
+            break;
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $sede = SedeDBs;
