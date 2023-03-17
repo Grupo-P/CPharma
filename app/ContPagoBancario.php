@@ -60,4 +60,11 @@ class ContPagoBancario extends Model
             return $query->whereDate('created_at', '<=', $fechaFin);
         }
     }
+
+    public function scopeNumeroRegistro($query, $numeroRegistro)
+    {
+        if ($numeroRegistro) {
+            return $query->where('id', 'LIKE', '%' . $numeroRegistro . '%');
+        }
+    }
 }

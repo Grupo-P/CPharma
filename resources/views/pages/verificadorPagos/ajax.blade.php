@@ -656,7 +656,7 @@
         $pagos = $pagos->sortByDesc('fechaSinFormato');
         $contador = 1;
 
-        /*$pagos = $pagos->filter(function ($item) {
+        $pagos = $pagos->filter(function ($item) {
 
             $fecha = strtotime($item['fechaSinFormato']);
 
@@ -668,7 +668,7 @@
             if ($fecha >= $anterior) {
                 return true;
             }
-        });*/
+        });
 
         $contador = 1;
     }

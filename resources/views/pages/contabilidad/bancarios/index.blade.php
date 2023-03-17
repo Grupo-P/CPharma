@@ -222,7 +222,7 @@
 
     <form autocomplete="off" action="" class="mb-3">
         <div class="row">
-            <div class="col">Cantidad de registros</div>
+            <div class="col-2">Cantidad de registros</div>
             <div class="col">
                 <select class="form-control form-control-sm" name="cantidad">
                     <option {{ $selected50 }} value="50">50</option>
@@ -239,6 +239,9 @@
 
             <div class="col">Fecha final</div>
             <div class="col"><input type="date" value="{{ $fechaFinUrl }}" class="form-control form-control-sm" name="fechaFin"></div>
+
+            <div class="col-2">Número registro</div>
+            <div class="col"><input type="number" value="{{ $numeroRegistro }}" class="form-control form-control-sm" name="numeroRegistro"></div>
 
             <div class="col"><input type="submit" value="Buscar" class="btn btn-sm btn-block btn-outline-success"></div>
         </div>
@@ -357,7 +360,9 @@
         </tbody>
     </table>
 
-    {{ ($pagos instanceof Illuminate\Pagination\LengthAwarePaginator) ? $pagos->links() : '' }}
+    <div>
+        {{ ($pagos instanceof Illuminate\Pagination\LengthAwarePaginator) ? $pagos->appends($_GET)->links() : '' }}
+    </div>
 
     <script>
         $(document).ready(function(){

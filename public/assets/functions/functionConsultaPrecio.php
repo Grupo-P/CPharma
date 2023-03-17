@@ -63,7 +63,9 @@
             $nombre_maquina == 'CONSULTOR-FSM-1' ||
             $nombre_maquina == 'CONSULTOR-FSM-2' ||
             $nombre_maquina == 'CONSULTOR-FSM-3' ||
-            $nombre_maquina == 'CONSULTOR-FSM-4'
+            $nombre_maquina == 'CONSULTOR-FSM-4' ||
+
+            $nombre_maquina == 'CONSULTOR-FEC-1'
         ) {
             $sqlCPharma = "INSERT INTO consultor(id_articulo, codigo_interno, codigo_barra, descripcion, precio, nombre_maquina, fecha_captura, created_at, updated_at) VALUES ('$id_articulo','$codigo_interno','$codigo_barra','$descripcion','$precio','$nombre_maquina','$fecha_captura','$fecha_completa','$fecha_completa')";
             mysqli_query($connCPharma,$sqlCPharma);
