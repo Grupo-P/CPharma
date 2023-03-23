@@ -14,7 +14,7 @@ class AddColumnsToOrdenCompraDetalles extends Migration
     public function up()
     {
         Schema::table('orden_compra_detalles', function (Blueprint $table) {
-            $table->string('sede6')->after('sede5');
+            $table->string('sede6')->after('sede5')->nullable();
         });
     }
 
