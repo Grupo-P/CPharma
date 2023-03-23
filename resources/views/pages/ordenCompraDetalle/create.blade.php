@@ -12,9 +12,9 @@
 <?php
     use Illuminate\Http\Request;
     use compras\OrdenCompra;
-  
+
     $usuario = auth()->user()->name;
-    $OrdenActiva = 
+    $OrdenActiva =
     OrdenCompra::where('user',$usuario)
     ->where('estatus','ACTIVO')
     ->get();
@@ -32,7 +32,7 @@
     <br>
 
     <?php
-      if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){  
+      if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){
     ?>
       {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'class' => 'store']) !!}
     <?php
@@ -41,7 +41,7 @@
     ?>
       {!! Form::open(['route' => 'ordenCompraDetalle.store', 'method' => 'POST', 'class' => 'store', 'id' => 'guardar']) !!}
     <?php
-      } 
+      }
     ?>
 
     {!! Form::hidden('codigo_orden',$OrdenCompra->codigo) !!}
@@ -70,10 +70,10 @@
                 <th scope="row">{!! Form::label('operador', 'Operador') !!}</th>
                 <td scope="row">{!! Form::label('user_orden',$OrdenCompra->user) !!}</td>
             </tr>
-  
+
         <!-- INICIO DE CASO FORMULARIO PARA ARTICULOS NUEVOS -->
             <?php
-                if($_GET['Reporte']=='NO'){  
+                if($_GET['Reporte']=='NO'){
             ?>
               {!! Form::hidden('isReporte','NO', ['id'=>'isReporte']) !!}
               {!! Form::hidden('id_articulo',NULL) !!}
@@ -94,9 +94,9 @@
         <!-- FIN DE CASO FORMULARIO PARA ARTICULOS NUEVOS -->
 
         <!-- INICIO DE CASO FORMULARIO PARA ARTICULOS DESDE REPORTES -->
-            <?php 
+            <?php
               }
-              else if($_GET['Reporte']=='SI'){  
+              else if($_GET['Reporte']=='SI'){
             ?>
               {!! Form::hidden('isReporte','SI', ['id'=>'isReporte']) !!}
               {!! Form::hidden('id_articulo',$_GET['id_articulo']) !!}
@@ -115,14 +115,14 @@
                 <th scope="row">{!! Form::label('descrip', 'Descripcion del articulo') !!}</th>
                 <td scope="row">{!! Form::label('descrip',$_GET['descripcion']) !!}</td>
               </tr>
-            <?php 
-              } 
+            <?php
+              }
             ?>
         <!-- FIN DE CASO FORMULARIO PARA ARTICULOS DESDE REPORTES -->
 
         <!-- INICIO DE CASO FORMULARIO PARA CENTRO DE DISTRIBUCION -->
             <?php
-                if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){  
+                if($OrdenCompra->sede_destino=='CENTRO DE DISTRIBUCION'){
             ?>
                {!! Form::hidden('isCDD','SI', ['id'=>'isCDD']) !!}
               <tr>
@@ -187,9 +187,9 @@
 
         </tbody>
         </table>
-        
+
         <?php
-          if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){  
+          if($OrdenCompra->sede_destino!='CENTRO DE DISTRIBUCION'){
         ?>
           {!! Form::submit('Guardar', ['class' => 'btn btn-outline-success btn-md']) !!}
         <?php
@@ -198,14 +198,14 @@
         ?>
           {!! Form::button('Guardar', ['class' => 'btn btn-outline-success btn-md', 'id'=>'guardar', 'onclick'=>'GuardarCDD()']) !!}
         <?php
-          } 
+          }
         ?>
 
     </fieldset>
-    {!! Form::close()!!} 
+    {!! Form::close()!!}
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('[data-toggle="tooltip"]').tooltip();
 
             $('.store').submit(function (event) {
               event.preventDefault();
@@ -232,9 +232,9 @@
 
         var clasesError = 'border border-danger campoNulo';
         var unidadesDisponibles = $('#unidadesDisponibles');
-        var guardar = $('#guardar');  
+        var guardar = $('#guardar');
         var totalUnidades = $('#totalUnidades');
-        var costoUnitario = $('#CostoUnitario'); 
+        var costoUnitario = $('#CostoUnitario');
         var isCDD = $('#isCDD');
         var isReporte = $('#isReporte');
         var descrip = $('#descripcion');
@@ -264,6 +264,7 @@
             sede3 = parseInt(document.getElementById('sede3').value);
             sede4 = parseInt(document.getElementById('sede4').value);
             sede5 = parseInt(document.getElementById('sede5').value);
+            sede6 = parseInt(document.getElementById('sede6').value);
 
             totalUnidades = document.getElementById('totalUnidades').value;
 
@@ -272,8 +273,9 @@
             var sub3 = isNaN(sede3) ? 0 : sede3;
             var sub4 = isNaN(sede4) ? 0 : sede4;
             var sub5 = isNaN(sede5) ? 0 : sede5;
+            var sub6 = isNaN(sede6) ? 0 : sede6;
 
-            total = sub1+sub2+sub3+sub4+sub5;
+            total = sub1+sub2+sub3+sub4+sub5+sub6;
 
             totalUnidades = totalUnidades-total;
             document.getElementById('unidadesDisponibles').value = totalUnidades;
@@ -318,7 +320,7 @@
             }
             else if (CostoUnitario==0) {
               costoUnitario.addClass(clasesError);
-            } 
+            }
           }
           else if(isReporte=='SI'){
 
@@ -333,8 +335,8 @@
             }
             else if (CostoUnitario==0) {
               costoUnitario.addClass(clasesError);
-            } 
+            }
           }
         }
-        
+
     </script>

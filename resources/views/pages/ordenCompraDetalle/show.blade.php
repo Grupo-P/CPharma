@@ -32,7 +32,7 @@
 		  </div>
 		</div>
 	@endif
-	
+
 	<!-- Modal Editar -->
 	@if (session('Updated'))
 		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -70,7 +70,7 @@
 		        <h4 class="h6">Articulo actualizado con exito</h4>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>	
+		        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Aceptar</button>
 		      </div>
 		    </div>
 		  </div>
@@ -86,7 +86,7 @@
 	<table style="width:100%;">
 		<tr>
 				<td style="width:10%;">
-					<form action="/ordenCompraDetalle/" method="POST">                  
+					<form action="/ordenCompraDetalle/" method="POST">
 			        <button type="submit" role="button" class="btn btn-outline-success btn-sm"data-placement="top" style="display: inline;"><i class="fa fa-reply">&nbsp;Regresar</i></button>
 			    </form>
 				</td>
@@ -102,7 +102,7 @@
 	    </tr>
 	</table>
 	<br/>
-	
+
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
@@ -113,21 +113,22 @@
 		      	<th scope="col" class="stickyCP">Fecha de la orden</th>
 		      	<th scope="col" class="stickyCP">Operador Orden</th>
 		      	<th scope="col" class="stickyCP">Proveedor Orden</th>
-		      	<th scope="col" class="stickyCP">Codigo Interno</th>	
-		      	<th scope="col" class="stickyCP">Codigo Barra</th>	
-		      	<th scope="col" class="stickyCP">Descripcion</th>		      		
-		      	<th scope="col" class="stickyCP">Cantidad FTN</th>	
-		      	<th scope="col" class="stickyCP">Cantidad FLL</th>	
-		      	<th scope="col" class="stickyCP">Cantidad FAU</th>		
-		      	<th scope="col" class="stickyCP">Cantidad FM</th>	
-		      	<th scope="col" class="stickyCP">Cantidad FEC</th>	
+		      	<th scope="col" class="stickyCP">Codigo Interno</th>
+		      	<th scope="col" class="stickyCP">Codigo Barra</th>
+		      	<th scope="col" class="stickyCP">Descripcion</th>
+		      	<th scope="col" class="stickyCP">Cantidad FTN</th>
+		      	<th scope="col" class="stickyCP">Cantidad FLL</th>
+		      	<th scope="col" class="stickyCP">Cantidad FAU</th>
+		      	<th scope="col" class="stickyCP">Cantidad FM</th>
+		      	<th scope="col" class="stickyCP">Cantidad FEC</th>
+                <th scope="col" class="stickyCP">Cantidad PAG</th>
 		      	<th scope="col" class="stickyCP">Total Unidades</th>
-		      	<th scope="col" class="stickyCP">Costo Unitario</th>	
+		      	<th scope="col" class="stickyCP">Costo Unitario</th>
 		      	<th scope="col" class="stickyCP">Costo Total</th>
-		      	<th scope="col" class="stickyCP">Existencia (Origen)</th>		
-		      	<th scope="col" class="stickyCP">Dias Restantes (Origen)</th>	
-		      	<th scope="col" class="stickyCP">Reporte (Origen)</th>	
-		      	<th scope="col" class="stickyCP">Rango (Origen)</th>	
+		      	<th scope="col" class="stickyCP">Existencia (Origen)</th>
+		      	<th scope="col" class="stickyCP">Dias Restantes (Origen)</th>
+		      	<th scope="col" class="stickyCP">Reporte (Origen)</th>
+		      	<th scope="col" class="stickyCP">Rango (Origen)</th>
 		    </tr>
 	  	</thead>
 	  	<tbody>
@@ -135,9 +136,9 @@
 	    <tr>
 	      <th>{{$ordenCompraDetalle->id}}</th>
 	      <td>{{$ordenCompraDetalle->codigo_orden}}</td>
-				
+
 				<?php
-					$OrdenCompra = 
+					$OrdenCompra =
 				  OrdenCompra::where('codigo',$ordenCompraDetalle->codigo_orden)
 				  ->get();
 				  $i = 0;
@@ -148,7 +149,7 @@
 				  echo'<td>'.$OrdenCompra[$i]->user.'</td>';
 				  echo'<td>'.$OrdenCompra[$i]->proveedor.'</td>';
 				?>
-				
+
 	      <td>{{$ordenCompraDetalle->codigo_articulo}}</td>
 	      <td>{{$ordenCompraDetalle->codigo_barra}}</td>
 	      <td>{{$ordenCompraDetalle->descripcion}}</td>
@@ -157,6 +158,7 @@
 	      <td>{{$ordenCompraDetalle->sede3}}</td>
 	      <td>{{$ordenCompraDetalle->sede4}}</td>
 	      <td>{{$ordenCompraDetalle->sede5}}</td>
+          <td>{{$ordenCompraDetalle->sede6}}</td>
 	      <td>{{$ordenCompraDetalle->total_unidades}}</td>
 	      <td>{{$ordenCompraDetalle->costo_unitario}}</td>
 	      <td>{{$ordenCompraDetalle->costo_total}}</td>
@@ -172,7 +174,7 @@
 
 	<script>
 		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip();   
+		    $('[data-toggle="tooltip"]').tooltip();
 
 		    $('.agregarOrdenCompra').on('submit', function (event) {
           event.preventDefault();
