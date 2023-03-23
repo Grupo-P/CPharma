@@ -153,6 +153,10 @@
                 <th scope="row">{!! Form::label('sede5', 'Cantidad para FEC') !!}</th>
                 <td>{!! Form::number('sede5', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede5']) !!}</td>
               </tr>
+              <tr>
+                <th scope="row">{!! Form::label('sede6', 'Cantidad para PAG') !!}</th>
+                <td>{!! Form::number('sede6', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede6']) !!}</td>
+              </tr>
         <!-- FIN DE CASO FORMULARIO PARA CENTRO DE DISTRIBUCION -->
 
         <!-- INICIO DE CASO FORMULARIO PARA UNICA SEDE -->
@@ -165,6 +169,7 @@
               {!! Form::hidden('sede3',NULL) !!}
               {!! Form::hidden('sede4',NULL) !!}
               {!! Form::hidden('sede5',NULL) !!}
+              {!! Form::hidden('sede6',NULL) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
                 <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades']) !!}</td>
@@ -249,6 +254,7 @@
             document.getElementById('sede3').value = 0;
             document.getElementById('sede4').value = 0;
             document.getElementById('sede5').value = 0;
+            document.getElementById('sede6').value = 0;
 
             isCDD = document.getElementById('isCDD').value;
 
