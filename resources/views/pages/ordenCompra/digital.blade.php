@@ -271,7 +271,7 @@
 				$total_sede3 += floatval($row['sede3']);
 				$total_sede4 += floatval($row['sede4']);
 				$total_sede5 += floatval($row['sede5']);
-                $total_sede5 += floatval($row['sede6']);
+                $total_sede6 += floatval($row['sede6']);
 				$cont++;
 	  	}
 
