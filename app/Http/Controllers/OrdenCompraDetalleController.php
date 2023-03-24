@@ -4,7 +4,7 @@ namespace compras\Http\Controllers;
 
 use Illuminate\Http\Request;
 use compras\OrdenCompra;
-use compras\OrdenCompraDetalle; 
+use compras\OrdenCompraDetalle;
 use compras\User;
 use compras\Auditoria;
 
@@ -28,7 +28,7 @@ class OrdenCompraDetalleController extends Controller
     public function index()
     {
         $usuario = auth()->user()->name;
-        $OrdenActiva = 
+        $OrdenActiva =
         OrdenCompra::where('user',$usuario)
         ->where('estatus','ACTIVO')
         ->get();
@@ -51,7 +51,7 @@ class OrdenCompraDetalleController extends Controller
     public function create()
     {
       $usuario = auth()->user()->name;
-        $OrdenActiva = 
+        $OrdenActiva =
         OrdenCompra::where('user',$usuario)
         ->where('estatus','ACTIVO')
         ->get();
@@ -84,10 +84,11 @@ class OrdenCompraDetalleController extends Controller
         $ordenCompraDetalles->sede3 = $request->input('sede3');
         $ordenCompraDetalles->sede4 = $request->input('sede4');
         $ordenCompraDetalles->sede5 = $request->input('sede5');
+        $ordenCompraDetalles->sede6 = $request->input('sede6');
         $ordenCompraDetalles->total_unidades = $request->input('totalUnidades');
         $ordenCompraDetalles->costo_unitario = $request->input('costo_unitario');
-        $ordenCompraDetalles->costo_total = ( 
-            ($request->input('totalUnidades')) * ($request->input('costo_unitario')) 
+        $ordenCompraDetalles->costo_total = (
+            ($request->input('totalUnidades')) * ($request->input('costo_unitario'))
           );
         $ordenCompraDetalles->existencia_rpt = $request->input('existencia_rpt');
         $ordenCompraDetalles->dias_restantes_rpt = $request->input('dias_restantes_rpt');
@@ -101,7 +102,7 @@ class OrdenCompraDetalleController extends Controller
         $ordenCompraDetalles->dias_pedir = $request->input('dias_pedir');
 
         $ordenCompraDetalles->save();
-        
+
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'AGREGAR';
         $Auditoria->tabla = 'ORDEN DE COMPRA DETALLE';
@@ -123,14 +124,14 @@ class OrdenCompraDetalleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $id)
-    {   
+    {
         $id_articulo = $request->input('id_articulo');
         $ordenCompraDetalles =
         OrdenCompraDetalle::where('id_articulo',$id_articulo)
         ->where('orden_compra_detalles.estatus','ACTIVO')
         ->join('orden_compras','orden_compras.codigo','=','orden_compra_detalles.codigo_orden')
         ->get();
-      
+
         $Auditoria = new Auditoria();
         $Auditoria->accion = 'CONSULTAR';
         $Auditoria->tabla = 'ORDEN DE COMPRA DETALLE';
@@ -167,8 +168,8 @@ class OrdenCompraDetalleController extends Controller
           $ordenCompraDetalles->fill($request->all());
           $ordenCompraDetalles->total_unidades = $request->input('totalUnidades');
           $ordenCompraDetalles->costo_unitario = $request->input('costo_unitario');
-          $ordenCompraDetalles->costo_total = ( 
-          ($request->input('totalUnidades')) * ($request->input('costo_unitario')) 
+          $ordenCompraDetalles->costo_total = (
+          ($request->input('totalUnidades')) * ($request->input('costo_unitario'))
         );
 
         $ordenCompraDetalles->save();
@@ -197,11 +198,11 @@ class OrdenCompraDetalleController extends Controller
     {
         $ordenCompraDetalles = OrdenCompraDetalle::find($id);
 
-        $Auditoria = new Auditoria();        
+        $Auditoria = new Auditoria();
         $Auditoria->tabla = 'ORDEN DE COMPRA DETALLE';
         $Auditoria->registro = "ORDEN: ".$ordenCompraDetalles->codigo_orden." ARTICULO: ".$ordenCompraDetalles->descripcion;
         $Auditoria->user = auth()->user()->name;
-        
+
         if($ordenCompraDetalles->estatus == 'ACTIVO'){
             $ordenCompraDetalles->estatus = 'INACTIVO';
             $Auditoria->accion = 'DESINCORPORAR';
@@ -211,7 +212,7 @@ class OrdenCompraDetalleController extends Controller
             $Auditoria->accion = 'REINCORPORAR';
         }
 
-        $ordenCompraDetalles->user = auth()->user()->name;        
+        $ordenCompraDetalles->user = auth()->user()->name;
         $ordenCompraDetalles->save();
 
         $Auditoria->save();

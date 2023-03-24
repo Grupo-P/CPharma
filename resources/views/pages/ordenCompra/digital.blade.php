@@ -63,98 +63,98 @@
 	<table>
 		<thead>
 		    <tr>
-		    		<th scope="row" colspan="11">
+		    		<th scope="row" colspan="12">
 		    			<span class="navbar-brand text-info CP-title-NavBar">
 		    				<b><i class="fas fa-syringe text-success"></i>CPharma</b>
   						</span>
 		    		</th>
-		    		<th scope="row" colspan="11" class="aumento">Soporte de orden de compra</th>
+		    		<th scope="row" colspan="12" class="aumento">Soporte de orden de compra</th>
 		    </tr>
   	</thead>
 	  	<tbody>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Codigo:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->codigo}}</td>
+	      	<td colspan="12" class="alinear-der">Codigo:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->codigo}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Fecha De Orden:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->created_at}}</td>
+	      	<td colspan="12" class="alinear-der">Fecha De Orden:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->created_at}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Destino:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->sede_destino}}</td>
+	      	<td colspan="12" class="alinear-der">Destino:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->sede_destino}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Proveedor:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->proveedor}}</td>
+	      	<td colspan="12" class="alinear-der">Proveedor:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->proveedor}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Fecha Despacho:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->fecha_estimada_despacho}}</td>
+	      	<td colspan="12" class="alinear-der">Fecha Despacho:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->fecha_estimada_despacho}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Condicion Crediticia:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->condicion_crediticia}}</td>
+	      	<td colspan="12" class="alinear-der">Condicion Crediticia:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->condicion_crediticia}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Dias Credito:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->dias_credito}}</td>
+	      	<td colspan="12" class="alinear-der">Dias Credito:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->dias_credito}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Operador Orden:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->user}}</td>
+	      	<td colspan="12" class="alinear-der">Operador Orden:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->user}}</td>
 		    </tr>
 	  		<tr>
-	      	<td colspan="11" class="alinear-der">Estatus:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->estado}}</td>
+	      	<td colspan="12" class="alinear-der">Estatus:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->estado}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Observacion:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->observacion}}</td>
+	      	<td colspan="12" class="alinear-der">Observacion:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->observacion}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Fecha De Aprobacion:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->fecha_aprobacion}}</td>
+	      	<td colspan="12" class="alinear-der">Fecha De Aprobacion:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->fecha_aprobacion}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Operador De Aprobacion:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->operador_aprobacion}}</td>
+	      	<td colspan="12" class="alinear-der">Operador De Aprobacion:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->operador_aprobacion}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Fecha De Recepcion:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->fecha_recepcion}}</td>
+	      	<td colspan="12" class="alinear-der">Fecha De Recepcion:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->fecha_recepcion}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Operador De Recepcion:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->operador_recepcion}}</td>
+	      	<td colspan="12" class="alinear-der">Operador De Recepcion:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->operador_recepcion}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Fecha De Ingreso:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->fecha_ingreso}}</td>
+	      	<td colspan="12" class="alinear-der">Fecha De Ingreso:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->fecha_ingreso}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Operador De Ingreso:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->operador_ingreso}}</td>
+	      	<td colspan="12" class="alinear-der">Operador De Ingreso:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->operador_ingreso}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Calificacion:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->calificacion}}</td>
+	      	<td colspan="12" class="alinear-der">Calificacion:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->calificacion}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Factura:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->numero_factura}}</td>
+	      	<td colspan="12" class="alinear-der">Factura:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->numero_factura}}</td>
 		    </tr>
 		    <tr>
-	      	<th colspan="11" class="alinear-der">Monto Real:</th>
-	      	<th colspan="11" class="alinear-izq">{{number_format($OrdenCompra->montoTotalReal,2,"," ,"." )}} {{$OrdenCompra->moneda}}</th>
+	      	<th colspan="12" class="alinear-der">Monto Real:</th>
+	      	<th colspan="12" class="alinear-izq">{{number_format($OrdenCompra->montoTotalReal,2,"," ,"." )}} {{$OrdenCompra->moneda}}</th>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Fecha De Cierre:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->fecha_cierre}}</td>
+	      	<td colspan="12" class="alinear-der">Fecha De Cierre:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->fecha_cierre}}</td>
 		    </tr>
 		    <tr>
-	      	<td colspan="11" class="alinear-der">Operador De Cierre:</td>
-	      	<td colspan="11" class="alinear-izq">{{$OrdenCompra->operador_cierre}}</td>
+	      	<td colspan="12" class="alinear-der">Operador De Cierre:</td>
+	      	<td colspan="12" class="alinear-izq">{{$OrdenCompra->operador_cierre}}</td>
 		    </tr>
 			<thead>
 		    <tr>
@@ -170,6 +170,7 @@
 		    		<th scope="row">FAU</th>
 		    		<th scope="row">FM</th>
 		    		<th scope="row">FEC</th>
+                    <th scope="row">PAG</th>
 		    		<th scope="row">Reporte Origen</th>
 		    		<th scope="row">Existencia Origen</th>
 		    		<th scope="row">Existencia Actual</th>
@@ -223,6 +224,7 @@
 			$total_sede3 = 0;
 			$total_sede4 = 0;
 			$total_sede5 = 0;
+            $total_sede6 = 0;
 			$cont = 1;
 
 			while($row = $result->fetch_assoc()) {
@@ -250,6 +252,7 @@
 				echo '<td>'.$row['sede3'].'</td>';
 				echo '<td>'.$row['sede4'].'</td>';
 				echo '<td>'.$row['sede5'].'</td>';
+                echo '<td>'.$row['sede6'].'</td>';
 				echo '<td>'.$row['origen_rpt'].'</td>';
 				echo '<td>'.$row['existencia_rpt'].'</td>';
 				echo '<td>'.$Existencia.'</td>';
@@ -268,6 +271,7 @@
 				$total_sede3 += floatval($row['sede3']);
 				$total_sede4 += floatval($row['sede4']);
 				$total_sede5 += floatval($row['sede5']);
+                $total_sede6 += floatval($row['sede6']);
 				$cont++;
 	  	}
 
@@ -281,6 +285,7 @@
 	  	echo '<td><strong>'.$total_sede3.'</strong></td>';
 	  	echo '<td><strong>'.$total_sede4.'</strong></td>';
 	  	echo '<td><strong>'.$total_sede5.'</strong></td>';
+        echo '<td><strong>'.$total_sede6.'</strong></td>';
 	  	echo '</tr>';
 			mysqli_close($connCPharma);
 	}
