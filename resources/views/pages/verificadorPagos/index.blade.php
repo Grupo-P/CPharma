@@ -35,6 +35,7 @@
                             <option value="FLL">FLL</option>
                             <option value="KDI">KDI</option>
                             <option value="FSM">FSM</option>
+                            <option value="FEC">FEC</option>
                         </select>
                     </div>
                 @endif
@@ -84,6 +85,12 @@
                 $username = 'pagoskdi@hotmail.com';
                 $password = 'GJpc2017.';
                 $remitente = '';
+            }
+
+            if ($sede == 'FEC' || $sede == 'FARMACIA EL CALLEJON, C.A.') {
+                $username = 'pagoselcallejon@hotmail.com';
+                $password = 'atorvastati@.YA';
+                $remitente = 'pagomovilfec@gmail.com';
             }
 
             $mailbox = '{outlook.office365.com:993/imap/ssl}';
@@ -401,7 +408,7 @@
 
                     if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
 
-                        $body = @imap_body($conn, $email);                    
+                        $body = @imap_body($conn, $email);
 
                         $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pa')) + 41;
                         $substr = substr($body, $inicioEnviadoPor);
@@ -489,7 +496,7 @@
                     $monto = trim($monto);
 
                     if (strpos($body, 'Memo:') === false) {
-                        $comentario = '';                   
+                        $comentario = '';
                     } else {
                         $inicioComentario = strpos($body, 'Memo:');
                         $finComentario = strpos($body, 'This was de');
@@ -544,7 +551,6 @@
 
                 /*if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
                     continue;
-                
                 }*/
 
                 foreach ($overview as $item) {

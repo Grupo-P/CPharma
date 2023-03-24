@@ -50,6 +50,13 @@
             $id = 5;
         }
 
+        if ($host == 'cpharmafec.com') {
+            $username = 'pagoselcallejon@hotmail.com';
+            $password = 'atorvastati@.YA';
+            $remitente = 'pagomovilfec@gmail.com';
+            $id = 6;
+        }
+
         $mailbox = '{outlook.office365.com:993/imap/ssl}';
 
         $fecha = date_create(request()->fecha);
@@ -333,7 +340,7 @@
 
                 if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
 
-                    $body = @imap_body($conn, $email);                    
+                    $body = @imap_body($conn, $email);
 
                     $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pa')) + 41;
                     $substr = substr($body, $inicioEnviadoPor);
@@ -486,7 +493,7 @@
                     $monto = trim($monto);
 
                     if (strpos($body, 'Memo:') === false) {
-                        $comentario = '';                   
+                        $comentario = '';
                     } else {
                         $inicioComentario = strpos($body, 'Memo:');
                         $finComentario = strpos($body, 'This was de');
@@ -546,7 +553,7 @@
 
             if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
                 continue;
-            
+
 }
             foreach ($overview as $item) {
 
