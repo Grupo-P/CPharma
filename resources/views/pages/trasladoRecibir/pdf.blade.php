@@ -44,6 +44,14 @@
                     if ($_SERVER['HTTP_HOST'] == 'cpharmafll.com') {
                         echo 'FARMACIA LA LAGO, C. A.';
                     }
+
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmafsm.com') {
+                        echo 'FARMACIA MILLENNIUM 2000, C.A';
+                    }
+
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmafec.com') {
+                        echo 'FARMACIA EL CALLEJON, C.A.';
+                    }
                 @endphp
             </td>
         </tr>
@@ -62,6 +70,14 @@
 
                     if ($sede == 'FLL') {
                         echo 'FARMACIA LA LAGO, C. A.';
+                    }
+
+                    if ($clave == 'FSM') {
+                        echo 'FARMACIA MILLENNIUM 2000, C.A';
+                    }
+
+                    if ($clave == 'FEC') {
+                        echo 'FARMACIA EL CALLEJON, C.A.';
                     }
                 @endphp
             </td>
