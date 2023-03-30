@@ -115,7 +115,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'descripcion_sede1', 'descripcion_sede2', 'descripcion_sede3', 'traslado_transito'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'sede4', 'descripcion_sede1', 'descripcion_sede2', 'descripcion_sede3', 'descripcion_sede4' ,'traslado_transito'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -365,6 +365,11 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion_sede4\')" name="sede4" checked>
+                    Descripción sede 4
+                </div>
+
+                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
                     Marcar todas
                 </div>
@@ -405,8 +410,8 @@
                     <th scope="col" class="sede2 CP-sticky">Existencia FLL</td>
                     <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
-                    <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FEC</th>
-                    <th scope="col" class="sede3 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="descripcion_sede4 sede4 CP-sticky">Descripción FEC</th>
+                    <th scope="col" class="sede4 CP-sticky">Existencia FEC</td>
                 ';
               }
 
@@ -417,8 +422,8 @@
                     <th scope="col" class="sede2 CP-sticky">Existencia FLL</td>
                     <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
-                        <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FEC</th>
-                    <th scope="col" class="sede3 CP-sticky">Existencia FEC</td>
+                        <th scope="col" class="descripcion_sede4 sede4 CP-sticky">Descripción FEC</th>
+                    <th scope="col" class="sede4 CP-sticky">Existencia FEC</td>
                 ';
               }
 
@@ -429,32 +434,32 @@
                     <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
                     <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
-                    <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FEC</th>
-                    <th scope="col" class="sede3 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="descripcion_sede4 sede4 CP-sticky">Descripción FEC</th>
+                    <th scope="col" class="sede4 CP-sticky">Existencia FEC</td>
                 ';
               }
 
               if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FSM') {
                 echo '<th scope="col" class="descripcion_sede1 CP-sticky">Descripción FTN</th>
-                    <th scope="col" class="descripcion_sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
                     <th scope="col" class="descripcion_sede2 sede2 CP-sticky">Descripción FAU</th>
                     <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
                     <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FLL</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FLL</td>
-                    <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FEC</th>
-                    <th scope="col" class="sede3 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="descripcion_sede4 sede4 CP-sticky">Descripción FEC</th>
+                    <th scope="col" class="sede4 CP-sticky">Existencia FEC</td>
                 ';
               }
 
               if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FEC') {
                 echo '<th scope="col" class="descripcion_sede1 CP-sticky">Descripción FTN</th>
-                    <th scope="col" class="descripcion_sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="sede1 CP-sticky">Existencia FTN</td>
                     <th scope="col" class="descripcion_sede2 sede2 CP-sticky">Descripción FAU</th>
                     <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
                     <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FLL</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FLL</td>
-                    <th scope="col" class="descripcion_sede3 sede3 CP-stick y">Descripción FSM</th>
-                    <th scope="col" class="sede3 CP-sticky">Existencia FSM</td>
+                    <th scope="col" class="descripcion_sede4 sede4 CP-stick y">Descripción FSM</th>
+                    <th scope="col" class="sede4 CP-sticky">Existencia FSM</td>
                 ';
               }
 
@@ -774,10 +779,10 @@
             }
 
             if ($conectividad_fec == 1) {
-                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fec.'</td>
+                echo '<td class="descripcion_sede4 sede4" align="center">'.$descripcion_fec.'</td>
                       <td class="sede4" align="center">'.$existencia_fec.'</td>';
             } else {
-                echo '<td class="descripcion_sede3 sede3">-</td>';
+                echo '<td class="descripcion_sede4 sede4">-</td>';
                 echo '<td class="sede4">-</td>';
             }
         }
@@ -808,10 +813,10 @@
             }
 
             if ($conectividad_fec == 1) {
-                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fec.'</td>
+                echo '<td class="descripcion_sede4 sede4" align="center">'.$descripcion_fec.'</td>
                       <td class="sede4" align="center">'.$existencia_fec.'</td>';
             } else {
-                echo '<td class="descripcion_sede3 sede3">-</td>';
+                echo '<td class="descripcion_sede4 sede3">-</td>';
                 echo '<td class="sede4">-</td>';
             }
         }
@@ -842,10 +847,10 @@
             }
 
             if ($conectividad_fec == 1) {
-                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fec.'</td>
+                echo '<td class="descripcion_sede4 sede4" align="center">'.$descripcion_fec.'</td>
                       <td class="sede4" align="center">'.$existencia_fec.'</td>';
             } else {
-                echo '<td class="descripcion_sede3 sede3">-</td>';
+                echo '<td class="descripcion_sede4 sede4">-</td>';
                 echo '<td class="sede4">-</td>';
             }
         }
@@ -876,10 +881,10 @@
             }
 
             if ($conectividad_fec == 1) {
-                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fec.'</td>
+                echo '<td class="descripcion_sede4 sede4" align="center">'.$descripcion_fec.'</td>
                       <td class="sede4" align="center">'.$existencia_fec.'</td>';
             } else {
-                echo '<td class="descripcion_sede3 sede3">-</td>';
+                echo '<td class="descripcion_sede4 sede4">-</td>';
                 echo '<td class="sede4">-</td>';
             }
         }
@@ -910,10 +915,10 @@
             }
 
             if ($conectividad_fsm == 1) {
-                echo '<td class="descripcion_sede3 sede3" align="center">'.$descripcion_fsm.'</td>
+                echo '<td class="descripcion_sede4 sede4" align="center">'.$descripcion_fsm.'</td>
                       <td class="sede4" align="center">'.$existencia_fsm.'</td>';
             } else {
-                echo '<td class="descripcion_sede3 sede3">-</td>';
+                echo '<td class="descripcion_sede4 sede4">-</td>';
                 echo '<td class="sede4">-</td>';
             }
         }
