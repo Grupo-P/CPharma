@@ -336,17 +336,22 @@
 
                 <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'sede1\')" name="sede1" checked>
-                    Sede 1
+                    Existencia Sede 1
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'sede2\')" name="sede2" checked>
-                    Sede 2
+                    Existencia Sede 2
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'sede3\')" name="sede3" checked>
-                    Sede 3
+                    Existencia Sede 3
+                </div>
+
+                <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede4\')" name="sede4" checked>
+                    Existencia Sede 4
                 </div>
 
                 <div class="form-group">

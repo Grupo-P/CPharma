@@ -72,11 +72,11 @@
                         echo 'FARMACIA LA LAGO, C. A.';
                     }
 
-                    if ($clave == 'FSM') {
+                    if ($sede == 'FSM') {
                         echo 'FARMACIA MILLENNIUM 2000, C.A';
                     }
 
-                    if ($clave == 'FEC') {
+                    if ($sede == 'FEC') {
                         echo 'FARMACIA EL CALLEJON, C.A.';
                     }
                 @endphp
