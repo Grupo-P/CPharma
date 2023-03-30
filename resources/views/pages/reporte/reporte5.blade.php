@@ -458,7 +458,7 @@
                 ';
               }
 
-              echo '<th scope="col" class="CP-sticky" colspan="3">Acciones traslado</th>';
+              echo '<th scope="col" class="CP-sticky" colspan="4">Acciones traslado</th>';
 
     echo '</tr>
       </thead>
