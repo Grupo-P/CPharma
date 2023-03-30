@@ -122,6 +122,11 @@
                             echo 'FARMACIA MILLENNIUM 2000, C.A';
                             $sede = 'FSM';
                         }
+
+                        if ($_SERVER['HTTP_HOST'] == 'cpharmafec.com') {
+                            echo 'FARMACIA EL CALLEJON, C.A.';
+                            $sede = 'FEC';
+                        }
                     @endphp
                 </td>
                 </tr>
@@ -143,6 +148,10 @@
 
                         if ($clave == 'FSM') {
                             echo 'FARMACIA MILLENNIUM 2000, C.A';
+                        }
+
+                        if ($clave == 'FEC') {
+                            echo 'FARMACIA EL CALLEJON, C.A.';
                         }
                     @endphp
                 </td>
