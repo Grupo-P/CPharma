@@ -2035,6 +2035,9 @@
             case 'FSM':
                 $Flag = TRUE;
             break;
+            case 'FEC':
+                $Flag = TRUE;
+            break;
             default:
                 $Flag = FALSE;
             break;
