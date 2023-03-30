@@ -4713,6 +4713,10 @@
         return [];
     }
 
+    if ($sede == 'FEC') {
+        $nombre = 'FARMACIA EL CALLEJON, C.A.';
+    }
+
     if ($codigo_barra) {
         $where = "traslados_detalle.codigo_barra = '$codigo_barra'";
     } else {
@@ -4812,6 +4816,23 @@
         ");
 
         $array = array_merge($array, $kdi);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $fec = DB::connection('fec')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $fec);
     } catch (Exception $excepcion) {
 
     }
