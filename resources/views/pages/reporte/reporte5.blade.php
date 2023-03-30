@@ -458,7 +458,7 @@
                     <th scope="col" class="sede2 CP-sticky">Existencia FAU</td>
                     <th scope="col" class="descripcion_sede3 sede3 CP-sticky">Descripción FLL</th>
                     <th scope="col" class="sede3 CP-sticky">Existencia FLL</td>
-                    <th scope="col" class="descripcion_sede4 sede4 CP-stick y">Descripción FSM</th>
+                    <th scope="col" class="descripcion_sede4 sede4 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="sede4 CP-sticky">Existencia FSM</td>
                 ';
               }
