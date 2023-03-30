@@ -965,6 +965,17 @@
                 return $conn;
             break;
         //FIN BLOQUE DE FSM
+        //INICIO BLOQUE DE FEC
+        case 'FEC':
+            $connectionInfo = array(
+                "Database"=>"Mod_Atte_Cliente",
+                "UID"=>userFEC,
+                "PWD"=>passFEC
+            );
+            $conn = sqlsrv_connect(serverFEC,$connectionInfo);
+            return $conn;
+        break;
+        //FIN BLOQUE DE FEC
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $connectionInfo = array(
