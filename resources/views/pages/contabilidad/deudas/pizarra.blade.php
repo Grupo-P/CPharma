@@ -72,7 +72,7 @@
                 SELECT
                     DATE(created_at) AS created_at
                 FROM
-                    {$tabla}_FSM
+                    {$tabla}_FM
                 WHERE
                     id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
                 ORDER BY
@@ -205,7 +205,7 @@
                 SELECT
                     DATE(created_at) AS created_at
                 FROM
-                    {$tabla}_FSM
+                    {$tabla}_FM
                 WHERE
                     id_proveedor = '{$id_proveedor}'
                 ORDER BY
