@@ -286,16 +286,6 @@
           </li>
         @endif
 
-        @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
-          <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresGP') }}">
-              <span data-feather="home"></span>
-              <i class="fas fa-lock"></i>
-              Diferidos en bolívares GP<span class="sr-only">(current)</span>
-            </a>
-          </li>
-        @endif
-
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFTN') }}">
@@ -336,6 +326,25 @@
           </li>
         @endif
 
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFEC') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en dolares FEC<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresGP') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolívares GP<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
 
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
@@ -373,6 +382,16 @@
               <span data-feather="home"></span>
               <i class="fas fa-lock"></i>
               Diferidos en bolivares FM<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
+        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresFEC') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolivares FEC<span class="sr-only">(current)</span>
             </a>
           </li>
         @endif

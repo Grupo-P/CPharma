@@ -417,8 +417,8 @@
             </div>
         </div>
 
-        <div class="card border-info mb-3">
-            <div class="card-body text-left bg-info">
+        <div class="card border-secondary mb-3">
+            <div class="card-body text-left bg-secondary">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -430,8 +430,8 @@
                     Último movimiento registrado: {{ ($diferidoBolivaresFEC) ? $diferidoBolivaresFEC->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-info text-right">
-                <a href="/contabilidad/diferidosBolivaresFEC" class="btn btn-outline-info btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="/contabilidad/diferidosBolivaresFEC" class="btn btn-outline-secondary btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
