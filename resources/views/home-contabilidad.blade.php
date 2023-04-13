@@ -140,11 +140,29 @@
                 <a href="/efectivoFM" class="btn btn-outline-warning btn-sm">Visualizar</a>
             </div>
         </div>
+
+        <div class="card border-secondary mb-3">
+            <div class="card-body text-left bg-secondary">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Saldo disponible FEC: ${{ number_format($dolaresFEC->saldo_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($dolaresFEC) ? $dolaresFEC->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="/efectivoFEC" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+            </div>
+        </div>
     </div>
 
     <div class="card-deck">
-        <div class="card border-warning mb-3">
-            <div class="card-body text-left bg-warning">
+        <div class="card border-danger mb-3">
+            <div class="card-body text-left bg-danger">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -156,13 +174,13 @@
                     Último movimiento registrado: {{ ($bolivaresFTN) ? $bolivaresFTN->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-warning text-right">
-                <a href="/bolivaresFTN" class="btn btn-outline-warning btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-danger text-right">
+                <a href="/bolivaresFTN" class="btn btn-outline-danger btn-sm">Visualizar</a>
             </div>
         </div>
 
-        <div class="card border-secondary mb-3">
-            <div class="card-body text-left bg-secondary">
+        <div class="card border-success mb-3">
+            <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -174,13 +192,13 @@
                     Último movimiento registrado: {{ ($bolivaresFAU) ? $bolivaresFAU->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-secondary text-right">
-                <a href="/bolivaresFAU" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-success text-right">
+                <a href="/bolivaresFAU" class="btn btn-outline-success btn-sm">Visualizar</a>
             </div>
         </div>
 
-        <div class="card border-dark mb-3">
-            <div class="card-body text-left bg-dark">
+        <div class="card border-info mb-3">
+            <div class="card-body text-left bg-info">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -192,13 +210,13 @@
                     Último movimiento registrado: {{ ($bolivaresFLL) ? $bolivaresFLL->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-dark text-right">
-                <a href="/bolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-info text-right">
+                <a href="/bolivaresFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
 
-        <div class="card border-info mb-3">
-            <div class="card-body text-left bg-info">
+        <div class="card border-warning mb-3">
+            <div class="card-body text-left bg-warning">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -210,8 +228,26 @@
                     Último movimiento registrado: {{ ($bolivaresFM) ? $bolivaresFM->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-info text-right">
-                <a href="/bolivaresFM" class="btn btn-outline-info btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <a href="/bolivaresFM" class="btn btn-outline-warning btn-sm">Visualizar</a>
+            </div>
+        </div>
+
+        <div class="card border-secondary mb-3">
+            <div class="card-body text-left bg-secondary">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Saldo disponible FEC: Bs.S. {{ number_format($bolivaresFEC->saldo_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($bolivaresFEC) ? $bolivaresFEC->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="/bolivaresFEC" class="btn btn-outline-secondary btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -288,11 +324,29 @@
                 <a href="/contabilidad/diferidosFM" class="btn btn-outline-warning btn-sm">Visualizar</a>
             </div>
         </div>
+
+        <div class="card border-secondary mb-3">
+            <div class="card-body text-left bg-secondary">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Diferido en $ FEC: {{ number_format($diferidoDolaresFEC->diferido_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoDolaresFEC) ? $diferidoDolaresFEC->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="/contabilidad/diferidosFEC" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+            </div>
+        </div>
     </div>
 
     <div class="card-deck">
-        <div class="card border-warning mb-3">
-            <div class="card-body text-left bg-warning">
+        <div class="card border-danger mb-3">
+            <div class="card-body text-left bg-danger">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -304,13 +358,13 @@
                     Último movimiento registrado: {{ ($diferidoBolivaresFTN) ? $diferidoBolivaresFTN->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-warning text-right">
-                <a href="/contabilidad/diferidosBolivaresFTN" class="btn btn-outline-warning btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-danger text-right">
+                <a href="/contabilidad/diferidosBolivaresFTN" class="btn btn-outline-danger btn-sm">Visualizar</a>
             </div>
         </div>
 
-        <div class="card border-secondary mb-3">
-            <div class="card-body text-left bg-secondary">
+        <div class="card border-success mb-3">
+            <div class="card-body text-left bg-success">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -322,13 +376,13 @@
                     Último movimiento registrado: {{ ($diferidoBolivaresFAU) ? $diferidoBolivaresFAU->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-secondary text-right">
-                <a href="/contabilidad/diferidosBolivaresFAU" class="btn btn-outline-secondary btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-success text-right">
+                <a href="/contabilidad/diferidosBolivaresFAU" class="btn btn-outline-success btn-sm">Visualizar</a>
             </div>
         </div>
 
-        <div class="card border-dark mb-3">
-            <div class="card-body text-left bg-dark">
+        <div class="card border-info mb-3">
+            <div class="card-body text-left bg-info">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -340,13 +394,13 @@
                     Último movimiento registrado: {{ ($diferidoBolivaresFLL) ? $diferidoBolivaresFLL->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
-            <div class="card-footer bg-transparent border-dark text-right">
-                <a href="/contabilidad/diferidosBolivaresFLL" class="btn btn-outline-dark btn-sm">Visualizar</a>
+            <div class="card-footer bg-transparent border-info text-right">
+                <a href="/contabilidad/diferidosBolivaresFLL" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
 
-        <div class="card border-info mb-3">
-            <div class="card-body text-left bg-info">
+        <div class="card border-warning mb-3">
+            <div class="card-body text-left bg-warning">
                 <h2 class="card-title">
                     <span class="card-text text-white">
                         <i class="fas fa-balance-scale"></i>
@@ -358,8 +412,26 @@
                     Último movimiento registrado: {{ ($diferidoBolivaresFM) ? $diferidoBolivaresFM->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
                 </p>
             </div>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <a href="/contabilidad/diferidosBolivaresFM" class="btn btn-outline-warning btn-sm">Visualizar</a>
+            </div>
+        </div>
+
+        <div class="card border-info mb-3">
+            <div class="card-body text-left bg-info">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Diferido en Bs.S. FEC: {{ number_format($diferidoBolivaresFEC->diferido_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoBolivaresFEC) ? $diferidoBolivaresFEC->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
             <div class="card-footer bg-transparent border-info text-right">
-                <a href="/contabilidad/diferidosBolivaresFM" class="btn btn-outline-info btn-sm">Visualizar</a>
+                <a href="/contabilidad/diferidosBolivaresFEC" class="btn btn-outline-info btn-sm">Visualizar</a>
             </div>
         </div>
     </div>
@@ -424,6 +496,10 @@
                                     Pago dólares efectivo FM
                                 @endif
 
+                                @if(get_class($pago) == 'compras\ContPagoEfectivoFEC')
+                                    Pago dólares efectivo FEC
+                                @endif
+
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
                                     Pago efectivo bolívares FTN
                                 @endif
@@ -438,6 +514,10 @@
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFM')
                                     Pago efectivo bolívares FM
+                                @endif
+
+                                @if(get_class($pago) == 'compras\ContPagoBolivaresFEC')
+                                    Pago efectivo bolívares FEC
                                 @endif
                             @endif
 
@@ -540,6 +620,10 @@
                                     Pago dólares efectivo FM
                                 @endif
 
+                                @if(get_class($pago) == 'compras\ContPagoEfectivoFEC')
+                                    Pago dólares efectivo FEC
+                                @endif
+
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFTN')
                                     Pago bolívares efectivo FTN
                                 @endif
@@ -554,6 +638,10 @@
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFM')
                                     Pago bolívares efectivo FM
+                                @endif
+
+                                @if(get_class($pago) == 'compras\ContPagoBolivaresFEC')
+                                    Pago bolívares efectivo FEC
                                 @endif
                             @endif
 
@@ -617,6 +705,10 @@
                                 Pago dólares efectivo FM
                             @endif
 
+                            @if(get_class($conciliacion) == 'compras\ContPagoEfectivoFEC')
+                                Pago dólares efectivo FEC
+                            @endif
+
                             @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFTN')
                                 Pago bolívares efectivo FTN
                             @endif
@@ -631,6 +723,10 @@
 
                             @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFM')
                                 Pago bolívares efectivo FM
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFEC')
+                                Pago bolívares efectivo FEC
                             @endif
                         @endif
 
@@ -805,6 +901,14 @@
                                     Ingreso dólares efectivo FLL
                                 @endif
 
+                                @if(get_class($movimiento) == 'compras\ContPagoEfectivoFM')
+                                    Ingreso dólares efectivo FM
+                                @endif
+
+                                @if(get_class($movimiento) == 'compras\ContPagoEfectivoFEC')
+                                    Ingreso dólares efectivo FEC
+                                @endif
+
                                 @if(get_class($movimiento) == 'compras\ContPagoBolivaresFTN')
                                     Ingreso efectivo bolívares FTN
                                 @endif
@@ -815,6 +919,14 @@
 
                                 @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLL')
                                     Ingreso efectivo bolívares FLL
+                                @endif
+
+                                @if(get_class($movimiento) == 'compras\ContPagoBolivaresFM')
+                                    Ingreso efectivo bolívares FM
+                                @endif
+
+                                @if(get_class($movimiento) == 'compras\ContPagoBolivaresFEC')
+                                    Ingreso efectivo bolívares FEC
                                 @endif
                             @else
                                 @if($movimiento->banco)
@@ -832,6 +944,14 @@
                                         Pago dólares efectivo FLL
                                     @endif
 
+                                    @if(get_class($movimiento) == 'compras\ContPagoEfectivoFM')
+                                        Pago dólares efectivo FM
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoEfectivoFEC')
+                                        Pago dólares efectivo FEC
+                                    @endif
+
                                     @if(get_class($movimiento) == 'compras\ContPagoBolivaresFTN')
                                         Pago efectivo bolívares FTN
                                     @endif
@@ -842,6 +962,14 @@
 
                                     @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLL')
                                         Pago efectivo bolívares FLL
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoBolivaresFM')
+                                        Pago efectivo bolívares FM
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoBolivaresFEC')
+                                        Pago efectivo bolívares FEC
                                     @endif
                                 @endif
                             @endif
