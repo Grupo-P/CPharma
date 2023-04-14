@@ -529,7 +529,6 @@
             $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die (imap_last_error());
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
-            $fecha = '18-Jan-2023';
 
             $search = imap_search($conn, 'SINCE "'.$fecha.'"');
             $search = is_iterable($search) ? $search : [];
