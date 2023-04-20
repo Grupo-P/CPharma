@@ -20,8 +20,8 @@ class VueltoVDCController extends Controller
 
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
-        //$RutaUrl = FG_Mi_Ubicacion();
-        $RutaUrl = 'FAU';
+        $RutaUrl = FG_Mi_Ubicacion();
+        //$RutaUrl = 'FAU';
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -168,8 +168,8 @@ class VueltoVDCController extends Controller
         include app_path() . '/functions/functions.php';
 
         //$sede = FG_Mi_Ubicacion();
-        //$RutaUrl = FG_Mi_Ubicacion();
-        $RutaUrl = 'FAU';
+        $RutaUrl = FG_Mi_Ubicacion();
+        //$RutaUrl = 'FAU';
         
         $SedeConnection = $RutaUrl;
         $sede= $SedeConnection;
@@ -338,8 +338,8 @@ class VueltoVDCController extends Controller
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
-         //$RutaUrl = FG_Mi_Ubicacion();
-         $RutaUrl = 'FAU';
+         $RutaUrl = FG_Mi_Ubicacion();
+         //$RutaUrl = 'FAU';
          $SedeConnection = $RutaUrl;
         $conn = \FG_Conectar_Smartpharma($SedeConnection);
 
@@ -380,8 +380,8 @@ class VueltoVDCController extends Controller
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
-        //$RutaUrl = FG_Mi_Ubicacion();
-        $RutaUrl = 'FAU';
+        $RutaUrl = FG_Mi_Ubicacion();
+       //$RutaUrl = 'FAU';
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $caja = $request->caja; 

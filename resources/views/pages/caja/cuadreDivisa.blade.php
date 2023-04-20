@@ -737,8 +737,8 @@
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
 
-    //$RutaUrl = FG_Mi_Ubicacion();
-    $RutaUrl = 'FAU';
+    $RutaUrl = FG_Mi_Ubicacion();
+    //$RutaUrl = 'FAU';
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = "SELECT id,CodigoCaja FROM VenCaja WHERE estadoCaja = 2 ORDER BY CodigoCaja ASC";
@@ -1429,10 +1429,10 @@
                     
                     <ul style="background-color:lightgray;border-radius:25px;">
                         <span style="text-align:center;"><strong>Requisitos para hacer un pago movil:</strong></span><br>
-                        <li>1.-<strong>No</strong> se le debe de haber <strong>emitido un pago movil al cliente por este medio en el día</strong></li>
-                        <li>2.-<strong>No</strong> se le debe de haber <strong>emitido un pago movil a la factura por este medio en el día</strong></li>
+                        <li>1.-Sólo un pago movil por cliente en el Día</strong></li>
+                        <li>2.-Sólo un pago movil por factura en el Día</strong></li>
                         <li>3.-El monto del pago movil debe ser<strong> menor a Bs. {{$TasaDolar*$montoMaximo}} ({{$montoMaximo}}$)</strong></li>
-                        <li>4.-La factura se debe haber emitido en<strong> menos de {{$minutosMaximos}} minutos</strong></li>                                                
+                        <li>4.-La factura se debe haber emitido en<strong> menos de {{$minutosMaximos}} minutos</strong></li>
                     </ul>
                 </div>
               </div>
