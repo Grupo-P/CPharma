@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use compras\Http\Controllers\Pagomovil\VueltoController;
+use GuzzleHttp\Client as GuzzleHttp;
+use GuzzleHttp\Exception\RequestException as GuzzleException;
 
 Route::view('stellar/productos', 'stellar.productos');
 Route::view('stellar/departamentos', 'stellar.departamentos');
@@ -22,10 +25,50 @@ Route::get('/', function() {
 });
 
 
-Route::get('/vuelto/test', 'VueltoController@test');
-Route::get('/vuelto/validar', 'VueltoController@validar');
-Route::get('/vuelto/info', 'VueltoController@info');
-Route::post('/vuelto', 'VueltoController@procesar');
+Route::get('/vuelto/vdc/test', 'VueltoVDCController@test');
+Route::get('/vuelto/vdc/validar', 'VueltoVDCController@validar');
+Route::get('/vuelto/vdc/info', 'VueltoVDCController@info');
+Route::get('/vuelto/vdc/actualizar', 'VueltoVDCController@actualizar');
+Route::get('/vuelto/vdc', 'VueltoVDCController@procesar');
+
+Route::get('/pagoMovil', function () {
+    $key = '6d0fa27ce7dbddfc';
+    $vi = '260196cb0c40b50b';
+
+    $json['hs'] = 'GFRyhmuM4waaJZlGSeg2NA==';
+    $json['dt']['titular'] = 'Nisa Delgado';
+    $json['dt']['cedula'] = '411801313';
+    $json['dt']['nacionalidad'] = 'J';
+    $json['dt']['motivo'] = 'Vuelto de factura';
+    $json['dt']['telefono'] = '584146803196';
+    $json['dt']['email'] = '';
+    $json['dt']['monto'] = '0.01';
+    $json['dt']['banco'] = '0105';
+
+    $json['dt'] = json_encode($json['dt']);
+    $json['dt'] = openssl_encrypt($json['dt'], 'AES-128-CBC', $key, 0, $vi);
+
+    $client = new GuzzleHttp;
+
+    try {
+        $response = $client->request(
+            'POST',
+            'https://cb.venezolano.com/rs/c2x',
+            ['json' => $json]
+        );
+
+        $response = json_decode($response->getBody()->getContents())->response;
+        $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
+        return $response;
+
+    } catch (GuzzleException $exception) {
+        $response = $exception->getResponse()->getBody()->getContents();
+        $response = json_decode($response);
+        $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
+        $response = json_decode($response);
+        return $response;
+    }
+});
 
 Route::resource('falla', 'FallaController');
 
@@ -469,7 +512,7 @@ Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
 
 Route::get('/syncategorias', 'CategorizacionController@syncategorias');
 
-Route::resource('/cotizacion', 'CotizacionController');
+//Route::resource('/cotizacion', 'CotizacionController');
 
 
 //***************************** RRHH routing *****************************//
@@ -589,6 +632,7 @@ Route::get('/reportes/movimientos-bancarios', 'ContReporteController@movimientos
 Route::get('/reportes/deudas-por-fecha', 'ContReporteController@deudas_por_fecha');
 Route::get('/reportes/pagos-por-fecha', 'ContReporteController@pagos_por_fecha');
 Route::get('/reportes/reporte-por-cuentas', 'ContReporteController@reporte_por_cuentas');
+Route::get('/reportes/vueltos', 'ContReporteController@vueltos');
 
 Route::resource('/conciliaciones', 'ContConciliacionesController');
 
@@ -605,3 +649,6 @@ Route::resource('corrida', 'ContCorridas');
 
 Route::view('verificadorPagos', 'pages.verificadorPagos.index');
 Route::view('verificadorPagosAjax', 'pages.verificadorPagos.ajax');
+
+Route::get('/historicoVueltos', 'Pagomovil\VueltoController@index');
+Route::post('/historicoVueltos2', 'Pagomovil\VueltoController@index')->name("filtrofecha");
