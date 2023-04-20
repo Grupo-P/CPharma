@@ -1431,7 +1431,7 @@
                         <span style="text-align:center;"><strong>Requisitos para hacer un pago movil:</strong></span><br>
                         <li>1.-<strong>No</strong> se le debe de haber <strong>emitido un pago movil al cliente por este medio en el día</strong></li>
                         <li>2.-<strong>No</strong> se le debe de haber <strong>emitido un pago movil a la factura por este medio en el día</strong></li>
-                        <li>3.-El monto del pago movil debe ser<strong> menor a {{$montoMaximo}}$</strong></li>
+                        <li>3.-El monto del pago movil debe ser<strong> menor a Bs. {{$TasaDolar*$montoMaximo}} ({{$montoMaximo}}$)</strong></li>
                         <li>4.-La factura se debe haber emitido en<strong> menos de {{$minutosMaximos}} minutos</strong></li>                                                
                     </ul>
                 </div>
