@@ -31,44 +31,7 @@ Route::get('/vuelto/vdc/info', 'VueltoVDCController@info');
 Route::get('/vuelto/vdc/actualizar', 'VueltoVDCController@actualizar');
 Route::get('/vuelto/vdc', 'VueltoVDCController@procesar');
 
-Route::get('/pagoMovil', function () {
-    $key = '6d0fa27ce7dbddfc';
-    $vi = '260196cb0c40b50b';
 
-    $json['hs'] = 'GFRyhmuM4waaJZlGSeg2NA==';
-    $json['dt']['titular'] = 'Nisa Delgado';
-    $json['dt']['cedula'] = '411801313';
-    $json['dt']['nacionalidad'] = 'J';
-    $json['dt']['motivo'] = 'Vuelto de factura';
-    $json['dt']['telefono'] = '584146803196';
-    $json['dt']['email'] = '';
-    $json['dt']['monto'] = '0.01';
-    $json['dt']['banco'] = '0105';
-
-    $json['dt'] = json_encode($json['dt']);
-    $json['dt'] = openssl_encrypt($json['dt'], 'AES-128-CBC', $key, 0, $vi);
-
-    $client = new GuzzleHttp;
-
-    try {
-        $response = $client->request(
-            'POST',
-            'https://cb.venezolano.com/rs/c2x',
-            ['json' => $json]
-        );
-
-        $response = json_decode($response->getBody()->getContents())->response;
-        $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
-        return $response;
-
-    } catch (GuzzleException $exception) {
-        $response = $exception->getResponse()->getBody()->getContents();
-        $response = json_decode($response);
-        $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
-        $response = json_decode($response);
-        return $response;
-    }
-});
 
 Route::resource('falla', 'FallaController');
 

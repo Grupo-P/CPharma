@@ -1524,11 +1524,11 @@
     }
         //modificacion
       //var SedeConnectionJs = '<?php echo $RutaUrl;?>';
-      var dominio = dominio("DBs");
+      var dominio = <?php echo $RutaUrl;?>;
       const URLConsulFac = ''+dominio+'assets/functions/funConsFactDivisa.php';
 
       function actualizar(){
-        //alert(URLConsulFac);
+        
         //Inicio de la busqueda y el armado de la tabla
           var cajaId =  parseInt($('#cajaActual').val());
           var parametro = {
@@ -1539,7 +1539,7 @@
             $('#errorModalCajaSelect').modal('show');
             return false;
           }
-          //alert(cajaId);
+          
           //Incio Armado tablaFactura
           $.ajax({
             data: parametro,

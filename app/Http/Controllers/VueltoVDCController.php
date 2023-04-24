@@ -16,12 +16,13 @@ class VueltoVDCController extends Controller
 {
     public function validar(Request $request)
     {
-        //return 'exito';
+        //return 'exito'; -- para testing
 
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
+
         $RutaUrl = FG_Mi_Ubicacion();
-        //$RutaUrl = 'FAU';
+        //$RutaUrl = 'FAU'; -- para testing
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -341,7 +342,7 @@ class VueltoVDCController extends Controller
          $RutaUrl = FG_Mi_Ubicacion();
          //$RutaUrl = 'FAU';
          $SedeConnection = $RutaUrl;
-        $conn = \FG_Conectar_Smartpharma($SedeConnection);
+        $conn = FG_Conectar_Smartpharma($SedeConnection);
 
         $caja = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 

@@ -34,8 +34,8 @@ class VueltoController extends Controller
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
-        //$RutaUrl = FG_Mi_Ubicacion();
-        $RutaUrl = 'FAU';
+        $RutaUrl = FG_Mi_Ubicacion();
+        //$RutaUrl = 'FAU';
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $sedeUsuario = Auth::user()->sede;
@@ -216,13 +216,8 @@ class VueltoController extends Controller
 
         if($vueltos!=null){
             foreach($vueltos as $vuelto){
-                if($vuelto->id_factura>0){
-                    $idFactura=$vuelto->id_factura;
-
-                }
-                else{
-                    $idFactura=320664;
-                }
+                
+                $idFactura=$vuelto->id_factura;
 
                 //Consulta de la factura
                 $sql = "

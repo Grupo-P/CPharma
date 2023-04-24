@@ -49,7 +49,7 @@
     $arrayFactura = array();
 
     $RutaUrl = FG_Mi_Ubicacion();
-    //$RutaUrl = 'FAU';
+    //$RutaUrl = 'FAU'; -- testing
     $SedeConnection = $RutaUrl;
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
 
