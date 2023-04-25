@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use compras\Http\Controllers\Pagomovil\VueltoController;
+use GuzzleHttp\Client as GuzzleHttp;
+use GuzzleHttp\Exception\RequestException as GuzzleException;
 
 Route::view('stellar/productos', 'stellar.productos');
 Route::view('stellar/departamentos', 'stellar.departamentos');
@@ -477,7 +480,7 @@ Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
 
 Route::get('/syncategorias', 'CategorizacionController@syncategorias');
 
-Route::resource('/cotizacion', 'CotizacionController');
+//Route::resource('/cotizacion', 'CotizacionController');
 
 
 //***************************** RRHH routing *****************************//
@@ -607,6 +610,7 @@ Route::get('/reportes/movimientos-bancarios', 'ContReporteController@movimientos
 Route::get('/reportes/deudas-por-fecha', 'ContReporteController@deudas_por_fecha');
 Route::get('/reportes/pagos-por-fecha', 'ContReporteController@pagos_por_fecha');
 Route::get('/reportes/reporte-por-cuentas', 'ContReporteController@reporte_por_cuentas');
+Route::get('/reportes/vueltos', 'ContReporteController@vueltos');
 
 Route::resource('/conciliaciones', 'ContConciliacionesController');
 
@@ -623,3 +627,6 @@ Route::resource('corrida', 'ContCorridas');
 
 Route::view('verificadorPagos', 'pages.verificadorPagos.index');
 Route::view('verificadorPagosAjax', 'pages.verificadorPagos.ajax');
+
+Route::get('/historicoVueltos', 'Pagomovil\VueltoController@index');
+Route::post('/historicoVueltos2', 'Pagomovil\VueltoController@index')->name("filtrofecha");

@@ -48,7 +48,9 @@
   function FG_Articulos_Sugeridos($cajaId){
     $arrayFactura = array();
 
-    $SedeConnection = FG_Mi_Ubicacion();
+    $RutaUrl = FG_Mi_Ubicacion();
+    //$RutaUrl = 'FAU'; -- testing
+    $SedeConnection = $RutaUrl;
   	$conn = FG_Conectar_Smartpharma($SedeConnection);
 
   	$sql = SQL_Consulta_Caja($cajaId);
