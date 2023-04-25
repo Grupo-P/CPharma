@@ -1523,8 +1523,8 @@
         }
     }
         //modificacion
-      //var SedeConnectionJs = '<?php echo $RutaUrl;?>';
-      var dominio = <?php echo $RutaUrl;?>;
+        var SedeConnectionJs = '<?php echo $RutaUrl;?>';
+      var dominio = dominio(SedeConnectionJs);
       const URLConsulFac = ''+dominio+'assets/functions/funConsFactDivisa.php';
 
       function actualizar(){
