@@ -1797,6 +1797,9 @@
             case 'Ventas por cajas/cajeros':
                 $ruta = '/reporte51';
             break;
+            case 'Lotes a la baja':
+                $ruta = '/reporte52';
+            break;
             default:
                 $ruta = '#';
             break;
@@ -1960,6 +1963,9 @@
             break;
             case 51:
                 $nombre = 'Ventas por cajas/cajeros';
+            break;
+            case 52:
+                $nombre = 'Lotes a la baja';
             break;
             default:
                 $nombre = 'Reporte desconocido';
