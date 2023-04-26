@@ -282,6 +282,8 @@ Route::get('/reporte50', 'Reporte50Controller@reporte50');
 
 Route::view('/reporte51', 'pages.reporte.reporte51');
 
+Route::view('/reporte52', 'pages.reporte.reporte52');
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });

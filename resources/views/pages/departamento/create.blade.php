@@ -163,7 +163,7 @@
                 <th scope="col">46</th>
                 <td scope="col">Compras por archivo</td>
                 <th scope="col">47</th>
-                <td scope="col">Cruce de aplicación de consultas</td>                
+                <td scope="col">Cruce de aplicación de consultas</td>
             </tr>
             <tr>
                 <th scope="col">48</th>
@@ -174,6 +174,8 @@
                 <td scope="col">Catálogo de droguerías</td>
                 <th scope="col">51</th>
                 <td scope="col">Ventas por cajas/cajeros</td>
+                <th scope="col">52</th>
+                <td scope="col">Lotes a la baja</td>
             </tr>
         </tbody>
     </table>

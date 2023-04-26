@@ -175,6 +175,8 @@
                 <td scope="col">Catálogo de droguerías</td>
                 <th scope="col">51</th>
                 <td scope="col">Ventas por cajas/cajeros</td>
+                <th scope="col">52</th>
+                <td scope="col">Lotes a la baja</td>
             </tr>
         </tbody>
     </table>
