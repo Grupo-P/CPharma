@@ -91,12 +91,13 @@
                 <th scope="col" class="CP-sticky">Codigo Barra</th>
                 <th scope="col" class="CP-sticky">Descripcion</th>
 	      	    <th scope="col" class="CP-sticky">Numero Lote</th>
-                <th scope="col" class="CP-sticky">Existencia</th>
-                <th scope="col" class="CP-sticky">Costo Lote</th>
-                <th scope="col" class="CP-sticky">Fecha Creacion</th>
-                <th scope="col" class="CP-sticky">Fecha Entrada</th>
+                <th scope="col" class="CP-sticky">Existencia Lote</th>
+                <th scope="col" class="CP-sticky">Costo Lote '.SigVe.'</th>
+                <th scope="col" class="CP-sticky">Fecha Lote Creacion</th>
+                <th scope="col" class="CP-sticky">Fecha Lote Entrada</th>
                 <th scope="col" class="CP-sticky">Dolarizado</th>
-                <th scope="col" class="CP-sticky">Costo Final $</th>
+                <th scope="col" class="CP-sticky">Tasa</th>
+                <th scope="col" class="CP-sticky">Costo Final '.SigDolar.'</th>
                 <th scope="col" class="CP-sticky">Bajo?</th>
                 <th scope="col" class="CP-sticky">Subio?</th>
                 <th scope="col" class="CP-sticky">Dias</th>
@@ -106,7 +107,7 @@
   	<tbody>
 		';
         $IdArticuloAnterior = '';
-        $CostoArticuloAnterior = 0;
+        $CostoDolarArticuloAnterior = 0;
         $lotesBaja = 0;
         $lotesAlza = 0;
         $sumPromedios = 0;
@@ -118,6 +119,7 @@
             $Dolarizado = FG_Producto_Dolarizado($row["Dolarizado"]);
             $costoBs = $row['M_PrecioCompraBruto'];
             $fechaCreacion = $row['Auditoria_FechaCreacion']->format('Y-m-d');
+            $RangoDias = $row['RangoDias'];
             $Tasa = FG_Tasa_Fecha($connCPharma,$fechaCreacion);
 
 			echo '<tr>';
@@ -138,53 +140,58 @@
             echo '<td align="center">'.($row['FechaEntrada'])->format('d-m-Y').'</td>';
 			echo '<td align="center">'.$Dolarizado.'</td>';
 
-            if($Tasa!=0){
+            if($Tasa!=0){ // Caso con tasa de dolar
                 $costoDolar = $costoBs/$Tasa;
+                echo '<td class="precio" align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
                 echo '<td class="precio_ds" align="center">'.number_format($costoDolar,2,"," ,"." ).'</td>';
-            }else{
-                echo '<td align="center">-</td>';
-            }
 
-            if($IdArticuloAnterior != $IdArticulo){
-                $IdArticuloAnterior = $IdArticulo;
-                $CostoArticuloAnterior = $costoBs;
-                echo '<td align="center">-</td>';
-                echo '<td align="center">-</td>';
-                echo '<td align="center">-</td>';
-                echo '<td align="center">-</td>';
-            }else{
-                if($costoBs < $CostoArticuloAnterior){
-                    echo '<td align="center"> SI </td>';
-                    echo '<td align="center"> - </td>';
-                    $RangoDias = $row['RangoDias'];
-                    echo '<td align="center">'.intval($RangoDias).'</td>';
-                    $porcentaje = (($costoBs-$CostoArticuloAnterior)/$CostoArticuloAnterior)*100;
-                    echo '<td class="precio_ds" align="center">'.number_format($porcentaje,3,"," ,"." ).' %</td>';
+                if($IdArticuloAnterior != $IdArticulo){ //Caso Articulo distinto
+                    echo '<td align="center">-</td>';
+                    echo '<td align="center">-</td>';
+                    echo '<td align="center">-</td>';
+                    echo '<td align="center">-</td>';
+                    $IdArticuloAnterior = $IdArticulo;
+                    $CostoDolarArticuloAnterior = $costoDolar;
+                }else{
+                    if($costoDolar < $CostoDolarArticuloAnterior){ //Caso Bajo Costo lote en dolares
+                        echo '<td align="center"> SI </td>';
+                        echo '<td align="center"> - </td>';
+                        echo '<td align="center">'.intval($RangoDias).'</td>';
+                        $porcentaje = (($costoDolar-$CostoDolarArticuloAnterior)/$CostoDolarArticuloAnterior)*100;
+                        echo '<td class="precio_ds" align="center">'.number_format($porcentaje,2,"," ,"." ).'%</td>';
 
-                    $lotesBaja++;
-                    $sumPromedios += $porcentaje;
-                    $sumDias += $RangoDias;
-                }
-                else if($costoBs > $CostoArticuloAnterior){
-                    echo '<td align="center"> - </td>';
-                    echo '<td align="center"> SI </td>';
-                    $RangoDias = $row['RangoDias'];
-                    echo '<td align="center">'.intval($RangoDias).'</td>';
-                    $porcentaje = (($costoBs-$CostoArticuloAnterior)/$CostoArticuloAnterior)*100;
-                    echo '<td class="precio_ds" align="center">'.number_format($porcentaje,3,"," ,"." ).' %</td>';
+                        $lotesBaja++;
+                        $sumPromedios += $porcentaje;
+                        $sumDias += $RangoDias;
+                    }
+                    else if($costoDolar > $CostoDolarArticuloAnterior){ //Caso Subio Costo lote en dolares
+                        echo '<td align="center"> - </td>';
+                        echo '<td align="center"> SI </td>';
+                        echo '<td align="center">'.intval($RangoDias).'</td>';
+                        $porcentaje = (($costoDolar-$CostoDolarArticuloAnterior)/$CostoDolarArticuloAnterior)*100;
+                        echo '<td class="precio_ds" align="center">'.number_format($porcentaje,2,"," ,"." ).'%</td>';
 
-                    $lotesAlza++;
-                    $sumPromedios += $porcentaje;
-                    $sumDias += $RangoDias;
+                        $lotesAlza++;
+                        $sumPromedios += $porcentaje;
+                        $sumDias += $RangoDias;
+                    }
+                    else{
+                        echo '<td align="center">-</td>';
+                        echo '<td align="center">-</td>';
+                        echo '<td align="center">-</td>';
+                        echo '<td align="center">-</td>';
+                    }
+                    $IdArticuloAnterior = $IdArticulo;
+                    $CostoDolarArticuloAnterior = $costoDolar;
                 }
-                else{
-                    echo '<td align="center">-</td>';
-                    echo '<td align="center">-</td>';
-                    echo '<td align="center">-</td>';
-                    echo '<td align="center">-</td>';
-                }
-                $IdArticuloAnterior = $IdArticulo;
-                $CostoArticuloAnterior = $costoBs;
+
+            }else{ //Caso sin tasa del dolar
+                echo '<td align="center">-</td>';
+                echo '<td align="center">-</td>';
+                echo '<td align="center">-</td>';
+                echo '<td align="center">-</td>';
+                echo '<td align="center">-</td>';
+                echo '<td align="center">-</td>';
             }
 
 			echo '</tr>';
@@ -194,6 +201,8 @@
   		</tbody>
 		</table>';
 
+        $TotalPromedios = (($lotesBaja+$lotesAlza)>0) ? $sumPromedios/($lotesBaja+$lotesAlza) : '-';
+        $TotalDias = (($lotesBaja+$lotesAlza)>0) ? $sumDias/($lotesBaja+$lotesAlza) : '-';
 
         echo '<table class="table table-bordered sortable table-striped table-sm">
         <thead class="thead-dark">
@@ -231,7 +240,7 @@
                 Promedio de %
             </td>
             <td scope="col">
-                '.$sumPromedios/($lotesBaja+$lotesAlza).'
+                '.$TotalPromedios.'
             </td>
         </tr>
         <tr>
@@ -239,7 +248,7 @@
                 Promedio de dias
             </td>
             <td scope="col">
-                '.$sumDias/($lotesBaja+$lotesAlza).'
+                '.$TotalDias.'
             </td>
         </tr>
         </tbody>
