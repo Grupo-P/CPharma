@@ -50,7 +50,21 @@ class ContCorridas extends Controller
             $kdi = false;
         }
 
-        return view('pages.contabilidad.corridas.index', compact('kdi', 'fm', 'fll', 'fau', 'ftn'));
+        try {
+            $fec['tasa_calculo'] = DB::connection('fec')->select("SELECT * FROM configuracions WHERE variable = 'DolarCalculo'")[0];
+
+        } catch (Exception $excepcion) {
+            $fec = false;
+        }
+
+        try {
+            $kd73['tasa_calculo'] = DB::connection('kd73')->select("SELECT * FROM configuracions WHERE variable = 'DolarCalculo'")[0];
+
+        } catch (Exception $excepcion) {
+            $kd73 = false;
+        }
+
+        return view('pages.contabilidad.corridas.index', compact('kdi', 'fm', 'fll', 'fau', 'ftn', 'fec', 'kd73'));
     }
 
     /**
@@ -84,11 +98,11 @@ class ContCorridas extends Controller
                 ->select("SELECT * FROM configuracions WHERE variable = 'DolarCalculo'");
 
             $tasa_caculo = $configuracion[0]->valor;
-            
+
             $tipo_corrida = $request->tipo_corrida;
             $user = auth()->user()->name;
 
-            FG_Corrida_Precio_Sede($sede, $tipo_corrida, $tasa_caculo, $user);  
+            FG_Corrida_Precio_Sede($sede, $tipo_corrida, $tasa_caculo, $user);
         }
 
         catch (Exception $excepcion) {
@@ -96,7 +110,7 @@ class ContCorridas extends Controller
         }
 
         return redirect('/corrida');
-        
+
     }
 
     /**

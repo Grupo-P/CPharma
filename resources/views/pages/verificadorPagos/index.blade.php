@@ -36,6 +36,7 @@
                             <option value="KDI">KDI</option>
                             <option value="FSM">FSM</option>
                             <option value="FEC">FEC</option>
+                            <option value="KD73">KD73</option>
                         </select>
                     </div>
                 @endif
@@ -81,7 +82,7 @@
                 $remitente = 'pagosfll677@gmail.com';
             }
 
-            if ($sede == 'KDI' || $sede == 'FARMACIAS KD EXPRESS, C.A.') {
+            if ($sede == 'KDI' || $sede == 'KD73' || $sede == 'FARMACIAS KD EXPRESS, C.A.') {
                 $username = 'pagoskdi@hotmail.com';
                 $password = 'GJpc2017.';
                 $remitente = '';

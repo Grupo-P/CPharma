@@ -60,10 +60,28 @@ class ContTasas extends Controller
             $kdi = false;
         }
 
+        try {
+            $fec['tasa_venta'] = DB::connection('fec')->select("SELECT * FROM tasa_ventas WHERE moneda = 'Dolar'")[0];
+            $fec['tasa_mercado'] = DB::connection('fec')->select("SELECT * FROM dolars ORDER BY id DESC LIMIT 1")[0];
+            $fec['tasa_calculo'] = DB::connection('fec')->select("SELECT * FROM configuracions WHERE variable = 'DolarCalculo'")[0];
+
+        } catch (Exception $excepcion) {
+            $fec = false;
+        }
+
+        try {
+            $kd73['tasa_venta'] = DB::connection('kd73')->select("SELECT * FROM tasa_ventas WHERE moneda = 'Dolar'")[0];
+            $kd73['tasa_mercado'] = DB::connection('kd73')->select("SELECT * FROM dolars ORDER BY id DESC LIMIT 1")[0];
+            $kd73['tasa_calculo'] = DB::connection('kd73')->select("SELECT * FROM configuracions WHERE variable = 'DolarCalculo'")[0];
+
+        } catch (Exception $excepcion) {
+            $kd73 = false;
+        }
+
         $min = DB::select("SELECT * FROM configuracions WHERE variable = 'RangoMinDolar'")[0]->valor;
         $max = DB::select("SELECT * FROM configuracions WHERE variable = 'RangoMaxDolar'")[0]->valor;
 
-        return view('pages.contabilidad.tasas.index', compact('ftn', 'fau', 'fm', 'fll', 'kdi', 'min', 'max'));
+        return view('pages.contabilidad.tasas.index', compact('ftn', 'fau', 'fm', 'fll', 'kdi', 'fec', 'kd73', 'min', 'max'));
     }
 
     /**

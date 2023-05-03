@@ -289,6 +289,10 @@
                 dominio = 'http://cpharmafec.com/';
                 return dominio;
             break;
+            case 'KD73':
+                dominio = 'http://cpharmakd73.com/';
+                return dominio;
+            break;
         }
     }
 

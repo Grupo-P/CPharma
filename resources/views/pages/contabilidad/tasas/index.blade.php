@@ -50,7 +50,7 @@
                 </tr>
             </thead>
 
-            <tbody>                
+            <tbody>
                 <tr>
                     @if($ftn)
                         <td>
@@ -72,7 +72,7 @@
                             <label>No hay conexión</label>
                         </td>
                     @endif
-                </tr>                
+                </tr>
             </tbody>
         </table>
 
@@ -198,6 +198,72 @@
                         <td>
                             <label for="tasa_calculo">Tasa cálculo (Última actualización: {{ date_format(date_create($kdi['tasa_calculo']->updated_at), 'd/m/Y') }})</label>
                             <input class="form-control" required name="kdi[tasa_calculo]" type="number" step="0.0001" value="{{ $kdi['tasa_calculo']->valor }}">
+                        </td>
+                    @else
+                        <td colspan="3" class="text-center">
+                            <label>No hay conexión</label>
+                        </td>
+                    @endif
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-borderless table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="row" colspan="5">FEC</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    @if($fec)
+                        <td>
+                            <label for="tasa_venta">Tasa venta (Última actualización: {{ date_format(date_create($fec['tasa_venta']->fecha), 'd/m/Y') }})</label>
+                            <input class="form-control" min="{{ $min }}" max="{{ $max }}" required name="fec[tasa_venta]" type="number" step="0.0001" value="{{ $fec['tasa_venta']->tasa }}">
+                        </td>
+
+                        <td>
+                            <label for="tasa_mercado">Tasa mercado (Última actualización: {{ date_format(date_create($fec['tasa_mercado']->fecha), 'd/m/Y') }})</label>
+                            <input class="form-control" required name="fec[tasa_mercado]" type="number" step="0.0001" value="{{ $fec['tasa_mercado']->tasa }}">
+                        </td>
+
+                        <td>
+                            <label for="tasa_calculo">Tasa cálculo (Última actualización: {{ date_format(date_create($fec['tasa_calculo']->updated_at), 'd/m/Y') }})</label>
+                            <input class="form-control" required name="fec[tasa_calculo]" type="number" step="0.0001" value="{{ $fec['tasa_calculo']->valor }}">
+                        </td>
+                    @else
+                        <td colspan="3" class="text-center">
+                            <label>No hay conexión</label>
+                        </td>
+                    @endif
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-borderless table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="row" colspan="5">KD73</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    @if($kd73)
+                        <td>
+                            <label for="tasa_venta">Tasa venta (Última actualización: {{ date_format(date_create($kd73['tasa_venta']->fecha), 'd/m/Y') }})</label>
+                            <input class="form-control" min="{{ $min }}" max="{{ $max }}" required name="kd73[tasa_venta]" type="number" step="0.0001" value="{{ $kd73['tasa_venta']->tasa }}">
+                        </td>
+
+                        <td>
+                            <label for="tasa_mercado">Tasa mercado (Última actualización: {{ date_format(date_create($kd73['tasa_mercado']->fecha), 'd/m/Y') }})</label>
+                            <input class="form-control" required name="kd73[tasa_mercado]" type="number" step="0.0001" value="{{ $kd73['tasa_mercado']->tasa }}">
+                        </td>
+
+                        <td>
+                            <label for="tasa_calculo">Tasa cálculo (Última actualización: {{ date_format(date_create($kd73['tasa_calculo']->updated_at), 'd/m/Y') }})</label>
+                            <input class="form-control" required name="kd73[tasa_calculo]" type="number" step="0.0001" value="{{ $kd73['tasa_calculo']->valor }}">
                         </td>
                     @else
                         <td colspan="3" class="text-center">
