@@ -31,7 +31,7 @@ define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
 define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A.");
 define ("SedeFEC","FARMACIA EL CALLEJON, C.A.");
 define ("SedeGP","Servidor de Testing");
-define ("SedeDBs","Servidor de Desarrollo Nisaul");
+define ("SedeDBs","Servidor de Desarrollo");
 define ("SedeDBsa","Servidor de Desarrollo Sergio");
 /**********************************************************************************/
 /************************ NOMBRES SEDES OFF-LINE *********************************/
