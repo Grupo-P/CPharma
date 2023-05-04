@@ -142,7 +142,7 @@
 ?>
     <script type="text/javascript">
       ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletado(document.getElementById("myInput"),document.getElementById("myId"), ArrJs);
+      autocompletadoGenerico(document.getElementById("myInput"),document.getElementById("myId"), ArrJs, 2);
     </script>
 <?php
   }
