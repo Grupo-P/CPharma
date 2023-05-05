@@ -30,6 +30,7 @@ define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
 define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
 define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A.");
 define ("SedeFEC","FARMACIA EL CALLEJON, C.A.");
+define ("SedeKD73","FARMACIAS KD EXPRESS, C.A. - KD73");
 define ("SedeGP","Servidor de Testing");
 define ("SedeDBs","Servidor de Desarrollo");
 define ("SedeDBsa","Servidor de Desarrollo Sergio");
@@ -83,6 +84,13 @@ define ("userFEC" , "admin");
 define ("passFEC" , "soporte123");
 define ("nameFEC" , "BD_ELCALLEJON");
 define ("nameFECOFF" , "cpharmafec");
+/**********************************************************************************/
+/************************* CONEXION ON LINE KD73 **********************************/
+define ("serverKD73" , "SERVER-KD73");
+define ("userKD73" , "admin");
+define ("passKD73" , "soporte123");
+define ("nameKD73" , "BD_KDEXPRESS");
+define ("nameKD73OFF" , "cpharmakd73");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
 define ("serverGP" , "TESTSERVER\TESTINGSERVER");

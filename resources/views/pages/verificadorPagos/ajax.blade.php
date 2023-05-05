@@ -57,6 +57,13 @@
             $id = 6;
         }
 
+        if ($host == 'cpharmakd73.com') {
+            $username = 'pagoskdi@hotmail.com';
+            $password = 'GJpc2017.';
+            $remitente = '';
+            $id = 5;
+        }
+
         $mailbox = '{outlook.office365.com:993/imap/ssl}';
 
         $fecha = date_create(request()->fecha);

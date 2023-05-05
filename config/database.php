@@ -122,7 +122,7 @@ return [
 
         'kdi' => [
             'driver' => 'mysql',
-            'host' => '192.168.20.35',
+            'host' => '192.168.15.35',
             'port' => '3306',
             'database' => 'cpharma',
             'username' => 'cpharmagp',
@@ -139,6 +139,22 @@ return [
         'fec' => [
             'driver' => 'mysql',
             'host' => '192.168.20.35',
+            'port' => '3306',
+            'database' => 'cpharma',
+            'username' => 'cpharmagp',
+            'password' => '4lUUKhAXR8IuC0yj',
+            'unix_socket' => '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+        ],
+
+        'kd73' => [
+            'driver' => 'mysql',
+            'host' => '192.168.60.35',
             'port' => '3306',
             'database' => 'cpharma',
             'username' => 'cpharmagp',

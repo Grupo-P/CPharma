@@ -153,6 +153,11 @@
                 return 'FEC';
             break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE DE KD73
+            case '60':
+                return 'KD73';
+            break;
+        //FIN BLOQUE DE KD73
             default:
                 return 'ARG';
                 //return ''.$Octeto[2];
@@ -304,10 +309,18 @@
                 return $sede;
             break;
         //FIN BLOQUE DE GRUPO P
+        //INICIO BLOQUE FEC
             case 'FEC':
                 $sede = SedeFEC;
                 return $sede;
             break;
+        //FIN BLOQUE FEC
+        //INICIO BLOQUE KD73
+            case 'KD73':
+                $sede = SedeKD73;
+                return $sede;
+            break;
+        //FIN BLOQUE KD73
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $sede = SedeDBs;
@@ -631,6 +644,17 @@
                 return $conn;
             break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE KD73
+            case 'KD73':
+                $connectionInfo = array(
+                    "Database"=>nameKD73,
+                    "UID"=>userKD73,
+                    "PWD"=>passKD73
+                );
+                $conn = sqlsrv_connect(serverKD73,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE KD73
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $connectionInfo = array(
@@ -976,6 +1000,17 @@
             return $conn;
         break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE DE KD73
+            case 'KD73':
+                $connectionInfo = array(
+                    "Database"=>"Mod_Atte_Cliente",
+                    "UID"=>userKD73,
+                    "PWD"=>passKD73
+                );
+                $conn = sqlsrv_connect(serverKDI,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE KD73
         //INICIO BLOQUE DE TEST
             case 'DBs':
                 $connectionInfo = array(
@@ -2053,6 +2088,9 @@
                 $Flag = TRUE;
             break;
             case 'FEC':
+                $Flag = TRUE;
+            break;
+            case 'KD73':
                 $Flag = TRUE;
             break;
             default:
@@ -3502,6 +3540,10 @@
                 $dominio = 'http://cpharmafec.com/';
                 return $dominio;
             break;
+            case 'KD73':
+                $dominio = 'http://cpharmakd73.com/';
+                return $dominio;
+            break;
         }
     }
     /**********************************************************************************/
@@ -4737,6 +4779,10 @@
         $nombre = 'FARMACIA EL CALLEJON, C.A.';
     }
 
+    if ($sede == 'KD73') {
+        return [];
+    }
+
     if ($codigo_barra) {
         $where = "traslados_detalle.codigo_barra = '$codigo_barra'";
     } else {
@@ -4853,6 +4899,23 @@
         ");
 
         $array = array_merge($array, $fec);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $kd73 = DB::connection('kd73')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $kd73);
     } catch (Exception $excepcion) {
 
     }

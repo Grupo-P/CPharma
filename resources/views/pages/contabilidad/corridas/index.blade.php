@@ -15,7 +15,7 @@
   </a>
 
 
-  
+
   <fieldset class="mt-3">
     <table class="table table-borderless table-striped">
         <thead class="thead-dark">
@@ -24,7 +24,7 @@
             </tr>
         </thead>
 
-        <tbody>                
+        <tbody>
             <tr>
                 @if($fm)
                     {!! Form::open(['route' => 'corrida.store', 'method' => 'POST', 'class' => 'form-group mt-3']) !!}
@@ -60,7 +60,7 @@
                         <label>No hay conexión</label>
                     </td>
                 @endif
-            </tr>                
+            </tr>
         </tbody>
     </table>
 
@@ -71,7 +71,7 @@
             </tr>
         </thead>
 
-        <tbody>                
+        <tbody>
             <tr>
                 @if($fau)
                     {!! Form::open(['route' => 'corrida.store', 'method' => 'POST', 'class' => 'form-group mt-3']) !!}
@@ -107,7 +107,7 @@
                         <label>No hay conexión</label>
                     </td>
                 @endif
-            </tr>                
+            </tr>
         </tbody>
     </table>
 
@@ -118,7 +118,7 @@
             </tr>
         </thead>
 
-        <tbody>                
+        <tbody>
             <tr>
                 @if($fm)
                     {!! Form::open(['route' => 'corrida.store', 'method' => 'POST', 'class' => 'form-group mt-3']) !!}
@@ -154,7 +154,7 @@
                         <label>No hay conexión</label>
                     </td>
                 @endif
-            </tr>                
+            </tr>
         </tbody>
     </table>
 
@@ -165,7 +165,7 @@
             </tr>
         </thead>
 
-        <tbody>                
+        <tbody>
             <tr>
                 @if($fll)
                     {!! Form::open(['route' => 'corrida.store', 'method' => 'POST', 'class' => 'form-group mt-3']) !!}
@@ -201,7 +201,7 @@
                         <label>No hay conexión</label>
                     </td>
                 @endif
-            </tr>                
+            </tr>
         </tbody>
     </table>
 
@@ -212,7 +212,7 @@
             </tr>
         </thead>
 
-        <tbody>                
+        <tbody>
             <tr>
                 @if($kdi)
                     {!! Form::open(['route' => 'corrida.store', 'method' => 'POST', 'class' => 'form-group mt-3']) !!}
@@ -248,7 +248,101 @@
                         <label>No hay conexión</label>
                     </td>
                 @endif
-            </tr>                
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-borderless table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="row" colspan="5">FEC</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                @if($fec)
+                    {!! Form::open(['route' => 'corrida.store', 'method' => 'POST', 'class' => 'form-group mt-3']) !!}
+                        <td>
+                            <label for="tasa_calculo">Tasa cálculo</label>
+                            <input class="form-control" readonly name="tasa_calculo" type="number" step="0.0001" value="{{ $fec['tasa_calculo']->valor }}">
+                        </td>
+
+                        <td>
+                            <label for="fecha">Fecha</label>
+                            <input class="form-control" readonly name="fecha" type="date" value="{{ date_format(date_create($fec['tasa_calculo']->updated_at), 'Y-m-d') }}">
+                        </td>
+
+                        <td>
+                            <label for="tipo">Tipo de corrida</label>
+
+                            <div class="mt-2">
+                                <input type="radio" id="subida" name="tipo_corrida" value="subida" checked>
+                                <label for="subida">Subida</label>
+
+                                <input class="ml-3" type="radio" id="subida/bajada" name="tipo_corrida" value="bajada">
+                                <label for="subida/bajada">Subida/Bajada</label>
+                            </div>
+                        </td>
+
+                        <td>
+                            <input type="hidden" name="sede" value="FEC">
+                            <button type="submit" class="btn btn-outline-success mt-3">Ejecutar</button>
+                        </td>
+                    {!! Form::close()!!}
+                @else
+                    <td colspan="3" class="text-center">
+                        <label>No hay conexión</label>
+                    </td>
+                @endif
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-borderless table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="row" colspan="5">KD73</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                @if($kd73)
+                    {!! Form::open(['route' => 'corrida.store', 'method' => 'POST', 'class' => 'form-group mt-3']) !!}
+                        <td>
+                            <label for="tasa_calculo">Tasa cálculo</label>
+                            <input class="form-control" readonly name="tasa_calculo" type="number" step="0.0001" value="{{ $kd73['tasa_calculo']->valor }}">
+                        </td>
+
+                        <td>
+                            <label for="fecha">Fecha</label>
+                            <input class="form-control" readonly name="fecha" type="date" value="{{ date_format(date_create($kd73['tasa_calculo']->updated_at), 'Y-m-d') }}">
+                        </td>
+
+                        <td>
+                            <label for="tipo">Tipo de corrida</label>
+
+                            <div class="mt-2">
+                                <input type="radio" id="subida" name="tipo_corrida" value="subida" checked>
+                                <label for="subida">Subida</label>
+
+                                <input class="ml-3" type="radio" id="subida/bajada" name="tipo_corrida" value="bajada">
+                                <label for="subida/bajada">Subida/Bajada</label>
+                            </div>
+                        </td>
+
+                        <td>
+                            <input type="hidden" name="sede" value="KD73">
+                            <button type="submit" class="btn btn-outline-success mt-3">Ejecutar</button>
+                        </td>
+                    {!! Form::close()!!}
+                @else
+                    <td colspan="3" class="text-center">
+                        <label>No hay conexión</label>
+                    </td>
+                @endif
+            </tr>
         </tbody>
     </table>
   </fieldset>

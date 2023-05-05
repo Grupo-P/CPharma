@@ -869,7 +869,8 @@
     }
 ?>
 <!-- CASO KDI-->
-<!-- CASO FEC -->
+<!-------------------------------------------------------------------------------->
+<!-- CASO FEC-->
 <?php
 }
     if($SedeConnection == 'FEC'){
@@ -1073,6 +1074,37 @@
     }
     ?>
 <!-- CASO FEC -->
+<!-------------------------------------------------------------------------------->
+<!-- CASO KD73-->
+<?php
+}
+    if($SedeConnection == 'KD73'){
+?>
+    <?php
+        if(Auth::user()->sede == 'FARMACIAS KD EXPRESS, C.A. - KD73' || Auth::user()->sede == 'GRUPO P, C.A'){
+    ?>
+    <div class="card-deck">
+        <div class="card border-danger mb-3" style="width: 14rem;">
+        <div class="card-body text-left bg-danger">
+            <h5 class="card-title">
+                <span class="card-text text-white">
+                    <?php echo "".SedeKD73; ?>
+                </span>
+            </h5>
+        </div>
+        <div class="card-footer bg-transparent border-danger text-right">
+                <form action="/reporte/" style="display: inline;">
+                @csrf
+                <input id="SEDE" name="SEDE" type="hidden" value="KD73">
+                <button type="submit" name="Reporte" role="button" class="btn btn-outline-danger btn-sm"></i>Ver reportes</button>
+                </form>
+        </div>
+        </div>
+    </div>
+    <?php
+    }
+?>
+<!-- CASO KD73-->
 <!-------------------------------------------------------------------------------->
 <!-------------------------------------------------------------------------------->
 <!-- CASO FSM -->
