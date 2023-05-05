@@ -27,7 +27,7 @@ define ("nameCP","cpharma");
 define ("SedeFTN","FARMACIA TIERRA NEGRA, C.A.");
 define ("SedeFLL","FARMACIA LA LAGO,C.A.");
 define ("SedeFAU","FARMACIA AVENIDA UNIVERSIDAD, C.A.");
-define ("SedeKDI","FARMACIA KD EXPRESS, C.A.");
+define ("SedeKDI","FARMACIAS KD EXPRESS, C.A.");
 define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A.");
 define ("SedeFEC","FARMACIA EL CALLEJON, C.A.");
 define ("SedeKD73","FARMACIAS KD EXPRESS, C.A. - KD73");
@@ -39,9 +39,10 @@ define ("SedeDBsa","Servidor de Desarrollo Sergio");
 define ("SedeFTNOFF","FARMACIA TIERRA NEGRA, C.A.<br>OFF-LINE");
 define ("SedeFLLOFF","FARMACIA LA LAGO,C.A.<br>OFF-LINE");
 define ("SedeFAUOFF","FARMACIA AVENIDA UNIVERSIDAD, C.A.<br>OFF-LINE");
-define ("SedeKDIOFF","FARMACIA KD EXPRESS, C.A.<br>OFF-LINE");
+define ("SedeKDIOFF","FARMACIAS KD EXPRESS, C.A.<br>OFF-LINE");
 define ("SedeFSMOFF","FARMACIA MILLENNIUM 2000, C.A.<br>OFF-LINE");
 define ("SedeFECOFF","FARMACIA EL CALLEJON, C.A.<br>OFF-LINE");
+define ("SedeKD73OFF","FARMACIAS KD EXPRESS, C.A. - KD73<br>OFF-LINE");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FTN **********************************/
 define ("serverFTN" , "10.100.0.2\SMARTPHARMA,1450");
