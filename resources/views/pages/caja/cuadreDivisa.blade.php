@@ -1199,7 +1199,7 @@
                     '0171' => 'Banco Activo',
                     '0172' => 'Bancamiga',
                     '0174' => 'Banplus',
-                    '0175' => 'Banco Bicentario',
+                    '0175' => 'Banco Bicentenario',
                     '0177' => 'Banfanb',
                     '0191' => 'Banco Nacional de Crédito'
                 ];
