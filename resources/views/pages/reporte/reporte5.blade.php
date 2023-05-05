@@ -951,7 +951,7 @@
             }
 
             if ($conectividad_fec == 1 && $descripcion_fec != '-' && $existencia_fec > 0) {
-                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fsm . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fec . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
             } else {
                 echo '<td>-</td>';
             }
@@ -977,7 +977,7 @@
             }
 
             if ($conectividad_fec == 1 && $descripcion_fec != '-' && $existencia_fec > 0) {
-                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fsm . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fec . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
             } else {
                 echo '<td>-</td>';
             }
@@ -1003,7 +1003,7 @@
             }
 
             if ($conectividad_fec == 1 && $descripcion_fec != '-' && $existencia_fec > 0) {
-                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fsm . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fec . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
             } else {
                 echo '<td>-</td>';
             }
@@ -1029,7 +1029,7 @@
             }
 
             if ($conectividad_fec == 1 && $descripcion_fec != '-' && $existencia_fec > 0) {
-                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fsm . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
+                echo '<td align="center"><button type="button" onclick="agregarTraslado(\'' . $CodigoBarra . '\', \'FEC\', \'' . $existencia_fec . '\')" class="btn btn-outline-info btn-sm">Agregar FEC</td>';
             } else {
                 echo '<td>-</td>';
             }
