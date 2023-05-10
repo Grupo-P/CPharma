@@ -148,6 +148,7 @@
                         $("#total_factura_PM").html("Total Factura: Bs. "+response.total_factura);
                         $("#numero_factura_PM").html("Número factura: "+response.numero_factura);
                         $("#total_pagado_PM").html("Total Pagado: Bs. "+response.total_factura_pagado);
+                        $("#total_pagado_input").val(response.total_factura_pagado);
                         $("#cliente_PM").html("Cliente: "+response.cliente);
                         $("#telefono_PM").val(response.telefono)
                         $('#numero_factura_pago_movil').val(response.numero_factura);                
@@ -300,6 +301,7 @@
                 $("#total_factura_PM").html("Total Factura: ");
                 $("#numero_factura_PM").html("Número factura: ");
                 $("#total_pagado_PM").html("Total Pagado: ");
+                $("#total_pagado_input").val("");
                 $("#cliente_PM").html("Cliente: ");
             });
 
@@ -1318,6 +1320,7 @@
                         <!--datos factura-->
                         <input type="hidden" id="numero_factura_pago_movil" name="numero_factura" value="{{ $numero_factura }}">
                         <input type="hidden" id="caja_pago_movil" name="caja" value="{{ $caja }}">
+                        <input type="hidden" id="total_pagado_input" name="total_pagado" value="">
                         @csrf
 
                         <!--Datos de la factura pago movil-->

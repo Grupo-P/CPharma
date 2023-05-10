@@ -273,6 +273,30 @@ class VueltoController extends Controller
                 else{
                     $fechaDevolucion="";
                 }
+
+                if($vuelto->montoPagado>0){
+                    $montoPagadoFactura=$vuelto->montoPagado;
+                }
+                else{
+                    $montoPagadoFactura=0;
+                }
+
+                if($vuelto->tasaVenta>0){                    
+                    $totalFacturaDolar=number_format($row["totalFactura"]/$vuelto->tasaVenta,2);
+                    $montoPagoMovilDolar=number_format($vuelto->monto/$vuelto->tasaVenta,2);
+                    if($montoPagadoFactura>0){
+                        $montoPagadoFacturaDolar=number_format($montoPagadoFactura/$vuelto->tasaVenta,2);
+                    }
+                    else{
+                        $montoPagadoFactura=0;
+                    }
+                }   
+                else{
+                    $totalFacturaDolar=0;
+                    $montoPagoMovilDolar=0;
+                    $montoPagadoFactura=0;
+                }
+
                 $registro = [
                     'sede'=>$vuelto->sede,
                     'cedula_cliente_factura' =>$row["CodigoCliente"],
@@ -282,6 +306,9 @@ class VueltoController extends Controller
                     'numero_factura' => $row["NumeroFactura"] ,
                     'nombre_cliente'=>$row["nombre"] ,
                     'total_factura'=>$row["totalFactura"] ,
+                    'total_factura_dolar' => $totalFacturaDolar ,
+                    'monto_pagado_factura' => $montoPagadoFactura,
+                    'monto_pagado_factura_dolar' => $montoPagadoFacturaDolar,
                     'id'=>$vuelto->id,  
                     'id_factura'=> $vuelto->id_factura,  
                     'fecha_hora'=> $vuelto->fecha_hora,  
@@ -289,6 +316,7 @@ class VueltoController extends Controller
                     'cedula_cliente'=> $vuelto->cedula_cliente,  
                     'telefono_pago_movil'=> $vuelto->telefono_cliente,  
                     'monto' => $vuelto->monto,
+                    'monto_dolar' => $montoPagoMovilDolar,
                     'sede'=> $vuelto->sede,  
                     'caja'=> $vuelto->caja,  
                     'estatus'=> $vuelto->estatus,  

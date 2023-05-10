@@ -19,7 +19,9 @@ class VueltoVDC extends Model
         'motivo_error',
         'sede',
         'caja',
-        'monto'
+        'monto',
+        'tasaVenta',
+        'montoPagado'
     ];
 
     public function scopeInicio($query, $inicio)

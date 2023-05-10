@@ -159,27 +159,31 @@
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
-                <th scope="col" class="CP-sticky">Sede</th>
-                <th scope="col" class="CP-sticky">Fecha / Hora Factura</th>
-		      	    <th scope="col" class="CP-sticky">Nro Factura</th>
-                <th scope="col" class="CP-sticky">Cédula Factura</th>
-                <th scope="col" class="CP-sticky">Cliente Factura</th>
-                <th scope="col" class="CP-sticky">Teléfono Factura</th>
-                <th scope="col" class="CP-sticky">Total Factura (Bs)</th>	      	
-                <th scope="col" class="CP-sticky">Caja Venta</th>
-                <th scope="col" class="CP-sticky">Cajero Venta</th>
-                <th scope="col" class="CP-sticky">Fecha / Hora Pago Movil</th>
-                <th scope="col" class="CP-sticky">Banco Destino</th>
-                <th scope="col" class="CP-sticky">Monto Pago movil (Bs)</th>
-                <th scope="col" class="CP-sticky">Cedula Pago movil</th>
-                <th scope="col" class="CP-sticky">Telefono Pago movil</th>
-                <th scope="col" class="CP-sticky">Status Banco</th>
-                <th scope="col" class="CP-sticky">Nro Confirmacion</th>
-                <th scope="col" class="CP-sticky">Mensaje del banco</th>
-                <th scope="col" class="CP-sticky">Numero devolución</th>
-                <th scope="col" class="CP-sticky">Fecha / Hora devolución</th>
-                <th scope="col" class="CP-sticky">Caja devolución</th>
-                <th scope="col" class="CP-sticky">Cajero devolucion</th>
+            <th scope="col" class="CP-sticky">Sede</th>
+            <th scope="col" class="CP-sticky">Fecha / Hora Factura</th>
+            <th scope="col" class="CP-sticky">Nro Factura</th>
+            <th scope="col" class="CP-sticky">Cédula Factura</th>
+            <th scope="col" class="CP-sticky">Cliente Factura</th>
+            <th scope="col" class="CP-sticky">Teléfono Factura</th>
+            <th scope="col" class="CP-sticky">Total Factura (Bs)</th>
+            <th scope="col" class="CP-sticky">Total Factura ($)</th>
+            <th scope="col" class="CP-sticky">Monto Pagado Factura (Bs)</th>
+            <th scope="col" class="CP-sticky">Monto Pagado Factura ($)</th>	      	
+            <th scope="col" class="CP-sticky">Caja Venta</th>
+            <th scope="col" class="CP-sticky">Cajero Venta</th>
+            <th scope="col" class="CP-sticky">Fecha / Hora Pago Movil</th>
+            <th scope="col" class="CP-sticky">Banco Destino</th>
+            <th scope="col" class="CP-sticky">Monto Pago movil (Bs)</th>
+            <th scope="col" class="CP-sticky">Monto Pago movil ($)</th>
+            <th scope="col" class="CP-sticky">Cedula Pago movil</th>
+            <th scope="col" class="CP-sticky">Telefono Pago movil</th>
+            <th scope="col" class="CP-sticky">Status Banco</th>
+            <th scope="col" class="CP-sticky">Nro Confirmacion</th>
+            <th scope="col" class="CP-sticky">Mensaje del banco</th>
+            <th scope="col" class="CP-sticky">Numero devolución</th>
+            <th scope="col" class="CP-sticky">Fecha / Hora devolución</th>
+            <th scope="col" class="CP-sticky">Caja devolución</th>
+            <th scope="col" class="CP-sticky">Cajero devolucion</th>                
 		    </tr>
 	  	</thead>
 	  	<tbody>       
@@ -212,11 +216,15 @@
                       <td>{{$vuelto->get("nombre_cliente")}}</td>                
                       <td>{{$vuelto->get("telefono_cliente_factura")}}</td>                
                       <td>{{number_format($vuelto->get("total_factura"), 2, ',', '.')}}</td>
+                      <td>{{number_format($vuelto->get("total_factura_dolar"), 2, ',', '.')}}</td>
+                      <td>{{number_format($vuelto->get("monto_pagado_factura"), 2, ',', '.')}}</td>
+                      <td>{{number_format($vuelto->get("monto_pagado_factura_dolar"), 2, ',', '.')}}</td>
                       <td>{{$vuelto->get("caja")}}</td>                
                       <td>{{$vuelto->get("cajero_venta")}}</td>
                       <td>{{$vuelto->get("fecha_hora")}}</td>
                       <td>{{$vuelto->get("banco_cliente")}}</td>
-                      <td>{{number_format($vuelto->get("monto"), 2, ',', '.')}}</td>                                
+                      <td>{{number_format($vuelto->get("monto"), 2, ',', '.')}}</td>
+                      <td>{{number_format($vuelto->get("monto_dolar"), 2, ',', '.')}}</td>
                       <td>{{$vuelto->get("cedula_cliente")}}</td>
                       <td>{{$vuelto->get("telefono_pago_movil")}}</td>                
                       <td style="{{$font}}">{{$vuelto->get("estatus")}}</td>

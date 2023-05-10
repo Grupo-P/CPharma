@@ -182,6 +182,7 @@ class VueltoVDCController extends Controller
             "tipo_cliente" => 'required',
             "cedula_cliente" => 'required',
         ]);
+        $montoPagado=$request->total_pagado;
         /*$request->monto = 0.01;
         $request->tipo_cliente = 'J';
         $request->telefono_cliente = '04146803196';
@@ -255,7 +256,7 @@ class VueltoVDCController extends Controller
             $response = json_decode($response);
 
             $confirmacion_banco = $response->referenciaMovimiento;
-
+            $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
             //Registro en caja negra
             Vuelto::create([
                 'fecha_hora' => date('Y-m-d H:i:s'),
@@ -268,6 +269,8 @@ class VueltoVDCController extends Controller
                 'caja' => $caja,
                 'sede' => $sede,
                 'monto' => $request->monto,
+                'montoPagado' => $montoPagado,
+                'tasaVenta' => $tasa,
             ]);
             
             return json_encode(['resultado' => 'exito', 'referencia' => $confirmacion_banco]);
@@ -284,7 +287,7 @@ class VueltoVDCController extends Controller
             $descripcion = $response->descripcion ?? $response->mensajeError;
 
             //Codigos de error del banco
-
+            $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
             //registro en historico
             Vuelto::create([
                 'fecha_hora' => date('Y-m-d H:i:s'),
@@ -297,6 +300,8 @@ class VueltoVDCController extends Controller
                 'sede' => $sede,
                 'motivo_error' => $descripcion,
                 'monto' => $request->monto,
+                'montoPagado' => $montoPagado,
+                'tasaVenta' => $tasa,
             ]);
 
             return json_encode(['resultado' => 'error', 'error' => $descripcion]);
