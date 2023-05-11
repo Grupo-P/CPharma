@@ -247,7 +247,7 @@ class VueltoVDCController extends Controller
             $response = $client->request(
                 'POST',
                 'https://cb.venezolano.com/rs/c2x',
-                ['json' => $json]
+                ['timeout'=>40,'json' => $json]
             );
 
             //obtener la respuesta del servidor
