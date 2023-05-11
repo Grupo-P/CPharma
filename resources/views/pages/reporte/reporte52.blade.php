@@ -141,7 +141,7 @@
 			echo '<td align="center">'.$Dolarizado.'</td>';
 
             if($Tasa!=0){ // Caso con tasa de dolar
-                $costoDolar = $costoBs/$Tasa;
+                $costoDolar = round($costoBs/$Tasa,2);
                 echo '<td class="precio" align="center">'.number_format($Tasa,2,"," ,"." ).'</td>';
                 echo '<td class="precio_ds" align="center">'.number_format($costoDolar,2,"," ,"." ).'</td>';
 
