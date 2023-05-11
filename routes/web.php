@@ -615,3 +615,16 @@ Route::view('verificadorPagosAjax', 'pages.verificadorPagos.ajax');
 
 Route::get('/historicoVueltos', 'Pagomovil\VueltoController@index');
 Route::post('/historicoVueltos2', 'Pagomovil\VueltoController@index')->name("filtrofecha");
+
+Route::get('/historicoClientesTransaccionales', 'Pagomovil\VueltoController@clientesTransaccionales')->name('clientesTransaccionales');
+Route::post('/historicoClientesTransaccionales2', 'Pagomovil\VueltoController@clientesTransaccionales')->name('clientesTransaccionales2');
+
+Route::get('/historicoCajerosTransaccionales', 'Pagomovil\VueltoController@cajerosTransaccionales')->name('cajerosTransaccionales');
+Route::post('/historicoCajerosTransaccionales2', 'Pagomovil\VueltoController@cajerosTransaccionales')->name('cajerosTransaccionales2');
+
+Route::get('/detalleClientesTransaccionales/{cliente}', 'Pagomovil\VueltoController@detalleClientes')->name('detalleClientesTransaccionales');
+Route::post('/detalleClientesTransaccionales2', 'Pagomovil\VueltoController@detalleClientes')->name('detalleClientesTransaccionales2');
+
+Route::get('/detalleCajerosTransaccionales/{cajero}', 'Pagomovil\VueltoController@detalleCajeros')->name('detalleCajerosTransaccionales');
+Route::post('/detalleCajerosTransaccionales2', 'Pagomovil\VueltoController@detalleCajeros')->name('detalleCajerosTransaccionales2');
+

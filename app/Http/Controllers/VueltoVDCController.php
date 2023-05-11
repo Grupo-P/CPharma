@@ -214,31 +214,34 @@ class VueltoVDCController extends Controller
 
         $numero_factura = $request->numero_factura;
 
-        $sql = "
-            SELECT TOP 1
-                VenFactura.Id
-            FROM
-                VenFactura
-            WHERE
-                VenFactura.NumeroFactura = '$numero_factura'
-        ";
-
-        $result = sqlsrv_query($conn, $sql);
-        $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+        
 
         $sql = "
             SELECT TOP 1
-                VenFactura.Id
+                f.Id,
+                f.NumeroFactura,
+                f.Auditoria_Usuario,
+                f.FechaDocumento, 
+                f.M_MontoTotalFactura as totalFactura,                   
+                cl.CodigoCliente,
+                CONCAT(g.Nombre, ' ', g.Apellido) AS nombre,
+                g.Telefono
             FROM
-                VenFactura
+                VenFactura f
+                LEFT JOIN VenCliente cl ON f.VenClienteId = cl.Id
+                LEFT JOIN GenPersona g ON g.Id = cl.GenPersonaId
             WHERE
-                VenFactura.NumeroFactura = '$numero_factura'
-        ";
+                f.NumeroFactura = '$numero_factura'
+            ";
 
         $result = sqlsrv_query($conn, $sql);
         $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
         $id_factura = $row['Id'];
+        $cedulaClienteFactura=$row['CodigoCliente'];
+        $nombreClienteFactura=$row['nombre'];
+        $nombreCajeroFactura=$row['Auditoria_Usuario'];
+        $totalFactura=number_format($row['totalFactura'],2);
 
         $cedula_cliente = $request->tipo_cliente . $request->cedula_cliente;
 
@@ -248,15 +251,17 @@ class VueltoVDCController extends Controller
                 'POST',
                 'https://cb.venezolano.com/rs/c2x',
                 ['timeout'=>40,'json' => $json]
-            );
-
+            );            
             //obtener la respuesta del servidor
             $response = json_decode($response->getBody()->getContents())->response;
             $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
             $response = json_decode($response);
 
             $confirmacion_banco = $response->referenciaMovimiento;
+
             $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+            $totalFacturaDolar=number_format($totalFactura/$tasa,2);
+
             //Registro en caja negra
             Vuelto::create([
                 'fecha_hora' => date('Y-m-d H:i:s'),
@@ -270,7 +275,12 @@ class VueltoVDCController extends Controller
                 'sede' => $sede,
                 'monto' => $request->monto,
                 'montoPagado' => $montoPagado,
-                'tasaVenta' => $tasa,
+                'tasaVenta' => $tasa,                
+                'cedulaClienteFactura' => $cedulaClienteFactura,
+                'nombreClienteFactura' => $nombreClienteFactura,
+                'nombreCajeroFactura' => $nombreCajeroFactura,
+                'totalFacturaBs' => $totalFactura,
+                'totalFacturaDolar' => $totalFacturaDolar
             ]);
             
             return json_encode(['resultado' => 'exito', 'referencia' => $confirmacion_banco]);
@@ -287,7 +297,9 @@ class VueltoVDCController extends Controller
             $descripcion = $response->descripcion ?? $response->mensajeError;
 
             //Codigos de error del banco
-            $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+                $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+                $totalFacturaDolar=number_format($totalFactura/$tasa,2);
+
             //registro en historico
             Vuelto::create([
                 'fecha_hora' => date('Y-m-d H:i:s'),
@@ -302,6 +314,11 @@ class VueltoVDCController extends Controller
                 'monto' => $request->monto,
                 'montoPagado' => $montoPagado,
                 'tasaVenta' => $tasa,
+                'cedulaClienteFactura' => $cedulaClienteFactura,
+                'nombreClienteFactura' => $nombreClienteFactura,
+                'nombreCajeroFactura' => $nombreCajeroFactura,
+                'totalFacturaBs' => $totalFactura,
+                'totalFacturaDolar' => $totalFacturaDolar
             ]);
 
             return json_encode(['resultado' => 'error', 'error' => $descripcion]);

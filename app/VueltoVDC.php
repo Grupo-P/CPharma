@@ -21,7 +21,12 @@ class VueltoVDC extends Model
         'caja',
         'monto',
         'tasaVenta',
-        'montoPagado'
+        'montoPagado',
+        'cedulaClienteFactura',
+        'nombreClienteFactura',
+        'nombreCajeroFactura',
+        'totalFacturaBs',
+        'totalFacturaDolar'
     ];
 
     public function scopeInicio($query, $inicio)
