@@ -195,6 +195,7 @@ class EtiquetaMovilController extends Controller
         $response['precio'] = number_format($precio, 2);
         $response['precio_ayer'] = null;
         $response['existencia'] = $row['Existencia'];
+        $response['precioCorrida'] = null;
 
         if ($row1['precio']) {
             $response['precio_ayer'] = number_format($row1['precio'], 2);
@@ -202,6 +203,8 @@ class EtiquetaMovilController extends Controller
 
         if ($dolarizado == 'SI') {
             $response['precio'] = number_format($precio/$tasa, 2);
+            $precioPartes=explode(".",$precio);
+            $response['precioCorrida'] =substr($precioPartes[1],-2);
         }
 
         if ($dolarizado == 'SI' && $row1['precio']) {
