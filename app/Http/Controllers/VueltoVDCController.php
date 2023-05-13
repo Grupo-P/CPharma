@@ -168,7 +168,7 @@ class VueltoVDCController extends Controller
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
-        //$sede = FG_Mi_Ubicacion();
+        
         $RutaUrl = FG_Mi_Ubicacion();
         //$RutaUrl = 'FAU';
         

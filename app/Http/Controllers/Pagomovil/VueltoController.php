@@ -786,8 +786,8 @@ class VueltoController extends Controller
             $fini=date("Y-m-d");
             $ffin=date("Y-m-d");            
         }    
-        //$RutaUrl = FG_Mi_Ubicacion();
-        $RutaUrl = 'DBs';
+        $RutaUrl = FG_Mi_Ubicacion(); 
+        //$RutaUrl = 'DBs';
         $SedeConnection = $RutaUrl;
         $sede='DBs';
         $sedeUsuario = Auth::user()->sede;
