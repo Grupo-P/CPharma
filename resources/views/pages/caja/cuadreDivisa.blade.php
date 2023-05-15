@@ -148,8 +148,8 @@
                         $("#total_factura_PM").html("Total Factura: Bs. "+response.total_factura);
                         $("#numero_factura_PM").html("Número factura: "+response.numero_factura);
                         $("#total_pagado_PM").html("Total Pagado: Bs. "+response.total_factura_pagado);
-                        $("#total_pagado_input").val(response.total_factura_pagado);
                         $("#cliente_PM").html("Cliente: "+response.cliente);
+                        $("#total_pagado_input").val(response.total_factura_pagado);
                         $("#telefono_PM").val(response.telefono)
                         $('#numero_factura_pago_movil').val(response.numero_factura);                
 
@@ -234,7 +234,9 @@
                 tcliente=$('#tipo_documento_pagoMovil option:selected').val();
                 
                 cedula_cliente=$('#documento_cliente_pagoMovil').val();
-
+                banco_destino=$("#banco_destino").val();
+                telefono_PM=$("#telefono_PM").val();
+                total_pagado=$("#total_pagado_input").val();
                 $.ajax({
                     type: 'GET',
                     url: '/vuelto/vdc/validar',
@@ -243,7 +245,9 @@
                         caja: caja,
                         monto: monto,                        
                         cedula_cliente: tcliente+cedula_cliente,
-                
+                        banco_destino: banco_destino,
+                        telefono_cliente:telefono_PM,  
+                        total_pagado:total_pagado,                                  
                     },
                     success: function (response) {
 
@@ -740,7 +744,7 @@
     include(app_path().'\functions\querys_sqlserver.php');
 
     $RutaUrl = FG_Mi_Ubicacion();
-    //$RutaUrl = 'FAU';
+    //$RutaUrl = 'DBs';
     $SedeConnection = $RutaUrl;
     $conn = FG_Conectar_Smartpharma($SedeConnection);
     $sql1 = "SELECT id,CodigoCaja FROM VenCaja WHERE estadoCaja = 2 ORDER BY CodigoCaja ASC";
@@ -1178,6 +1182,7 @@
             $telefono = 0;
             //$tipo_cliente = "V";
             $cedula_cliente = "";
+            //$caja="CAJARX05"; //TESTING
             $caja = gethostbyaddr($_SERVER['REMOTE_ADDR']);
             $monto = "";
 
@@ -1379,7 +1384,7 @@
                         <!--bancos-->
                         <div class="form-group">
                             <label for="banco_destino">Banco de destino</label>
-                            <select name="banco_destino" class="form-control" required="required">
+                            <select name="banco_destino" id="banco_destino" class="form-control" required="required">
                                 <option value=""></option>
                                 @foreach($bancos as $key => $value)
                                     <option value="{{ $key }}">{{ $value }}</option>
@@ -1526,7 +1531,7 @@
         }
     }
         //modificacion
-        var SedeConnectionJs = '<?php echo $RutaUrl;?>';
+    var SedeConnectionJs = '<?php echo $RutaUrl;?>';
       var dominio = dominio(SedeConnectionJs);
       const URLConsulFac = ''+dominio+'assets/functions/funConsFactDivisa.php';
 

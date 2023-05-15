@@ -25,7 +25,7 @@ class VueltoController extends Controller
     {
         $this->middleware('auth');
     }
-
+   
     /**
      * Display a listing of the resource.
      *
@@ -35,12 +35,49 @@ class VueltoController extends Controller
     {
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
+        
+        $sedeUsuario = Auth::user()->sede;
+        switch($sedeUsuario){
+            case "GRUPO P, C.A":
+                $RutaUrl = "FAU";
+            break;
+            case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
+                $RutaUrl = "FAU";
+            break;
+            case "FARMACIA TIERRA NEGRA, C.A.":
+                $RutaUrl = "FTN";
+            break;
+            case "FARMACIA MILLENNIUM 2000, C.A":
+                $RutaUrl = "FSM";
+            break;
+            case "FARMACIA LA LAGO,C.A.":
+                $RutaUrl = "FLL";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A.":
+                $RutaUrl = "KDI";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A. - KD73":
+                $RutaUrl = "KD73";
+            break;
+            case "FARMACIA EL CALLEJON, C.A.":
+                $RutaUrl = "FEC";
+            break;
 
-        $RutaUrl = FG_Mi_Ubicacion();
+        }
         //$RutaUrl = 'FAU';
+        //si se selecciono otra sede consultarla
+        if($request->sede!=null){
+            if($request->sede!="Seleccione una sede"){
+                $RutaUrl=$request->sede;
+                $mensaje="Debe Seleccionar una sede";
+            }
+            else{
+                $RutaUrl=$RutaUrl;                
+            }
+        }
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
-        $sedeUsuario = Auth::user()->sede;
+        
 
         $registro=[];       
         $historialvueltos=collect();
@@ -348,7 +385,6 @@ class VueltoController extends Controller
         return view('pages.vuelto.index', compact('mensaje','historialvueltos','fini','ffin','sedeUsuario','sede'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -364,274 +400,177 @@ class VueltoController extends Controller
             $ffin=$request->fecha_fin;
             //$vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
         }
+
         else{
             $fini=date("Y-m-d");
             $ffin=date("Y-m-d");            
         }
-        $RutaUrl = FG_Mi_Ubicacion();
-        //$RutaUrl = 'DBs';
-        $SedeConnection = $RutaUrl;        
+
         $sedeUsuario = Auth::user()->sede;
+        switch($sedeUsuario){
+            case "GRUPO P, C.A":
+                $RutaUrl = "FAU";
+                //$RutaUrl = "DBs";
+            break;
+            case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
+                $RutaUrl = "FAU";
+            break;
+            case "FARMACIA TIERRA NEGRA, C.A.":
+                $RutaUrl = "FTN";
+            break;
+            case "FARMACIA MILLENNIUM 2000, C.A":
+                $RutaUrl = "FSM";
+            break;
+            case "FARMACIA LA LAGO,C.A.":
+                $RutaUrl = "FLL";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A.":
+                $RutaUrl = "KDI";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A. - KD73":
+                $RutaUrl = "KD73";
+            break;
+            case "FARMACIA EL CALLEJON, C.A.":
+                $RutaUrl = "FEC";
+            break;
 
+        }
+        
+        //$RutaUrl = 'FAU';
         if($request->sede!=null){
-            if($request->sede=="Seleccione una sede"){
-                $sede=$SedeConnection;
+            if($request->sede!="Seleccione una sede"){
+                $RutaUrl=$request->sede;
             }
             else{
-                $sede=$request->sede;
+                $RutaUrl=$RutaUrl;
             }
+        }
+        
+        $SedeConnection = $RutaUrl;        
+        $sede=$RutaUrl;
 
-            switch($sede)
-            {
-                case 'DBs':                                          
+        switch($sede)
+        {
+            case 'DBs':                                          
+                $clientes=VueltoVDC::where('sede','=','DBs')->fecha($fini, $ffin)
+                        ->where('estatus','=','Aprobado')                    
+                        ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                        ->groupBy('cedulaClienteFactura')
+                        ->orderBy('vueltos', 'DESC')
+                        ->get();
+                $mensaje=null;                 
+            break;
+            case 'FAU':
+                if(FG_Validar_Conectividad('FAU')==1){                        
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
                             ->get();
-                    $mensaje=null;                 
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                        
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){
-                        $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                                               
-                        $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                                                
-                        $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){   
-                        $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                        ->groupBy('cedulaClienteFactura')
-                                        ->orderBy('vueltos', 'DESC')
-                                        ->get();                             
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            }           
-        }
-        else{
-            if($SedeConnection=="GP"){
-                $sede="FAU";
-            }
-            else{
-                $sede=$SedeConnection;
-            }
-            
-            switch($sede)
-            {
-                case 'DBs':                                          
+                    $mensaje=null;
+                    
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
+                }
+            break;
+            case 'GP':
+                if(FG_Validar_Conectividad('FAU')==1){
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
                             ->get();
-                    $mensaje=null;                 
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                        
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){
-                        $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                                               
-                        $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                                                
-                        $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('cedulaClienteFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){   
-                        $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                        ->groupBy('cedulaClienteFactura')
-                                        ->orderBy('vueltos', 'DESC')
-                                        ->get();                             
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            }
-            
-        }
-
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Grupo P (GP)";
+                }
+            break;
+            case 'FTN':
+                if(FG_Validar_Conectividad('FTN')==1){
+                    $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('cedulaClienteFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
+                }
+            break;
+            case 'FLL':
+                if(FG_Validar_Conectividad('FLL')==1){                                               
+                    $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('cedulaClienteFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia La Lago (FLL)";
+                }
+            break;
+            case 'FSM':
+                if(FG_Validar_Conectividad('FSM')==1){                        
+                    $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('cedulaClienteFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get(); 
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
+                }
+            break;
+            case 'KDI':
+                if(FG_Validar_Conectividad('KDI')==1){                                                
+                    $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('cedulaClienteFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get(); 
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia KD Express (KDI)";
+                }
+            break;
+            case 'FEC':
+                if(FG_Validar_Conectividad('FEC')==1){   
+                    $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
+                                    ->where('estatus','=','Aprobado')                    
+                                    ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                                    ->groupBy('cedulaClienteFactura')
+                                    ->orderBy('vueltos', 'DESC')
+                                    ->get();                             
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
+                }
+            break;
+        }                   
         
         $arreglo=[];
         $i=0;
+        //dd($sede);
         foreach ($clientes as $cliente) {
             //if($cliente->cedulaClienteFactura!=null){
                 
@@ -759,13 +698,10 @@ class VueltoController extends Controller
                     'cantidadPagoMovil' => $cliente->vueltos                    
                 ]);
             //}
-        }
-    
+        }    
         
         return view('pages.vuelto.clientes', compact('arreglo','sedeUsuario','sede','mensaje','fini','ffin'));
     }
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -786,265 +722,168 @@ class VueltoController extends Controller
             $fini=date("Y-m-d");
             $ffin=date("Y-m-d");            
         }    
-        $RutaUrl = FG_Mi_Ubicacion(); 
-        //$RutaUrl = 'DBs';
-        $SedeConnection = $RutaUrl;
-        $sede='DBs';
+
         $sedeUsuario = Auth::user()->sede;
 
+        switch($sedeUsuario){
+            case "GRUPO P, C.A":
+                 $RutaUrl = "FAU";
+                // $RutaUrl = "DBs";
+            break;
+            case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
+                $RutaUrl = "FAU";
+            break;
+            case "FARMACIA TIERRA NEGRA, C.A.":
+                $RutaUrl = "FTN";
+            break;
+            case "FARMACIA MILLENNIUM 2000, C.A":
+                $RutaUrl = "FSM";
+            break;
+            case "FARMACIA LA LAGO,C.A.":
+                $RutaUrl = "FLL";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A.":
+                $RutaUrl = "KDI";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A. - KD73":
+                $RutaUrl = "KD73";
+            break;
+            case "FARMACIA EL CALLEJON, C.A.":
+                $RutaUrl = "FEC";
+            break;
+
+        }        
+
         if($request->sede!=null){
-            if($request->sede=="Seleccione una sede"){
-                $sede=$SedeConnection;
+            if($request->sede!="Seleccione una sede"){
+                $RutaUrl=$request->sede;
             }
             else{
-                $sede=$request->sede;
+                $RutaUrl=$RutaUrl;
             }
-            switch($sede)
-            {
-                case 'DBs':                                          
-                    $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;                    
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){                        
-                        $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                        
-                        $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                        
-                        $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){                        
-                        $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            }            
         }
-        else{
-            if($SedeConnection=="GP"){
-                $sede="FAU";
-            }
-            else{
-                $sede=$SedeConnection;
-            }
-            
-            switch($sede)
-            {
-                case 'DBs':                                          
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;                    
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){                        
-                        $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                        
-                        $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                        
-                        $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){                        
-                        $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')
-                                ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
-                                ->groupBy('nombreCajeroFactura')
-                                ->orderBy('vueltos', 'DESC')
-                                ->get(); 
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            }
-            
+
+        $SedeConnection = $RutaUrl;
+        $sede = $RutaUrl;
+        
+       
+        switch($sede)
+        {
+            case 'DBs':                                          
+                $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;                    
+            break;
+            case 'FAU':
+                if(FG_Validar_Conectividad('FAU')==1){                        
+                    $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
+                }
+            break;
+            case 'GP':
+                if(FG_Validar_Conectividad('FAU')==1){
+                    
+                    $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Grupo P (GP)";
+                }
+            break;
+            case 'FTN':
+                if(FG_Validar_Conectividad('FTN')==1){                        
+                    $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
+                }
+            break;
+            case 'FLL':
+                if(FG_Validar_Conectividad('FLL')==1){                        
+                    $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia La Lago (FLL)";
+                }
+            break;
+            case 'FSM':
+                if(FG_Validar_Conectividad('FSM')==1){                        
+                    $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get(); 
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
+                }
+            break;
+            case 'KDI':
+                if(FG_Validar_Conectividad('KDI')==1){                        
+                    $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get(); 
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia KD Express (KDI)";
+                }
+            break;
+            case 'FEC':
+                if(FG_Validar_Conectividad('FEC')==1){                        
+                    $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get(); 
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
+                }
+            break;
         }
                
         $arreglo=[];
@@ -1174,13 +1013,10 @@ class VueltoController extends Controller
                     'cantidadPagoMovil' => $cajero->vueltos,                    
                 ]);
             //}
-        }
-    
+        }    
         
         return view('pages.vuelto.cajeros', compact('arreglo','sedeUsuario','sede','mensaje','fini','ffin'));
     }
-
-
 
     /**
      * Detalles de pago movil de clientes
@@ -1201,236 +1037,158 @@ class VueltoController extends Controller
             $fini=date("Y-m-d");
             $ffin=date("Y-m-d");            
         }
-        $RutaUrl = FG_Mi_Ubicacion();
-        //$RutaUrl = 'DBs';
-        $SedeConnection = $RutaUrl;        
-        $conn = FG_Conectar_Smartpharma($SedeConnection);
+        //detectar la sede del usuario
         $sedeUsuario = Auth::user()->sede;
-        $registro=[];       
-        $historialvueltos=collect();
-        if($request->sede!=null){
-            if($request->sede=="Seleccione una sede"){
-                $sede=$SedeConnection;
-            }
-            else{
-                $sede=$request->sede;
-            }
+        
+        //switch para retornar las siglas de conexion en base a la sede del usuario
+        switch($sedeUsuario){                
+            case "GRUPO P, C.A":
+                 $RutaUrl = "FAU";
+                // $RutaUrl = "DBs";
+            break;
+            case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
+                $RutaUrl = "FAU";
+            break;
+            case "FARMACIA TIERRA NEGRA, C.A.":
+                $RutaUrl = "FTN";
+            break;
+            case "FARMACIA MILLENNIUM 2000, C.A":
+                $RutaUrl = "FSM";
+            break;
+            case "FARMACIA LA LAGO,C.A.":
+                $RutaUrl = "FLL";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A.":
+                $RutaUrl = "KDI";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A. - KD73":
+                $RutaUrl = "KD73";
+            break;
+            case "FARMACIA EL CALLEJON, C.A.":
+                $RutaUrl = "FEC";
+            break;
+        }  
 
-            switch($sede)
-            {
-                case 'DBs':                                          
-                    $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                            ->get();
-                    $mensaje=null;                 
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                        
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){
-                        $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                                               
-                        $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                                                
-                        $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){   
-                        $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();                             
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            }         
-        }
-        else{
-            if($SedeConnection=="GP"){
-                $sede="FAU";
+        //si se selecciono otra sede consultarla
+        if($request->sede!=null){
+            if($request->sede!="Seleccione una sede"){
+                $RutaUrl=$request->sede;
             }
             else{
-                $sede=$SedeConnection;
+                $RutaUrl=$RutaUrl;
             }
-            
-            switch($sede)
-            {
-                case 'DBs':                                          
-                    $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                            ->get();
-                    $mensaje=null;                 
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                        
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){
-                        $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                                               
-                        $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                                                
-                        $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){   
-                        $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                            ->where('estatus','=','Aprobado')                    
-                                            ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
-                                            ->get();                             
-                        $mensaje=null;
-                    }
-                    else{
-                        $clientes=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            }
-            
         }
+        //$RutaUrl = 'DBs';
+        $SedeConnection = $RutaUrl;
+        $sede = $RutaUrl;       
+              
+        $conn = FG_Conectar_Smartpharma($SedeConnection);        
+        $registro=[];       
+        $historialvueltos=collect();        
+            
+        switch($sede)
+        {
+            case 'DBs':                                          
+                $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
+                        ->where('estatus','=','Aprobado')                    
+                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                        ->get();
+                $mensaje=null;                 
+            break;
+            case 'FAU':
+                if(FG_Validar_Conectividad('FAU')==1){                        
+                    $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->get();
+                    $mensaje=null;
+                    
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
+                }
+            break;
+            case 'GP':
+                if(FG_Validar_Conectividad('FAU')==1){
+                    $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Grupo P (GP)";
+                }
+            break;
+            case 'FTN':
+                if(FG_Validar_Conectividad('FTN')==1){
+                    $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
+                }
+            break;
+            case 'FLL':
+                if(FG_Validar_Conectividad('FLL')==1){                                               
+                    $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia La Lago (FLL)";
+                }
+            break;
+            case 'FSM':
+                if(FG_Validar_Conectividad('FSM')==1){                        
+                    $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
+                }
+            break;
+            case 'KDI':
+                if(FG_Validar_Conectividad('KDI')==1){                                                
+                    $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia KD Express (KDI)";
+                }
+            break;
+            case 'FEC':
+                if(FG_Validar_Conectividad('FEC')==1){   
+                    $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->get();                             
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
+                }
+            break;
+        }            
+        
         if($clientes!=null){
             foreach($clientes as $cliente){
                 
@@ -1553,10 +1311,11 @@ class VueltoController extends Controller
             $historialvueltos=null;
         }            
                 
-           $cliente=$request->cliente;
+        $cliente=$request->cliente;
         
         return view('pages.vuelto.detalleCliente',compact('cliente','historialvueltos','mensaje','sedeUsuario','sede','fini','ffin'));
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -1575,236 +1334,161 @@ class VueltoController extends Controller
             $fini=date("Y-m-d");
             $ffin=date("Y-m-d");            
         }
-        $RutaUrl = FG_Mi_Ubicacion();        
-        $SedeConnection = $RutaUrl;        
-        $conn = FG_Conectar_Smartpharma($SedeConnection);
+
+        //detectar la sede del usuario
         $sedeUsuario = Auth::user()->sede;
+        
+        //switch para retornar las siglas de conexion en base a la sede del usuario
+        switch($sedeUsuario){
+            case "GRUPO P, C.A":
+                 $RutaUrl = "FAU";
+                 //$RutaUrl = "DBs";
+            break;
+            case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
+                $RutaUrl = "FAU";
+            break;
+            case "FARMACIA TIERRA NEGRA, C.A.":
+                $RutaUrl = "FTN";
+            break;
+            case "FARMACIA MILLENNIUM 2000, C.A":
+                $RutaUrl = "FSM";
+            break;
+            case "FARMACIA LA LAGO,C.A.":
+                $RutaUrl = "FLL";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A.":
+                $RutaUrl = "KDI";
+            break;
+            case "FARMACIAS KD EXPRESS, C.A. - KD73":
+                $RutaUrl = "KD73";
+            break;
+            case "FARMACIA EL CALLEJON, C.A.":
+                $RutaUrl = "FEC";
+            break;
+
+        }  
+
+        //si se selecciono otra sede consultarla
+        if($request->sede!=null){
+            if($request->sede!="Seleccione una sede"){
+                $RutaUrl=$request->sede;
+            }
+            else{
+                $RutaUrl=$RutaUrl;
+            }
+        }
+
+        //$RutaUrl = 'DBs';
+        $SedeConnection = $RutaUrl;
+        $sede = $RutaUrl;
+                      
+        $conn = FG_Conectar_Smartpharma($SedeConnection);        
         $registro=[];       
         $historialvueltos=collect();
-
-        if($request->sede!=null){
-            if($request->sede=="Seleccione una sede"){
-                $sede=$SedeConnection;
-            }
-            else{
-                $sede=$request->sede;
-            }
-
-            switch($sede)
-            {
-                case 'DBs':                                          
+        
+        switch($sede)
+        {
+            case 'DBs':                                          
+                $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
+                        ->where('estatus','=','Aprobado')                    
+                        ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                        ->get();
+                $mensaje=null;                 
+            break;
+            case 'FAU':
+                if(FG_Validar_Conectividad('FAU')==1){                        
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
                             ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
                             ->get();
-                    $mensaje=null;                 
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                        
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){
-                        $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                                               
-                        $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                                                
-                        $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){   
-                        $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();                            
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            }         
-        }
-        else{
-            if($SedeConnection=="GP"){
-                $sede="FAU";
-            }
-            else{
-                $sede=$SedeConnection;
-            }
-            
-            switch($sede)
-            {
-                case 'DBs':                                          
+                    $mensaje=null;
+                    
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
+                }
+            break;
+            case 'GP':
+                if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
                             ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
                             ->get();
-                    $mensaje=null;                 
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){                        
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                        
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){
-                        $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){                                               
-                        $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){                        
-                        $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){                                                
-                        $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':
-                    if(FG_Validar_Conectividad('FEC')==1){   
-                        $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
-                                ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
-                                ->get();                            
-                        $mensaje=null;
-                    }
-                    else{
-                        $cajeros=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-            } 
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Grupo P (GP)";
+                }
+            break;
+            case 'FTN':
+                if(FG_Validar_Conectividad('FTN')==1){
+                    $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
+                }
+            break;
+            case 'FLL':
+                if(FG_Validar_Conectividad('FLL')==1){                                               
+                    $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia La Lago (FLL)";
+                }
+            break;
+            case 'FSM':
+                if(FG_Validar_Conectividad('FSM')==1){                        
+                    $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
+                }
+            break;
+            case 'KDI':
+                if(FG_Validar_Conectividad('KDI')==1){                                                
+                    $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia KD Express (KDI)";
+                }
+            break;
+            case 'FEC':
+                if(FG_Validar_Conectividad('FEC')==1){   
+                    $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')                    
+                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->get();                            
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
+                }
+            break;
+        } 
             
-        }
         if($cajeros!=null){
             foreach($cajeros as $cajero){
                 
@@ -1927,10 +1611,10 @@ class VueltoController extends Controller
             $historialvueltos=null;
         }            
                 
-           $cajero=$request->cajero;
+        $cajero=$request->cajero;
         
 
-           return view('pages.vuelto.detalleCajero',compact('cajero','historialvueltos','mensaje','sedeUsuario','sede','fini','ffin'));
+        return view('pages.vuelto.detalleCajero',compact('cajero','historialvueltos','mensaje','sedeUsuario','sede','fini','ffin'));
     }
 
    
