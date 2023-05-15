@@ -284,7 +284,7 @@ class VueltoVDCController extends Controller
         $minutos = floor($minutos);
         $minutosMaximos=Configuracion::where('variable','=', 'TiempoMaximoUltFac')->first()->valor;
 
-        /*if ($minutos >= $minutosMaximos) {
+        if ($minutos >= $minutosMaximos) {
             $descripcion = 'Solo puede hacer un vuelto a una factura registrada hace '.$minutosMaximos.' minutos o menos.';
                         
             //registro en historico
@@ -308,7 +308,7 @@ class VueltoVDCController extends Controller
                 'totalFacturaDolar' => $totalFacturaDolar
             ]);
             return $descripcion;            
-        }*/
+        }
 
         /////////////////////////////////////////////////////////////////
         /* Valida que el monto máximo del pago móvil sea $20. */
