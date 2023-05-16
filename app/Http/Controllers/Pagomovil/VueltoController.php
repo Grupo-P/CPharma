@@ -40,9 +40,11 @@ class VueltoController extends Controller
         switch($sedeUsuario){
             case "GRUPO P, C.A":
                 $RutaUrl = "FAU";
+                //$RutaUrl = "DBs";
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 $RutaUrl = "FAU";
+                //$RutaUrl = "DBs";
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -348,8 +350,7 @@ class VueltoController extends Controller
                     'sede'=>$vuelto->sede,
                     'cedula_cliente_factura' =>$row["CodigoCliente"],
                     'telefono_cliente_factura' =>$row["Telefono"],
-                    'fecha_hora_factura'=>$row['FechaDocumento']->format('Y-m-d H:i:s'),
-                    'cajero_venta' =>$row["Auditoria_Usuario"],                
+                    'fecha_hora_factura'=>$row['FechaDocumento']->format('Y-m-d H:i:s'),                                   
                     'numero_factura' => $row["NumeroFactura"] ,
                     'nombre_cliente'=>$row["nombre"] ,
                     'total_factura'=>$row["totalFactura"] ,
@@ -366,6 +367,7 @@ class VueltoController extends Controller
                     'monto_dolar' => $montoPagoMovilDolar,
                     'sede'=> $vuelto->sede,  
                     'caja'=> $vuelto->caja,  
+                    'cajero_venta'  => $vuelto->nombreCajeroFactura,
                     'estatus'=> $vuelto->estatus,  
                     'confirmacion_banco'=> $vuelto->confirmacion_banco,  
                     'motivo_error'=> $vuelto->motivo_error,
@@ -413,7 +415,8 @@ class VueltoController extends Controller
                 //$RutaUrl = "DBs";
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-                $RutaUrl = "FAU";
+               $RutaUrl = "FAU";
+                 //$RutaUrl = "DBs";
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -570,9 +573,9 @@ class VueltoController extends Controller
         
         $arreglo=[];
         $i=0;
-        //dd($sede);
+        
         foreach ($clientes as $cliente) {
-            //if($cliente->cedulaClienteFactura!=null){
+            if($cliente->cedulaClienteFactura!=null){
                 
                 switch($sede)
                 {
@@ -697,7 +700,7 @@ class VueltoController extends Controller
                     'TotalPagadoDolar' => number_format($totalPagadoDolar,2),
                     'cantidadPagoMovil' => $cliente->vueltos                    
                 ]);
-            //}
+            }
         }    
         
         return view('pages.vuelto.clientes', compact('arreglo','sedeUsuario','sede','mensaje','fini','ffin'));
@@ -716,7 +719,7 @@ class VueltoController extends Controller
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
             $ffin=$request->fecha_fin;
-            //$vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+            
         }
         else{
             $fini=date("Y-m-d");
@@ -728,10 +731,11 @@ class VueltoController extends Controller
         switch($sedeUsuario){
             case "GRUPO P, C.A":
                  $RutaUrl = "FAU";
-                // $RutaUrl = "DBs";
+                 //$RutaUrl = "DBs";
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-                $RutaUrl = "FAU";
+                 $RutaUrl = "FAU";
+                 //$RutaUrl = "DBs";
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -889,7 +893,7 @@ class VueltoController extends Controller
         $arreglo=[];
         $i=0;
         foreach ($cajeros as $cajero) {
-           // if($cajero->nombreCajeroFactura!=null){
+            if($cajero->nombreCajeroFactura!=null){
                 
                 switch($sede)
                 {
@@ -1012,7 +1016,7 @@ class VueltoController extends Controller
                     'TotalPagadoDolar' => number_format($totalPagadoDolar,2),
                     'cantidadPagoMovil' => $cajero->vueltos,                    
                 ]);
-            //}
+            }
         }    
         
         return view('pages.vuelto.cajeros', compact('arreglo','sedeUsuario','sede','mensaje','fini','ffin'));
@@ -1031,7 +1035,7 @@ class VueltoController extends Controller
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
             $ffin=$request->fecha_fin;
-            //$vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+            
         }
         else{
             $fini=date("Y-m-d");
@@ -1044,10 +1048,11 @@ class VueltoController extends Controller
         switch($sedeUsuario){                
             case "GRUPO P, C.A":
                  $RutaUrl = "FAU";
-                // $RutaUrl = "DBs";
+                 //$RutaUrl = "DBs";
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-                $RutaUrl = "FAU";
+                 $RutaUrl = "FAU";
+                // $RutaUrl = "DBs";
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -1078,7 +1083,7 @@ class VueltoController extends Controller
                 $RutaUrl=$RutaUrl;
             }
         }
-        //$RutaUrl = 'DBs';
+        
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;       
               
@@ -1091,7 +1096,8 @@ class VueltoController extends Controller
             case 'DBs':                                          
                 $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                         ->where('estatus','=','Aprobado')                    
-                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                        ->where('cedulaClienteFactura','=',$request->cliente)
+                        ->OrderBy("id",'desc')                                                                            
                         ->get();
                 $mensaje=null;                 
             break;
@@ -1099,7 +1105,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FAU')==1){                        
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                                         ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->where('cedulaClienteFactura','=',$request->cliente) 
+                                        ->OrderBy("id",'desc')                                                                           
                                         ->get();
                     $mensaje=null;
                     
@@ -1113,7 +1120,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FAU')==1){
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                                         ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->where('cedulaClienteFactura','=',$request->cliente) 
+                                        ->OrderBy("id",'desc')                                                                           
                                         ->get();
                     $mensaje=null;
                 }
@@ -1126,7 +1134,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FTN')==1){
                     $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
                                         ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->where('cedulaClienteFactura','=',$request->cliente)  
+                                        ->OrderBy("id",'desc')                                                                          
                                         ->get();
                     $mensaje=null;
                 }
@@ -1139,7 +1148,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FLL')==1){                                               
                     $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
                                         ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')                                                                            
                                         ->get();
                     $mensaje=null;
                 }
@@ -1152,7 +1162,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FSM')==1){                        
                     $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
                                         ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->where('cedulaClienteFactura','=',$request->cliente)  
+                                        ->OrderBy("id",'desc')                                                                          
                                         ->get();
                     $mensaje=null;
                 }
@@ -1165,7 +1176,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('KDI')==1){                                                
                     $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
                                         ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->where('cedulaClienteFactura','=',$request->cliente) 
+                                        ->OrderBy("id",'desc')                                                                           
                                         ->get();
                     $mensaje=null;
                 }
@@ -1178,7 +1190,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FEC')==1){   
                     $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
                                         ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)                                                                            
+                                        ->where('cedulaClienteFactura','=',$request->cliente) 
+                                        ->OrderBy("id",'desc')                                                                           
                                         ->get();                             
                     $mensaje=null;
                 }
@@ -1342,10 +1355,11 @@ class VueltoController extends Controller
         switch($sedeUsuario){
             case "GRUPO P, C.A":
                  $RutaUrl = "FAU";
-                 //$RutaUrl = "DBs";
+                // $RutaUrl = "DBs";
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 $RutaUrl = "FAU";
+               // $RutaUrl = "DBs";
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -1377,8 +1391,7 @@ class VueltoController extends Controller
                 $RutaUrl=$RutaUrl;
             }
         }
-
-        //$RutaUrl = 'DBs';
+                
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;
                       
@@ -1391,7 +1404,8 @@ class VueltoController extends Controller
             case 'DBs':                                          
                 $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                         ->where('estatus','=','Aprobado')                    
-                        ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                        ->where('nombreCajeroFactura','=',$request->cajero)  
+                        ->OrderBy("id",'desc')                                                                          
                         ->get();
                 $mensaje=null;                 
             break;
@@ -1399,7 +1413,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FAU')==1){                        
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->where('nombreCajeroFactura','=',$request->cajero)   
+                            ->OrderBy("id",'desc')                                                                         
                             ->get();
                     $mensaje=null;
                     
@@ -1413,7 +1428,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->where('nombreCajeroFactura','=',$request->cajero)  
+                            ->OrderBy("id",'desc')                                                                          
                             ->get();
                     $mensaje=null;
                 }
@@ -1426,7 +1442,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FTN')==1){
                     $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->where('nombreCajeroFactura','=',$request->cajero)  
+                            ->OrderBy("id",'desc')                                                                          
                             ->get();
                     $mensaje=null;
                 }
@@ -1439,7 +1456,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FLL')==1){                                               
                     $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->where('nombreCajeroFactura','=',$request->cajero)  
+                            ->OrderBy("id",'desc')                                                                          
                             ->get();
                     $mensaje=null;
                 }
@@ -1452,7 +1470,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FSM')==1){                        
                     $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->where('nombreCajeroFactura','=',$request->cajero)  
+                            ->OrderBy("id",'desc')                                                                          
                             ->get();
                     $mensaje=null;
                 }
@@ -1465,7 +1484,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('KDI')==1){                                                
                     $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->where('nombreCajeroFactura','=',$request->cajero)    
+                            ->OrderBy("id",'desc')                                                                        
                             ->get();
                     $mensaje=null;
                 }
@@ -1478,7 +1498,8 @@ class VueltoController extends Controller
                 if(FG_Validar_Conectividad('FEC')==1){   
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)                                                                            
+                            ->where('nombreCajeroFactura','=',$request->cajero) 
+                            ->OrderBy("id",'desc')                                                                           
                             ->get();                            
                     $mensaje=null;
                 }
