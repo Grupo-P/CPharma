@@ -29,7 +29,7 @@ class VueltoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\ResponseDBs
      */
     public function index(Request $request)
     {
@@ -39,12 +39,20 @@ class VueltoController extends Controller
         $sedeUsuario = Auth::user()->sede;
         switch($sedeUsuario){
             case "GRUPO P, C.A":
-                $RutaUrl = "FAU";
-                //$RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }                
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-                $RutaUrl = "FAU";
-                //$RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -70,8 +78,17 @@ class VueltoController extends Controller
         //si se selecciono otra sede consultarla
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
-                $RutaUrl=$request->sede;
-                $mensaje="Debe Seleccionar una sede";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    if($request->sede=="FAU"){
+                        $RutaUrl='DBs';
+                    }
+                    else{
+                        $RutaUrl=$request->sede;
+                    }
+                }
+                else{
+                    $RutaUrl=$request->sede;
+                }
             }
             else{
                 $RutaUrl=$RutaUrl;                
@@ -399,8 +416,7 @@ class VueltoController extends Controller
 
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
-            $ffin=$request->fecha_fin;
-            //$vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+            $ffin=$request->fecha_fin;            
         }
 
         else{
@@ -411,12 +427,20 @@ class VueltoController extends Controller
         $sedeUsuario = Auth::user()->sede;
         switch($sedeUsuario){
             case "GRUPO P, C.A":
-                $RutaUrl = "FAU";
-                //$RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-               $RutaUrl = "FAU";
-                 //$RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -439,10 +463,20 @@ class VueltoController extends Controller
 
         }
         
-        //$RutaUrl = 'FAU';
+        
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
-                $RutaUrl=$request->sede;
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    if($request->sede=="FAU"){
+                        $RutaUrl='DBs';
+                    }
+                    else{
+                        $RutaUrl=$request->sede;
+                    }
+                }
+                else{
+                    $RutaUrl=$request->sede;
+                }
             }
             else{
                 $RutaUrl=$RutaUrl;
@@ -730,12 +764,20 @@ class VueltoController extends Controller
 
         switch($sedeUsuario){
             case "GRUPO P, C.A":
-                 $RutaUrl = "FAU";
-                 //$RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-                 $RutaUrl = "FAU";
-                 //$RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -760,7 +802,17 @@ class VueltoController extends Controller
 
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
-                $RutaUrl=$request->sede;
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    if($request->sede=="FAU"){
+                        $RutaUrl='DBs';
+                    }
+                    else{
+                        $RutaUrl=$request->sede;
+                    }
+                }
+                else{
+                    $RutaUrl=$request->sede;
+                }
             }
             else{
                 $RutaUrl=$RutaUrl;
@@ -1047,12 +1099,20 @@ class VueltoController extends Controller
         //switch para retornar las siglas de conexion en base a la sede del usuario
         switch($sedeUsuario){                
             case "GRUPO P, C.A":
-                 $RutaUrl = "FAU";
-                 //$RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-                 $RutaUrl = "FAU";
-                // $RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -1077,13 +1137,23 @@ class VueltoController extends Controller
         //si se selecciono otra sede consultarla
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
-                $RutaUrl=$request->sede;
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    if($request->sede=="FAU"){
+                        $RutaUrl='DBs';
+                    }
+                    else{
+                        $RutaUrl=$request->sede;
+                    }
+                }
+                else{
+                    $RutaUrl=$request->sede;
+                }
             }
             else{
                 $RutaUrl=$RutaUrl;
             }
         }
-        
+        //$RutaUrl = 'DBs';
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;       
               
@@ -1354,12 +1424,20 @@ class VueltoController extends Controller
         //switch para retornar las siglas de conexion en base a la sede del usuario
         switch($sedeUsuario){
             case "GRUPO P, C.A":
-                 $RutaUrl = "FAU";
-                // $RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
-                $RutaUrl = "FAU";
-               // $RutaUrl = "DBs";
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    $RutaUrl = "DBs";
+                }
+                else{
+                    $RutaUrl = "FAU";
+                }    
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -1385,13 +1463,24 @@ class VueltoController extends Controller
         //si se selecciono otra sede consultarla
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
-                $RutaUrl=$request->sede;
+                if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+                    if($request->sede=="FAU"){
+                        $RutaUrl='DBs';
+                    }
+                    else{
+                        $RutaUrl=$request->sede;
+                    }
+                }
+                else{
+                    $RutaUrl=$request->sede;
+                }
             }
             else{
                 $RutaUrl=$RutaUrl;
             }
         }
-                
+
+        //$RutaUrl = 'DBs';
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;
                       
