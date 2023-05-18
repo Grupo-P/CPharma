@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Detalles de movimiento del cajero
+    Cajeros con mas incidencias:
 @endsection
 
 @section('content')
@@ -76,7 +76,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-cogs"></i>
-		Detalles de movimiento del cajero
+		Cajeros con mas incidencias:
 	</h1>
 
 	<hr class="row align-items-start col-12">
@@ -96,27 +96,9 @@
 	    </tr>
 	</table>
 	<br/>
-    <div class="col-12">
-        @if($fini>0)
-            <div class="alert alert-info" style="font-weight:bold;">
-                <div class="row">
-                    <div class="col-6 text-center">
-                        Desde: {{date("d-m-Y",strtotime($fini))}} 
-                    </div>
-                    <div class="col-6 text-center">
-                        Hasta: {{date("d-m-Y",strtotime($ffin))}}
-                    </div>
-                </div>
-            </div>
-        @else
-            <div class="alert alert-info text-center" style="font-weight:bold;">
-               Día: {{date("d-m-Y")}}
-            </div>
-        @endif
-                        
-        <form action="{{route("detalleCajerosTransaccionales2")}}" method="POST">
+    <div class="col-12">                        
+        <form action="{{route("cajerosTransaccionales2")}}" method="POST">
             @csrf
-            <input type="hidden" name="cajero" value="{{$cajero}}">
             <div class="row">
                 <div class="col-4">
                     <label for="">Desde:</label>
@@ -131,7 +113,7 @@
                     <label for="">Sede: </label>
                     <select class="form-control my-0 py-1" name="sede" id="sede">
                       <option  >Seleccione una sede</option>
-                      <option value="DBs" {{ ( $sede == "DBs") ? 'selected' : '' }}>DBs</option>
+					  <option value="DBs" {{ ( $sede == "DBs") ? 'selected' : '' }}>DBs</option>
                       <option value="FTN" {{ ( $sede == "FTN") ? 'selected' : '' }}>FTN</option>
                       <option value="FAU" {{ ( $sede == "FAU") ? 'selected' : '' }}>FAU</option>
                       <option value="FLL" {{ ( $sede == "FLL") ? 'selected' : '' }}>FLL</option>
@@ -144,7 +126,7 @@
 
                 <div class="col-12 text-center mt-3">
                     <input class="btn btn-success" type="submit" value="Enviar">
-                    <a class="btn btn-info" href="/historicoCajerosTransaccionales" type="button" >Volver</a>
+                    <a class="btn btn-info" href="/historicoVueltos" type="button" >Volver</a>
                 </div>
             </div>
         </form>
@@ -157,98 +139,44 @@
         </div>
       @endif
     </div>
+    
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">#</th>
-                <th scope="col" class="CP-sticky">Sede</th>
-                <th scope="col" class="CP-sticky">Fecha / Hora Factura</th>
-		      	    <th scope="col" class="CP-sticky">Nro Factura</th>
-                <th scope="col" class="CP-sticky">Cédula Factura</th>
-                <th scope="col" class="CP-sticky">Cliente Factura</th>
-                <th scope="col" class="CP-sticky">Teléfono Factura</th>
+                <th scope="col" class="CP-sticky">Sede</th>                
+                <th scope="col" class="CP-sticky">Cajero</th>                
                 <th scope="col" class="CP-sticky">Total Factura (Bs)</th>
                 <th scope="col" class="CP-sticky">Total Factura ($)</th>
-                <th scope="col" class="CP-sticky">Monto Pagado Factura (Bs)</th>
-                <th scope="col" class="CP-sticky">Monto Pagado Factura ($)</th>	      	
-                <th scope="col" class="CP-sticky">Caja Venta</th>
-                <th scope="col" class="CP-sticky">Cajero Venta</th>
-                <th scope="col" class="CP-sticky">Fecha / Hora Pago Movil</th>
-                <th scope="col" class="CP-sticky">Banco Destino</th>
-                <th scope="col" class="CP-sticky">Monto Pago movil (Bs)</th>
-                <th scope="col" class="CP-sticky">Monto Pago movil ($)</th>
-                <th scope="col" class="CP-sticky">Cedula Pago movil</th>
-                <th scope="col" class="CP-sticky">Telefono Pago movil</th>
-                <th scope="col" class="CP-sticky">Status Banco</th>
-                <th scope="col" class="CP-sticky">Nro Confirmacion</th>
-                <th scope="col" class="CP-sticky">Mensaje del banco</th>
-                <th scope="col" class="CP-sticky">Numero devolución</th>
-                <th scope="col" class="CP-sticky">Fecha / Hora devolución</th>
-                <th scope="col" class="CP-sticky">Caja devolución</th>
-                <th scope="col" class="CP-sticky">Cajero devolucion</th>
+                <th scope="col" class="CP-sticky">Total Pagado (Bs)</th>
+                <th scope="col" class="CP-sticky">Total Pagado ($)</th>
+                <th scope="col" class="CP-sticky">Cantidad Errores</th>
+                
 		    </tr>
 	  	</thead>
 	  	<tbody>       
         
-        @if(isset($historialvueltos))
-          @foreach($historialvueltos as $vuelto)
-                  @php
-                  if($vuelto->get("nro_devolucion")>0){
-                      $color='background-color:#f5c6cb;';
-                      $font='color:#721c24;font-weight:bold;';
-                  }
-                  else{
-                      if($vuelto->get("estatus")=="Error"){
-                          $color='background-color:#fff3cd;';
-                          $font='color:red;font-weight:bold;';
-                      }
-                      else{
-                          $color='background-color:white';
-                          $font='color:darkgreen;font-weight:bold;';
-                      }
-                  }
-                  @endphp
-              <tr style="{{$color}}">
-                      
-                      <td>{{$vuelto->get("id")}}</td>
-                      <td>{{$vuelto->get("sede")}}</td>
-                      <td>{{$vuelto->get("fecha_hora_factura")}}</td>
-                      <td>{{$vuelto->get("numero_factura")}}</td>
-                      <td>{{$vuelto->get("cedula_cliente_factura")}}</td>                                
-                      <td>{{$vuelto->get("nombre_cliente")}}</td>                
-                      <td>{{$vuelto->get("telefono_cliente_factura")}}</td>                
-                      <td>{{number_format($vuelto->get("total_factura"), 2, ',', '.')}}</td>
-                      <td>{{number_format($vuelto->get("total_factura_dolar"), 2, ',', '.')}}</td>
-                      <td>{{number_format($vuelto->get("monto_pagado_factura"), 2, ',', '.')}}</td>
-                      <td>{{number_format($vuelto->get("monto_pagado_factura_dolar"), 2, ',', '.')}}</td>
-                      <td>{{$vuelto->get("caja")}}</td>                
-                      <td>{{$vuelto->get("cajero_venta")}}</td>
-                      <td>{{$vuelto->get("fecha_hora")}}</td>
-                      <td>{{$vuelto->get("banco_cliente")}}</td>
-                      <td>{{number_format($vuelto->get("monto"), 2, ',', '.')}}</td>
-                      <td>{{number_format($vuelto->get("monto_dolar"), 2, ',', '.')}}</td>
-                      <td>{{$vuelto->get("cedula_cliente")}}</td>
-                      <td>{{$vuelto->get("telefono_pago_movil")}}</td>                
-                      <td style="{{$font}}">{{$vuelto->get("estatus")}}</td>
-                      <td>
-                          @if($vuelto->get("estatus")=="Error")
-                              N/A                
-                          @else
-                              {{$vuelto->get("confirmacion_banco")}}                        
-                          @endif
-                          
-                      </td>
-                      <td style="{{$font}}">
-                          @if($vuelto->get("estatus")=="Error")
-                              {{$vuelto->get("motivo_error")}}
-                          @else
-                              Aprobado
-                          @endif                    
-                      </td>
-                      <td>{{$vuelto->get("nro_devolucion")}}</td>
-                      <td>{{$vuelto->get("fecha_devolucion")}}</td>
-                      <td>{{$vuelto->get("caja_devolucion")}}</td>
-                      <td>{{$vuelto->get("cajero_devolucion")}}</td>
+        @if(isset($arreglo))
+          @foreach($arreglo as $vuelto)                  
+              <tr>                
+                    <td class="text-center">{{$vuelto["registro"] }}</td>
+                    <td class="text-center">{{$vuelto["Sede"] }}</td>
+                    <td class="text-center">
+						<form action="{{route("detalleCajerosTransaccionalesError2")}}" method="POST" target="_blank">
+							@csrf
+							<input name="cajero" type="hidden" value="{{$vuelto['nombreCajeroFactura']}}">
+							<input name="fecha_ini" type="hidden" value="{{$fini}}">
+							<input name="fecha_fin" type="hidden" value="{{$ffin}}">
+							<input name="sede" type="hidden" value="{{$sede}}">
+			
+							<button class="btn btn-link" type="submit" >{{$vuelto["nombreCajeroFactura"] }}</button>
+						</form>                        
+                    </td>                      
+                    <td class="text-center">{{$vuelto["TotalAcumuladoBs"] }} Bs.</td>                                
+                    <td class="text-center">$. {{$vuelto["TotalAcumuladoDolar"] }}</td> 
+                    <td class="text-center">{{$vuelto["TotalPagadoBs"] }} Bs.</td> 
+                    <td class="text-center">$. {{$vuelto["TotalPagadoDolar"] }}</td>                                    
+                    <td class="text-center">{{$vuelto["cantidadPagoMovil"] }}</td>                                      
               </tr>
           @endforeach
         @endif

@@ -131,6 +131,7 @@
                     <label for="">Sede: </label>
                     <select class="form-control my-0 py-1" name="sede" id="sede">
                       <option  >Seleccione una sede</option>
+                      <option value="DBs" {{ ( $sede == "DBs") ? 'selected' : '' }}>DBs</option>
                       <option value="FTN" {{ ( $sede == "FTN") ? 'selected' : '' }}>FTN</option>
                       <option value="FAU" {{ ( $sede == "FAU") ? 'selected' : '' }}>FAU</option>
                       <option value="FLL" {{ ( $sede == "FLL") ? 'selected' : '' }}>FLL</option>

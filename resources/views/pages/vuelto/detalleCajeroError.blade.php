@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Detalles de movimiento del cajero
+    Detalles de errores del cajero
 @endsection
 
 @section('content')
@@ -76,7 +76,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-cogs"></i>
-		Detalles de movimiento del cajero
+		Detalles de errores del cajero
 	</h1>
 
 	<hr class="row align-items-start col-12">

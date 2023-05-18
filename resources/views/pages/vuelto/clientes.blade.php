@@ -113,6 +113,7 @@
                     <label for="">Sede: {{$sede}}</label>
                     <select class="form-control my-0 py-1" name="sede" id="sede">
                       <option  >Seleccione una sede</option>
+					  <option value="DBs" {{ ( $sede == "DBs") ? 'selected' : '' }}>DBs</option>
                       <option value="FTN" {{ ( $sede == "FTN") ? 'selected' : '' }}>FTN</option>
                       <option value="FAU" {{ ( $sede == "FAU") ? 'selected' : '' }}>FAU</option>
                       <option value="FLL" {{ ( $sede == "FLL") ? 'selected' : '' }}>FLL</option>
@@ -162,9 +163,16 @@
                 <td  class="text-center"> {{$vuelto["registro"] }}</td>
                 <td class="text-center">{{$vuelto["Sede"] }}</td>
                 <td class="text-center">
-                    <a href="{{route('detalleClientesTransaccionales',['cliente'=>$vuelto['cedulaClienteFactura']])}}">
-                        {{$vuelto["cedulaClienteFactura"] }}
-                    </a>
+					<form action="{{route("detalleClientesTransaccionales2")}}" method="POST" target="_blank">
+						@csrf
+						<input name="cliente" type="hidden" value="{{$vuelto['cedulaClienteFactura']}}">
+						<input name="fecha_ini" type="hidden" value="{{$fini}}">
+						<input name="fecha_fin" type="hidden" value="{{$ffin}}">
+						<input name="sede" type="hidden" value="{{$sede}}">
+		
+						<button class="btn btn-link" type="submit" >{{$vuelto["cedulaClienteFactura"] }}</button>
+					</form> 
+                    
                 </td>
                 <td class="text-center">{{$vuelto["nombreClienteFactura"] }}</td>
                 <td class="text-center">{{$vuelto["TotalAcumuladoBs"] }} Bs.</td>                                

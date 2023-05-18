@@ -130,6 +130,7 @@
                     <label for="">Sede: </label>
                     <select class="form-control my-0 py-1" name="sede" id="sede">
                       <option  >Seleccione una sede</option>
+                      <option value="DBs" {{ ( $sede == "DBs") ? 'selected' : '' }}>DBs</option>
                       <option value="FTN" {{ ( $sede == "FTN") ? 'selected' : '' }}>FTN</option>
                       <option value="FAU" {{ ( $sede == "FAU") ? 'selected' : '' }}>FAU</option>
                       <option value="FLL" {{ ( $sede == "FLL") ? 'selected' : '' }}>FLL</option>
@@ -146,9 +147,39 @@
                 </div>
             </div>
         </form>
-        <div class="col-12 text-center mt-3">            
-            <a class="btn btn-info" href="{{route('clientesTransaccionales')}}" type="button" >Clientes Transaccionales</a>
-            <a class="btn btn-info" href="{{route('cajerosTransaccionales')}}" type="button" >Cajeros Transaccionales</a>
+        <div class="col-12 text-center mt-3">    
+          <div class="row">
+            <div class="col-4">
+              <form action="{{route("clientesTransaccionales2")}}" method="POST" target="_blank">
+                @csrf
+                <input name="fecha_ini" type="hidden" value="{{$fini}}">
+                <input name="fecha_fin" type="hidden" value="{{$ffin}}">
+                <input name="sede" type="hidden" value="{{$sede}}">
+
+                <button class="btn btn-info" type="submit" >Clientes Transaccionales</button>
+              </form>        
+            </div>           
+            <div class="col-4">
+              <form action="{{route("cajerosTransaccionales2")}}" method="POST" target="_blank">
+                @csrf
+                <input name="fecha_ini" type="hidden" value="{{$fini}}">
+                <input name="fecha_fin" type="hidden" value="{{$ffin}}">
+                <input name="sede" type="hidden" value="{{$sede}}">
+
+                <button class="btn btn-info" type="submit" >Cajeros Transaccionales</button>
+              </form> 
+            </div>
+            <div class="col-4">
+              <form action="{{route("cajerosTransaccionalesError2")}}" method="POST" target="_blank">
+                @csrf
+                <input name="fecha_ini" type="hidden" value="{{$fini}}">
+                <input name="fecha_fin" type="hidden" value="{{$ffin}}">
+                <input name="sede" type="hidden" value="{{$sede}}">
+
+                <button class="btn btn-danger" type="submit" >Cajeros con incidencias</button>
+              </form> 
+            </div>
+          </div>
         </div>        
     </div>  
     <br>
@@ -191,10 +222,14 @@
 		    </tr>
 	  	</thead>
 	  	<tbody>       
-        
+        @php
+          $contador=0;
+        @endphp
         @if(isset($historialvueltos))
           @foreach($historialvueltos as $vuelto)
+
                   @php
+                  $contador=$contador+1;
                   if($vuelto->get("nro_devolucion")>0){
                       $color='background-color:#f5c6cb;';
                       $font='color:#721c24;font-weight:bold;';
@@ -212,7 +247,7 @@
                   @endphp
               <tr style="{{$color}}">
                       
-                      <td>{{$vuelto->get("id")}}</td>
+                      <td>{{$contador}}</td>
                       <td>{{$vuelto->get("sede")}}</td>
                       <td>{{$vuelto->get("fecha_hora_factura")}}</td>
                       <td>{{$vuelto->get("numero_factura")}}</td>

@@ -628,3 +628,8 @@ Route::post('/detalleClientesTransaccionales2', 'Pagomovil\VueltoController@deta
 Route::get('/detalleCajerosTransaccionales/{cajero}', 'Pagomovil\VueltoController@detalleCajeros')->name('detalleCajerosTransaccionales');
 Route::post('/detalleCajerosTransaccionales2', 'Pagomovil\VueltoController@detalleCajeros')->name('detalleCajerosTransaccionales2');
 
+Route::get('/historicoCajerosTransaccionalesError', 'Pagomovil\VueltoController@cajerosTransaccionalesError')->name('cajerosTransaccionalesError');
+Route::post('/historicoCajerosTransaccionalesError2', 'Pagomovil\VueltoController@cajerosTransaccionalesError')->name('cajerosTransaccionalesError2');
+
+Route::get('/detalleCajerosTransaccionalesError/{cajero}', 'Pagomovil\VueltoController@detalleCajerosErrores')->name('detalleCajerosTransaccionalesError');
+Route::post('/detalleCajerosTransaccionalesError2', 'Pagomovil\VueltoController@detalleCajerosErrores')->name('detalleCajerosTransaccionalesError2');
