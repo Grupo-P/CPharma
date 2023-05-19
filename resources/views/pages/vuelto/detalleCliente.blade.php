@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Histórico de pagos
+    Detalles del movimiento del cliente
 @endsection
 
 @section('content')
@@ -76,7 +76,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-cogs"></i>
-		Histórico de pagos moviles
+		Detalles del movimiento del cliente
 	</h1>
 
 	<hr class="row align-items-start col-12">
@@ -114,8 +114,9 @@
             </div>
         @endif
                         
-        <form action="{{route("filtrofecha")}}" method="POST">
+        <form action="{{route("detalleClientesTransaccionales2")}}" method="POST">
             @csrf
+            <input type="hidden" name="cliente" value="{{$cliente}}">
             <div class="row">
                 <div class="col-4">
                     <label for="">Desde:</label>
@@ -143,44 +144,10 @@
 
                 <div class="col-12 text-center mt-3">
                     <input class="btn btn-success" type="submit" value="Enviar">
-                    <a class="btn btn-info" href="/historicoVueltos" type="button" >Limpiar</a>
+                    <a class="btn btn-info" href="/historicoClientesTransaccionales" type="button" >Volver</a>
                 </div>
             </div>
         </form>
-        <div class="col-12 text-center mt-3">    
-          <div class="row">
-            <div class="col-4">
-              <form action="{{route("clientesTransaccionales2")}}" method="POST" target="_blank">
-                @csrf
-                <input name="fecha_ini" type="hidden" value="{{$fini}}">
-                <input name="fecha_fin" type="hidden" value="{{$ffin}}">
-                <input name="sede" type="hidden" value="{{$sede}}">
-
-                <button class="btn btn-info" type="submit" >Clientes Transaccionales</button>
-              </form>        
-            </div>           
-            <div class="col-4">
-              <form action="{{route("cajerosTransaccionales2")}}" method="POST" target="_blank">
-                @csrf
-                <input name="fecha_ini" type="hidden" value="{{$fini}}">
-                <input name="fecha_fin" type="hidden" value="{{$ffin}}">
-                <input name="sede" type="hidden" value="{{$sede}}">
-
-                <button class="btn btn-info" type="submit" >Cajeros Transaccionales</button>
-              </form> 
-            </div>
-            <div class="col-4">
-              <form action="{{route("cajerosTransaccionalesError2")}}" method="POST" target="_blank">
-                @csrf
-                <input name="fecha_ini" type="hidden" value="{{$fini}}">
-                <input name="fecha_fin" type="hidden" value="{{$ffin}}">
-                <input name="sede" type="hidden" value="{{$sede}}">
-
-                <button class="btn btn-danger" type="submit" >Cajeros con incidencias</button>
-              </form> 
-            </div>
-          </div>
-        </div>        
     </div>  
     <br>
     <div class="row">    
@@ -222,14 +189,10 @@
 		    </tr>
 	  	</thead>
 	  	<tbody>       
-        @php
-          $contador=0;
-        @endphp
+        
         @if(isset($historialvueltos))
           @foreach($historialvueltos as $vuelto)
-
                   @php
-                  $contador=$contador+1;
                   if($vuelto->get("nro_devolucion")>0){
                       $color='background-color:#f5c6cb;';
                       $font='color:#721c24;font-weight:bold;';
@@ -247,7 +210,7 @@
                   @endphp
               <tr style="{{$color}}">
                       
-                      <td>{{$contador}}</td>
+                      <td>{{$vuelto->get("id")}}</td>
                       <td>{{$vuelto->get("sede")}}</td>
                       <td>{{$vuelto->get("fecha_hora_factura")}}</td>
                       <td>{{$vuelto->get("numero_factura")}}</td>

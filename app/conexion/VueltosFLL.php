@@ -20,7 +20,14 @@ class VueltosFLL extends Model
         'motivo_error',
         'sede',
         'caja',
-        'monto'
+        'monto',
+        'tasaVenta',
+        'montoPagado',
+        'cedulaClienteFactura',
+        'nombreClienteFactura',
+        'nombreCajeroFactura',
+        'totalFacturaBs',
+        'totalFacturaDolar'
     ];
 
     public function scopeInicio($query, $inicio)
