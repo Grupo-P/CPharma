@@ -306,7 +306,11 @@ class VueltoController extends Controller
             foreach($vueltos as $vuelto){
                 
                 $idFactura=$vuelto->id_factura;
-
+                $montoPagadoFacturaDolar=0;
+                $totalFacturaDolar=0;
+                $montoPagadoFactura=0;
+                $montoPagadoFacturaDolar=0;
+                $montoPagoMovilDolar=0;
                 //Consulta de la factura
                 $sql = "
                         SELECT
