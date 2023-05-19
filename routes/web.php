@@ -483,7 +483,7 @@ Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
 
 Route::get('/syncategorias', 'CategorizacionController@syncategorias');
 
-//Route::resource('/cotizacion', 'CotizacionController');
+Route::resource('/cotizacion', 'CotizacionController');
 
 
 //***************************** RRHH routing *****************************//
