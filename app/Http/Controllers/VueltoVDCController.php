@@ -51,9 +51,9 @@ class VueltoVDCController extends Controller
         $cedulaClienteFactura=$row['CodigoCliente'];
         $nombreClienteFactura=$row['nombre'];
         $nombreCajeroFactura=$row['Auditoria_Usuario'];
-        $totalFactura=number_format($row['totalFactura'],2);
+        $totalFactura=number_format($row['totalFactura'],2,'.','');
         $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;                    
-        $totalFacturaDolar=number_format($totalFactura/$tasa,2);
+        $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
         $sede= $SedeConnection;
         $montoPagado=$request->total_pagado;
         /////////////////////////////////////////////////////////////////
@@ -423,7 +423,7 @@ class VueltoVDCController extends Controller
             $cedulaClienteFactura=$row['CodigoCliente'];
             $nombreClienteFactura=$row['nombre'];
             $nombreCajeroFactura=$row['Auditoria_Usuario'];
-            $totalFactura=number_format($row['totalFactura'],2);
+            $totalFactura=number_format($row['totalFactura'],2,'.','');
 
             $cedula_cliente = $request->tipo_cliente . $request->cedula_cliente;
             
@@ -436,7 +436,7 @@ class VueltoVDCController extends Controller
                         ['timeout'=>40,'json' => $json]
                     );
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;                    
-                    $totalFacturaDolar=number_format($totalFactura/$tasa,2);
+                    $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
                     //obtener la respuesta del servidor
                     $response = json_decode($response->getBody()->getContents())->response;
                     $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
@@ -480,7 +480,7 @@ class VueltoVDCController extends Controller
 
                     //Codigos de error del banco
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
-                    $totalFacturaDolar=number_format($totalFactura/$tasa,2);
+                    $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
 
                     //registro en historico
                     Vuelto::create([
@@ -626,11 +626,11 @@ class VueltoVDCController extends Controller
         $cedula_cliente = implode($array, '');
         $telefono = $row['Telefono'];
         $monto = $row['MontoRecibido'] - $row['MontoPagado'];
-        $monto = number_format($monto, 2);        
+        $monto = number_format($monto, 2,'.','');        
 
         $cliente = $row['nombre'];
-        $total_factura = number_format($row['totalFactura'], 2);
-        $total_factura_pagado = number_format($row['MontoRecibido'], 2);
+        $total_factura = number_format($row['totalFactura'], 2,'.','');
+        $total_factura_pagado = number_format($row['MontoRecibido'], 2,'.','');
         return [
             'numero_factura' => $numero_factura,
             'caja' => $caja,
