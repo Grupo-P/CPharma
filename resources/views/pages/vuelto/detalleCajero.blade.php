@@ -130,8 +130,7 @@
                   @if($sedeUsuario=="GRUPO P, C.A")
                     <label for="">Sede: </label>
                     <select class="form-control my-0 py-1" name="sede" id="sede">
-                      <option  >Seleccione una sede</option>
-                      <option value="DBs" {{ ( $sede == "DBs") ? 'selected' : '' }}>DBs</option>
+                      <option  >Seleccione una sede</option>                      
                       <option value="FTN" {{ ( $sede == "FTN") ? 'selected' : '' }}>FTN</option>
                       <option value="FAU" {{ ( $sede == "FAU") ? 'selected' : '' }}>FAU</option>
                       <option value="FLL" {{ ( $sede == "FLL") ? 'selected' : '' }}>FLL</option>
@@ -160,7 +159,7 @@
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
-		      	<th scope="col" class="CP-sticky">#</th>
+		      	<th scope="col" class="CP-sticky">Codigo</th>
                 <th scope="col" class="CP-sticky">Sede</th>
                 <th scope="col" class="CP-sticky">Fecha / Hora Factura</th>
 		      	    <th scope="col" class="CP-sticky">Nro Factura</th>

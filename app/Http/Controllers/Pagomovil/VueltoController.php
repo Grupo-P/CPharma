@@ -2362,6 +2362,7 @@ class VueltoController extends Controller
                     }
                     else{
                         $montoPagadoFactura=0;
+                        $montoPagadoFacturaDolar=0;
                     }
                 }   
                 else{
