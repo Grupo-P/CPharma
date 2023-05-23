@@ -49,7 +49,7 @@ class VueltoVDCController extends Controller
 
         $id_factura = $row['Id'];
         $cedulaClienteFactura=$row['CodigoCliente'];
-        $nombreClienteFactura=$row['nombre'];
+        $nombreClienteFactura=mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
         $nombreCajeroFactura=$row['Auditoria_Usuario'];
         $totalFactura=number_format($row['totalFactura'],2,'.','');
         $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;                    
@@ -421,7 +421,7 @@ class VueltoVDCController extends Controller
 
             $id_factura = $row['Id'];
             $cedulaClienteFactura=$row['CodigoCliente'];
-            $nombreClienteFactura=$row['nombre'];
+            $nombreClienteFactura=mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
             $nombreCajeroFactura=$row['Auditoria_Usuario'];
             $totalFactura=number_format($row['totalFactura'],2,'.','');
 
@@ -628,7 +628,7 @@ class VueltoVDCController extends Controller
         $monto = $row['MontoRecibido'] - $row['MontoPagado'];
         $monto = number_format($monto, 2,'.','');        
 
-        $cliente = $row['nombre'];
+        $cliente = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
         $total_factura = number_format($row['totalFactura'], 2,'.','');
         $total_factura_pagado = number_format($row['MontoRecibido'], 2,'.','');
         return [
