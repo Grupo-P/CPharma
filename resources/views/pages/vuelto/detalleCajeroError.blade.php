@@ -137,6 +137,7 @@
                       <option value="FSM" {{ ( $sede == "FSM") ? 'selected' : '' }}>FSM</option>
                       <option value="KDI" {{ ( $sede == "KDI") ? 'selected' : '' }}>KDI</option>
                       <option value="FEC" {{ ( $sede == "FEC") ? 'selected' : '' }}>FEC</option>
+                      <option value="KD73" {{ ( $sede == "KD73") ? 'selected' : '' }}>KD73</option>
                     </select>
                   @endif
                 </div>
