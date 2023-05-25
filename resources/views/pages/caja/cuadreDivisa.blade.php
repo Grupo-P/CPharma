@@ -1308,18 +1308,7 @@
                             <div class="numero-referencia-container"></div>
                         </center>
                     </div>
-                    <div class="alert alert-danger" id="tpago-error-container">
-                        <center>
-                            <h4 >
-                                <i class="fa fa-exclamation-triangle text-danger"></i>
-                                <br>
-                                ¡Error en la transaccion!<br>
-                                <span id="tpago-error-text"></span>
-                            </h4>
-
-                            <div class="numero-referencia-container"></div>
-                        </center>
-                    </div>
+                    
                     <div class="tpago-form-container">
 
                         <!--datos factura-->
@@ -1436,7 +1425,18 @@
                             required="required"
                             >
                         </div>
-
+                        <div class="alert alert-danger" id="tpago-error-container">
+                            <center>
+                                <h4 >
+                                    <i class="fa fa-exclamation-triangle text-danger"></i>
+                                    <br>
+                                    ¡Error en la transaccion!<br>
+                                    <span id="tpago-error-text"></span>
+                                </h4>
+    
+                                <div class="numero-referencia-container"></div>
+                            </center>
+                        </div>
                         <ul style="background-color:lightgray;border-radius:25px;">
                             <span style="text-align:center;"><strong>Requisitos para hacer un pago movil:</strong></span><br>
                             <li>1.-Sólo un pago movil por cliente en el Día</strong></li>

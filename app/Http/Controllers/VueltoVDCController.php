@@ -481,7 +481,9 @@ class VueltoVDCController extends Controller
                     //Codigos de error del banco
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
-
+                    if($descripcion == "Saldo insuficiente"){
+                        $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
+                    }
                     //registro en historico
                     Vuelto::create([
                         'fecha_hora' => date('Y-m-d H:i:s'),
@@ -494,6 +496,7 @@ class VueltoVDCController extends Controller
                         'sede' => $sede,
                         'motivo_error' => $descripcion,
                         'monto' => $request->monto,
+                        'montoPagado' => $montoPagado,
                         'tasaVenta' => $tasa,
                         'cedulaClienteFactura' => $cedulaClienteFactura,
                         'nombreClienteFactura' => $nombreClienteFactura,
