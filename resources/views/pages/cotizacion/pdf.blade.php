@@ -57,7 +57,7 @@
                         echo 'FARMACIAS KD EXPRESS, C.A.';
                     }
 
-                    if ($_SERVER['HTTP_HOST'] == 'cpharmakdi73.com') {
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmakd73.com') {
                         echo 'FARMACIAS KD EXPRESS, C.A. - KD73';
                     }
 
