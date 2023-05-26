@@ -66,7 +66,7 @@ define ("nameFAU" , "smartfau");
 define ("nameFAUOFF" , "cpharmafau");
 /**********************************************************************************/
 /************************* CONEXION ON LINE KDI **********************************/
-define ("serverKDI" , "SERVER-KDI");
+define ("serverKDI" , "192.168.15.35");
 define ("userKDI" , "admin");
 define ("passKDI" , "soporte123");
 define ("nameKDI" , "KD_EXPRESS_SMART");
@@ -87,7 +87,7 @@ define ("nameFEC" , "BD_ELCALLEJON");
 define ("nameFECOFF" , "cpharmafec");
 /**********************************************************************************/
 /************************* CONEXION ON LINE KD73 **********************************/
-define ("serverKD73" , "SERVER-KD73");
+define ("serverKD73" , "192.168.60.35");
 define ("userKD73" , "admin");
 define ("passKD73" , "soporte123");
 define ("nameKD73" , "BD_KDEXPRESS");

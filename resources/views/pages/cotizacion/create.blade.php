@@ -13,7 +13,7 @@
     <hr class="row align-items-start col-12">
 
     <div>
-        <form action="/cotizacion" method="POST">
+        <form action="/cotizacion" method="POST" target="_blank">
             @csrf
 
             <div class="card">
