@@ -478,13 +478,16 @@ class VueltoVDCController extends Controller
                 }
                 catch (GuzzleException $exception) {
                     $response = $exception->getResponse()->getBody();
+                    $contenido= $exception->getResponse()->getBody()->getContents();
+                    $tamaño= strlen($contenido);             
                     auditoriaPM::create([
                         'paso' => "4 Error",
-                        'informacion' => $exception->getResponse()->getBody()->getContents(),
+                        'informacion' => $contenido,
                         'caja' => $caja
-                    ]);
-                    $response = json_decode($response);
-                    if($exception->getResponse()->getBody()!=null || $exception->getResponse()->getBody()!= ""){
+                    ]);                       
+                    
+                    if($tamaño>0){
+                        $response = json_decode($response);
                         $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
                         
                         $response = json_decode($response);
@@ -494,13 +497,15 @@ class VueltoVDCController extends Controller
                         $descripcion = $response->descripcion ?? $response->mensajeError;
 
                         //Codigos de error del banco
-                       
-                        if($descripcion == "Saldo insuficiente"){
+                        
+                        if($descripcion == "Saldo insuficiente                "){
                             $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
                         }
+                        
                     }
                     else{
                         $descripcion="Sin Conexion con el banco";
+                        
                     }
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
