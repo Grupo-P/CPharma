@@ -6,6 +6,7 @@ use compras\TasaVenta;
 use compras\Configuracion;
 use compras\VueltoVDC as Vuelto;
 use Carbon\Carbon;
+use compras\pagoMovil\auditoriaPM;
 use DateTime;
 use GuzzleHttp\Client as GuzzleHttp;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class VueltoVDCController extends Controller
     public function validar(Request $request)
     {
         //return 'exito'; -- para testing
-
+       
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
         $numero_factura = $request->numero_factura;
@@ -57,7 +58,7 @@ class VueltoVDCController extends Controller
         $sede= $SedeConnection;
         $montoPagado=$request->total_pagado;
         /////////////////////////////////////////////////////////////////
-        /* Valida que la caja de la venta sea igual a la caja desde la cual se está haciendo el vuelto. */
+        // Valida que la caja de la venta sea igual a la caja desde la cual se está haciendo el vuelto. 
         /////////////////////////////////////////////////////////////////
         
         $sql = "
@@ -101,7 +102,7 @@ class VueltoVDCController extends Controller
         }
 
         /////////////////////////////////////////////////////////////////
-        /* Valida que la factura sea la última registrada en esa caja */
+        // Valida que la factura sea la última registrada en esa caja 
         /////////////////////////////////////////////////////////////////
         $caja = $request->caja;
 
@@ -154,7 +155,7 @@ class VueltoVDCController extends Controller
             return $descripcion;
         }
         /////////////////////////////////////////////////////////////////
-        /* Valida que el cliente no tenga un vuelto ese mismo dia. */
+        // Valida que el cliente no tenga un vuelto ese mismo dia. 
         /////////////////////////////////////////////////////////////////
         
         $id_factura= $row["idFactura"];
@@ -192,7 +193,7 @@ class VueltoVDCController extends Controller
         
         /////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////
-        /* Valida que el cliente no tenga un vuelto ese mismo dia. */
+        // Valida que el cliente no tenga un vuelto ese mismo dia. 
         /////////////////////////////////////////////////////////////////
         
         $cedula= $request->cedula_cliente;
@@ -273,7 +274,7 @@ class VueltoVDCController extends Controller
             return $descripcion;            
         }
         /////////////////////////////////////////////////////////////////
-        /* Valida que no hayan pasado más de 10 minutos desde registro de factura. */
+        // Valida que no hayan pasado más de 10 minutos desde registro de factura. 
         /////////////////////////////////////////////////////////////////
 
         $fecha_factura = $row['FechaDocumento']->format('Y-m-d H:i:s');
@@ -311,7 +312,7 @@ class VueltoVDCController extends Controller
         }
 
         /////////////////////////////////////////////////////////////////
-        /* Valida que el monto máximo del pago móvil sea $20. */
+        // Valida que el monto máximo del pago móvil sea $20. 
         /////////////////////////////////////////////////////////////////
         $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
         $monto = $request->monto / $tasa;
@@ -352,7 +353,6 @@ class VueltoVDCController extends Controller
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
-        
         $RutaUrl = FG_Mi_Ubicacion();
         //$RutaUrl = 'DBs';
         
@@ -366,12 +366,7 @@ class VueltoVDCController extends Controller
             "tipo_cliente" => 'required',
             "cedula_cliente" => 'required',
         ]);
-        $montoPagado=$request->total_pagado;
-        /*$request->monto = 0.01;
-        $request->tipo_cliente = 'J';
-        $request->telefono_cliente = '04146803196';
-        $request->banco_destino = '0105';
-        $request->cedula_cliente = '4118013131';*/
+            $montoPagado=$request->total_pagado;        
 
             $caja = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
@@ -391,7 +386,11 @@ class VueltoVDCController extends Controller
             $json['dt']['email'] = '';
             $json['dt']['monto'] = $request->monto;
             $json['dt']['banco'] = $request->banco_destino;
-
+            auditoriaPM::create([
+                'paso' => "3",
+                'informacion' => json_encode($json['dt']),
+                'caja' => $caja
+            ]);
             $json['dt'] = json_encode($json['dt']);
 
             $json['dt'] = openssl_encrypt($json['dt'], 'AES-128-CBC', $key, 0, $vi);
@@ -426,7 +425,7 @@ class VueltoVDCController extends Controller
             $totalFactura=number_format($row['totalFactura'],2,'.','');
 
             $cedula_cliente = $request->tipo_cliente . $request->cedula_cliente;
-            
+           
            
                 try {
                     $client = new GuzzleHttp;
@@ -438,9 +437,18 @@ class VueltoVDCController extends Controller
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;                    
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
                     //obtener la respuesta del servidor
+                    
                     $response = json_decode($response->getBody()->getContents())->response;
+                    
                     $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
+                    
                     $response = json_decode($response);
+
+                    auditoriaPM::create([
+                        'paso' => "4",
+                        'informacion' => "Exito: ".$response->referenciaMovimiento,
+                        'caja' => $caja
+                    ]);
 
                     $confirmacion_banco = $response->referenciaMovimiento;
 
@@ -469,21 +477,33 @@ class VueltoVDCController extends Controller
                     return json_encode(['resultado' => 'exito', 'referencia' => $confirmacion_banco]);
                 }
                 catch (GuzzleException $exception) {
-                    $response = $exception->getResponse()->getBody()->getContents();
+                    $response = $exception->getResponse()->getBody();
+                    auditoriaPM::create([
+                        'paso' => "4 Error",
+                        'informacion' => $exception->getResponse()->getBody()->getContents(),
+                        'caja' => $caja
+                    ]);
                     $response = json_decode($response);
-                    $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
-                    $response = json_decode($response);
-
+                    if($exception->getResponse()->getBody()->getContents()!=null || $exception->getResponse()->getBody()->getContents()!= ""){
+                        $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
+                        
+                        $response = json_decode($response);
                     
-                    //Obtener la respuesta del servidor
-                    $descripcion = $response->descripcion ?? $response->mensajeError;
+                    
+                        //Obtener la respuesta del servidor
+                        $descripcion = $response->descripcion ?? $response->mensajeError;
 
-                    //Codigos de error del banco
+                        //Codigos de error del banco
+                       
+                        if($descripcion == "Saldo insuficiente"){
+                            $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
+                        }
+                    }
+                    else{
+                        $descripcion="Sin Conexion con el banco";
+                    }
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
-                    if($descripcion == "Saldo insuficiente"){
-                        $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
-                    }
                     //registro en historico
                     Vuelto::create([
                         'fecha_hora' => date('Y-m-d H:i:s'),
@@ -572,7 +592,7 @@ class VueltoVDCController extends Controller
         ";
 
         $result = sqlsrv_query($conn, $sql);
-        /*dd(sqlsrv_errors());*/
+        
         $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
         return [
@@ -590,6 +610,13 @@ class VueltoVDCController extends Controller
 
         $RutaUrl = FG_Mi_Ubicacion();
         //$RutaUrl = 'DBs';
+        
+        auditoriaPM::create([
+            'paso' => "1",
+            'informacion' => "Carga de datos",
+            'caja' => $request->caja
+        ]);
+        
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $caja = $request->caja; 
@@ -634,6 +661,19 @@ class VueltoVDCController extends Controller
         $cliente = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
         $total_factura = number_format($row['totalFactura'], 2,'.','');
         $total_factura_pagado = number_format($row['MontoRecibido'], 2,'.','');
+        auditoriaPM::create([
+            'paso' => "2",
+            'informacion' => "numero_factura: $numero_factura,
+            caja:  $caja,
+            tipo_cliente: $tipo_cliente,
+            cedula_cliente: $cedula_cliente,
+            telefono: $telefono,
+            monto:  $monto,
+            cliente: $cliente,
+            total_factura: $total_factura,
+            total_factura_pagado: $total_factura_pagado,",
+            'caja' =>$request->caja
+        ]);
         return [
             'numero_factura' => $numero_factura,
             'caja' => $caja,
@@ -645,6 +685,7 @@ class VueltoVDCController extends Controller
             'total_factura' => $total_factura,
             'total_factura_pagado' => $total_factura_pagado,
         ];
+
         
     }
 }
