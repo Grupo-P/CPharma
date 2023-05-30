@@ -484,7 +484,7 @@ class VueltoVDCController extends Controller
                         'caja' => $caja
                     ]);
                     $response = json_decode($response);
-                    if($exception->getResponse()->getBody()->getContents()!=null || $exception->getResponse()->getBody()->getContents()!= ""){
+                    if($exception->getResponse()->getBody()!=null || $exception->getResponse()->getBody()!= ""){
                         $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
                         
                         $response = json_decode($response);
