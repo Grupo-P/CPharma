@@ -204,10 +204,14 @@ class EtiquetaMovilController extends Controller
         
         if ($dolarizado == 'SI') {
             $response['precio'] = number_format($precio/$tasa, 2);
-            $precioPartes=explode(".",$precio);
-            
-            if(substr($precioPartes[1],-2)=="01"){
-                $response['precioCorrida'] =substr($precioPartes[1],-2);
+            if($precio>0){
+                $precioPartes=explode(".",$precio);
+                if(substr($precioPartes[1],-2)=="01"){
+                    $response['precioCorrida'] =substr($precioPartes[1],-2);
+                }
+                else{
+                    $response['precioCorrida'] = null;
+                }
             }
             else{
                 $response['precioCorrida'] = null;
