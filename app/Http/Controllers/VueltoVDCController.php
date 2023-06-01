@@ -486,26 +486,34 @@ class VueltoVDCController extends Controller
                         'caja' => $caja
                     ]);                       
                     
-                    if($tamaño>0){
-                        $response = json_decode($response);
-                        $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
-                        
-                        $response = json_decode($response);
-                    
-                    
-                        //Obtener la respuesta del servidor
-                        $descripcion = $response->descripcion ?? $response->mensajeError;
-
-                        //Codigos de error del banco
-                        
-                        if($descripcion == "Saldo insuficiente                "){
-                            $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
-                        }
-                        
-                    }
-                    else{
+                    if(str_contains($contenido, '<head>')){
                         $descripcion="Sin Conexion con el banco";
-                        
+                    }
+                    else{ 
+                        if($tamaño>0){
+                                $response = json_decode($response);
+                                $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
+                            
+                                
+                                
+                                $response = json_decode($response);
+                            
+                            
+                                //Obtener la respuesta del servidor
+                                $descripcion = $response->descripcion ?? $response->mensajeError;
+
+                                //Codigos de error del banco
+                                
+                                if($descripcion == "Saldo insuficiente                "){
+                                    $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
+                                }
+                            
+                            
+                        }
+                        else{
+                            $descripcion="Sin Conexion con el banco";
+                            
+                        }
                     }
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
