@@ -43,24 +43,10 @@
             $id = 3;
         }
 
-        if ($host == 'cpharmakdi.com') {
+        if ($host == 'cpharmakdi.com' || $host == 'cpharmakd73.com') {
             $username = 'pagoskdi@hotmail.com';
             $password = 'GJpc2017.';
-            $remitente = '';
-            $id = 5;
-        }
-
-        if ($host == 'cpharmafec.com') {
-            $username = 'pagoselcallejon@hotmail.com';
-            $password = 'atorvastati@.YA';
-            $remitente = 'pagomovilfec@gmail.com';
-            $id = 6;
-        }
-
-        if ($host == 'cpharmakd73.com') {
-            $username = 'pagoskdi@hotmail.com';
-            $password = 'GJpc2017.';
-            $remitente = '';
+            $remitente = 'pagomovilkd@gmail.com';
             $id = 5;
         }
 
@@ -209,6 +195,52 @@
                     }
 
                 }
+
+                 // BNC
+
+                if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
+
+                    $body = @imap_fetchbody($conn, $email, 2);
+
+                    if (strpos($body, 'Pago Movil') && strpos($body, '- 2620')) {
+
+                        $inicioEnviadoPor =(strpos($body, 'Telf.')) + 5;                
+                        $substr = substr($body, $inicioEnviadoPor);                
+                        $finEnviadoPor = strpos($substr, ' ');                
+                        $enviadoPor = substr($substr, 0, $finEnviadoPor);                
+                        $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
+                        
+
+                        $inicioMonto = (strpos($body, 'Pago Movil Recibido')) + 20;                
+                        $substr = substr($body, $inicioMonto);                
+                        $finMonto = strpos($substr, ' Telf.');
+                        $monto = substr($substr, 0, $finMonto);
+                    
+                        $inicioReferencia = (strpos($body, 'ef:')) + 3;                
+                        $substr = substr($body, $inicioReferencia);
+                        
+                        $finReferencia = strpos($substr, ' Llamar');
+                        $referencia = substr($substr, 0, $finReferencia);                
+
+                        $comentario = "Referencia: $referencia";
+
+                        $decimales = explode('.', (string) $monto);
+                        
+                        $decimales = $decimales[1];
+                    
+                        $pagos[$i]['tipo'] = 'Pago móvil BNC';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                        $pagos[$i]['referencia'] = $referencia;
+
+                        $i++;
+                    }
+
+                    }
             }
         }
 
@@ -347,7 +379,7 @@
 
                 if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
 
-                    $body = @imap_body($conn, $email);
+                    $body = @imap_body($conn, $email);                    
 
                     $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pa')) + 41;
                     $substr = substr($body, $inicioEnviadoPor);
@@ -500,7 +532,7 @@
                     $monto = trim($monto);
 
                     if (strpos($body, 'Memo:') === false) {
-                        $comentario = '';
+                        $comentario = '';                   
                     } else {
                         $inicioComentario = strpos($body, 'Memo:');
                         $finComentario = strpos($body, 'This was de');
@@ -560,7 +592,7 @@
 
             if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
                 continue;
-
+            
 }
             foreach ($overview as $item) {
 
@@ -675,7 +707,7 @@
             $fecha = strtotime($item['fechaSinFormato']);
 
             $anterior = new DateTime();
-            $anterior->modify('-30minutes');
+            $anterior->modify('-30 minutes');
             $anterior = $anterior->format('Y-m-d H:i:s');
             $anterior = strtotime($anterior);
 
