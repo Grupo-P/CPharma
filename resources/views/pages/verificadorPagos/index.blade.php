@@ -85,7 +85,8 @@
             if ($sede == 'KDI' || $sede == 'KD73' || $sede == 'FARMACIAS KD EXPRESS, C.A.') {
                 $username = 'pagoskdi@hotmail.com';
                 $password = 'GJpc2017.';
-                $remitente = '';
+                $remitente = 'pagomovilkd@gmail.com';
+                $id = 5;
             }
 
             if ($sede == 'FEC' || $sede == 'FARMACIA EL CALLEJON, C.A.') {
@@ -216,6 +217,51 @@
                             $pagos[$i]['fecha'] = $fecha;
                             $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                             $pagos[$i]['comentario'] = $comentario;
+                            $pagos[$i]['referencia'] = $referencia;
+
+                            $i++;
+                        }
+
+                    }
+                    // BNC
+
+                    if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
+
+                        $body = @imap_fetchbody($conn, $email, 2);
+
+                        if (strpos($body, 'Pago Movil') && strpos($body, '- 2620')) {
+
+                            $inicioEnviadoPor =(strpos($body, 'Telf.')) + 5;                
+                            $substr = substr($body, $inicioEnviadoPor);                
+                            $finEnviadoPor = strpos($substr, ' ');                
+                            $enviadoPor = substr($substr, 0, $finEnviadoPor);                
+                            $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
+                            
+
+                            $inicioMonto = (strpos($body, 'Pago Movil Recibido')) + 20;                
+                            $substr = substr($body, $inicioMonto);                
+                            $finMonto = strpos($substr, ' Telf.');
+                            $monto = substr($substr, 0, $finMonto);
+                        
+                            $inicioReferencia = (strpos($body, 'ef:')) + 3;                
+                            $substr = substr($body, $inicioReferencia);
+                            
+                            $finReferencia = strpos($substr, ' Llamar');
+                            $referencia = substr($substr, 0, $finReferencia);                
+
+                            $comentario = "Referencia: $referencia";
+
+                            $decimales = explode('.', (string) $monto);
+                            
+                            $decimales = $decimales[1];
+                        
+                            $pagos[$i]['tipo'] = 'Pago móvil BNC';
+                            $pagos[$i]['enviado_por'] = $enviadoPor;
+                            $pagos[$i]['monto'] = $monto;
+                            $pagos[$i]['fecha'] = $fecha;
+                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                            $pagos[$i]['comentario'] = $comentario;
+                            $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
                             $pagos[$i]['referencia'] = $referencia;
 
                             $i++;
