@@ -737,8 +737,7 @@
             $fecha = strtotime($item['fechaSinFormato']);
 
             $anterior = new DateTime();
-            //$anterior->modify('-30 minutes');
-            $anterior->modify('-8 hours');
+            $anterior->modify('-30 minutes');            
             $anterior = $anterior->format('Y-m-d H:i:s');
             $anterior = strtotime($anterior);
 
