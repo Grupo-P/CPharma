@@ -43,6 +43,13 @@
             $id = 3;
         }
 
+        if ($host == 'cpharmafec.com') {
+            $username = 'pagoselcallejon@hotmail.com';
+            $password = 'atorvastati@.YA';
+            $remitente = 'pagomovilfec@gmail.com';
+            $id = 6;
+        }
+        
         if ($host == 'cpharmakdi.com' || $host == 'cpharmakd73.com') {
             $username = 'pagoskdi@hotmail.com';
             $password = 'GJpc2017.';
