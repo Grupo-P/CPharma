@@ -46,7 +46,7 @@
                     }
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmafsm.com') {
-                        echo 'FARMACIA LA LAGO, C. A.';
+                        echo 'FARMACIA MILLENNIUM 2000, C.A.';
                     }
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmafec.com') {
