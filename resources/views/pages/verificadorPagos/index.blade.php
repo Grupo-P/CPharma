@@ -100,7 +100,7 @@
 
             $conn = @imap_open($mailbox, $username, $password) or die (@imap_last_error());
 
-            $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
+            $search = @imap_search($conn, 'ON "'.$fecha.'"');
 
             $search = is_iterable($search) ? $search : [];
 
@@ -275,7 +275,7 @@
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
+            $search = @imap_search($conn, 'ON "'.$fecha.'"');
             $search = is_iterable($search) ? $search : [];
 
             foreach ($search as $email) {
@@ -485,6 +485,7 @@
 
                         $i++;
                     }
+
                     if (strpos($asunto, 'Pago recibido correctamente:') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
 
                         $body = @imap_body($conn, $email);
@@ -605,7 +606,7 @@
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $search = imap_search($conn, 'SINCE "'.$fecha.'"');
+            $search = imap_search($conn, 'ON "'.$fecha.'"');
             $search = is_iterable($search) ? $search : [];
 
             foreach ($search as $email) {
@@ -664,7 +665,7 @@
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $search = imap_search($conn, 'SINCE "'.$fecha.'"');
+            $search = imap_search($conn, 'ON "'.$fecha.'"');
             $search = is_iterable($search) ? $search : [];
 
             foreach ($search as $email) {
