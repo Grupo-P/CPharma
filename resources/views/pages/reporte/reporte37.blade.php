@@ -443,42 +443,45 @@
         if ($conectividad_ftn == 1) {
           $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
           $result3 = sqlsrv_query($connFTN,$sql3);
-
-          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-          $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-          $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-          $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          if(!$result3 === false) {
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
         }
 
         if ($conectividad_fll == 1) {
           $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
           $result3 = sqlsrv_query($connFLL,$sql3);
-          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-          $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-          $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-          $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          if(!$result3 === false) {
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
         }
 
         if ($conectividad_fsm == 1) {
           $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
           $result3 = sqlsrv_query($connFSM,$sql3);
-          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-          $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-          $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-          $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          if(!$result3 === false) {
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+            $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
         }
 
         if ($conectividad_fec == 1) {
           $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
           $result3 = sqlsrv_query($connFEC,$sql3);
-          $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-          $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-          $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-          $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          if(!$result3 === false) {
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+            $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+          }
         }
       }
 
@@ -486,41 +489,45 @@
         if ($conectividad_fau == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFAU,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fll == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFLL,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fsm == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFSM,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fec == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFEC,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
       }
 
@@ -528,41 +535,45 @@
          if ($conectividad_ftn == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFTN,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fau == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFAU,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fsm == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFSM,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fec == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFEC,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
       }
 
@@ -570,41 +581,45 @@
          if ($conectividad_ftn == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFTN,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fau == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFAU,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fll == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFLL,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fec == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFEC,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
       }
 
@@ -612,41 +627,45 @@
          if ($conectividad_ftn == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFTN,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fau == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFAU,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fll == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFLL,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
 
           if ($conectividad_fsm == 1) {
             $sql3 = R37_Q_Descripcion_Existencia_Articulo($codigo_barra);
             $result3 = sqlsrv_query($connFSM,$sql3);
-            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
-
-            $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
-            $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
-            $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            if(!$result3 === false) {
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+                $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                $existenciaForanea = $existenciaForanea + (($row3['existencia']) ? $row3['existencia'] : 0);
+            }
           }
       }
 
