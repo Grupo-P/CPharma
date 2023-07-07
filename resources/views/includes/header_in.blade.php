@@ -194,13 +194,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/tasaVenta') }}">
           <span data-feather="home"></span>
@@ -303,13 +303,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
     </div>
   </div>
 <?php
@@ -416,13 +416,13 @@
             Orden de compra<span class="sr-only">(current)</span>
           </a>
         </li>
-        <li class="nav-item">
+        <!--<li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
               <span data-feather="home"></span>
               <i class="fas fa-exclamation-triangle"></i>
               Seguimiento de reclamos<span class="sr-only">(current)</span>
             </a>
-          </li>
+          </li>-->
         <li class="nav-item">
           <a class="nav-link CP-Links-Menu" href="{{ url('/traslado?Tipo=0') }}">
             <span data-feather="home"></span>
@@ -487,13 +487,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
     </div>
   </div>
 <?php
@@ -657,13 +657,13 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
 
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/movimientos?tasa_ventas_id=1') }}">
@@ -957,13 +957,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
           <span data-feather="home"></span>
@@ -1176,13 +1176,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
     </div>
   </div>
 <?php
@@ -1376,13 +1376,13 @@
           Orden de compra<span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/ConsultorCompra') }}" target="_blank">
           <span data-feather="home"></span>
@@ -1528,13 +1528,13 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/compras/reclamos') }}">
           <span data-feather="home"></span>
           <i class="fas fa-exclamation-triangle"></i>
           Seguimiento de reclamos<span class="sr-only">(current)</span>
         </a>
-      </li>
+      </li>-->
 
       <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/traslado?Tipo=0') }}">
