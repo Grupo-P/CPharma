@@ -500,10 +500,9 @@ class VueltoVDCController extends Controller
                             
                             
                                 //Obtener la respuesta del servidor
-                                $descripcion = $response->descripcion ?? $response->mensajeError;
+                                $descripcion = $response->descripcion ?? $response->mensajeError ?? $response->error;
 
-                                //Codigos de error del banco
-                                
+                                //Codigos de error del banco                                
                                 if($descripcion == "Saldo insuficiente                "){
                                     $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
                                 }

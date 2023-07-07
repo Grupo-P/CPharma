@@ -49,7 +49,7 @@
             $remitente = 'pagomovilfec@gmail.com';
             $id = 6;
         }
-        
+
         if ($host == 'cpharmakdi.com' || $host == 'cpharmakd73.com') {
             $username = 'pagoskdi@hotmail.com';
             $password = 'GJpc2017.';
@@ -347,7 +347,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -378,11 +378,12 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;                    
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
                 }
+
                 if (strpos($asunto, 'Pago recibido correctamente:') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
 
                     $body = @imap_body($conn, $email);
@@ -426,11 +427,7 @@
                     $inicioMonto = (strpos($body, ' por ')) + 5;
                     $substr = substr($body, $inicioMonto);
                     $finMonto = strpos($substr, '. Ve a la [Aplicaci');
-                    $monto = substr($substr, 0, $finMonto);/*
-
-                    dd($body);
-
-                    dd($inicioMonto, $finMonto);*/
+                    $monto = substr($substr, 0, $finMonto);
 
                     $comentario = '';
 
@@ -442,7 +439,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -471,7 +468,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -502,7 +499,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -654,7 +651,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -726,7 +723,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -744,7 +741,8 @@
             $fecha = strtotime($item['fechaSinFormato']);
 
             $anterior = new DateTime();
-            $anterior->modify('-30 minutes');            
+            $anterior->modify('-30 minutes');
+            //$anterior->modify('-8 hours');
             $anterior = $anterior->format('Y-m-d H:i:s');
             $anterior = strtotime($anterior);
 
