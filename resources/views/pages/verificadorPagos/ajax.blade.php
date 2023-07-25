@@ -636,25 +636,26 @@
                     $array = explode(' sent you ', $item->subject);
                     $enviadoPor = $array[0];
                     $enviadoPor = strtoupper($array[0]);
+                    if(count($array)>1){
+                        $monto = $array[1];
 
-                    $monto = $array[1];
+                        $inicioComentario = strpos($body, 'Memo:');
+                        $finComentario = strpos($body, 'To learn more,');
+                        $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                        $comentario = strip_tags($comentario);
+                        $comentario = str_replace('Memo:', '', $comentario);
 
-                    $inicioComentario = strpos($body, 'Memo:');
-                    $finComentario = strpos($body, 'To learn more,');
-                    $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                    $comentario = strip_tags($comentario);
-                    $comentario = str_replace('Memo:', '', $comentario);
+                        $pagos[$i]['tipo'] = 'Zelle Chase';
+                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['monto'] = $monto;
+                        $pagos[$i]['fecha'] = $fecha;
+                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                        $pagos[$i]['comentario'] = $comentario;
+                        $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
+                        $pagos[$i]['referencia'] = $i;
 
-                    $pagos[$i]['tipo'] = 'Zelle Chase';
-                    $pagos[$i]['enviado_por'] = $enviadoPor;
-                    $pagos[$i]['monto'] = $monto;
-                    $pagos[$i]['fecha'] = $fecha;
-                    $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                    $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
-                    $pagos[$i]['referencia'] = $i;
-
-                    $i++;
+                        $i++;
+                    }
                 }
             }
         }
