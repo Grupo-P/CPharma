@@ -221,7 +221,7 @@
                         $inicioMonto = (strpos($body, 'Pago Movil Recibido')) + 20;                
                         $substr = substr($body, $inicioMonto);                
                         $finMonto = strpos($substr, ' Telf.');
-                        $monto = substr($substr, 0, $finMonto);
+                        $monto = str_replace(["=","\n","\r"," "], "",substr($substr, 0, $finMonto));
                     
                         $inicioReferencia = (strpos($body, 'ef:')) + 3;                
                         $substr = substr($body, $inicioReferencia);
