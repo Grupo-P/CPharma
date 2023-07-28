@@ -432,7 +432,7 @@ class VueltoVDCController extends Controller
                     $response = $client->request(
                         'POST',
                         'https://cb.venezolano.com/rs/c2x',
-                        ['timeout'=>40,'json' => $json]
+                        ['timeout'=>120,'json' => $json]
                     );
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;                    
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
@@ -477,66 +477,98 @@ class VueltoVDCController extends Controller
                     return json_encode(['resultado' => 'exito', 'referencia' => $confirmacion_banco]);
                 }
                 catch (GuzzleException $exception) {
-                    $response = $exception->getResponse()->getBody();
-                    $contenido= $exception->getResponse()->getBody()->getContents();
-                    $tamaño= strlen($contenido);             
-                    auditoriaPM::create([
-                        'paso' => "4 Error",
-                        'informacion' => $contenido,
-                        'caja' => $caja
-                    ]);                       
-                    
-                    if(str_contains($contenido, '<head>')){
-                        $descripcion="Sin Conexion con el banco";
+                    if($exception->getResponse() == null){
+                        auditoriaPM::create([
+                            'paso' => "4 Error",
+                            'informacion' => "Timeout",
+                            'caja' => $caja
+                        ]);
+                        $descripcion = "El banco no respondio, Valide con administracion la ejecución del pago";
+                        $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+                        $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
+                        //registro en historico
+                        Vuelto::create([
+                            'fecha_hora' => date('Y-m-d H:i:s'),
+                            'id_factura' => $id_factura,
+                            'banco_cliente' => $this->obtener_banco($request->banco_destino),
+                            'cedula_cliente' => $cedula_cliente,
+                            'telefono_cliente' => $telefono_cliente,
+                            'estatus' => 'Error',
+                            'caja' => $caja,
+                            'sede' => $sede,
+                            'motivo_error' => $descripcion,
+                            'monto' => $request->monto,
+                            'montoPagado' => $montoPagado,
+                            'tasaVenta' => $tasa,
+                            'cedulaClienteFactura' => $cedulaClienteFactura,
+                            'nombreClienteFactura' => $nombreClienteFactura,
+                            'nombreCajeroFactura' => $nombreCajeroFactura,
+                            'totalFacturaBs' => $totalFactura,
+                            'totalFacturaDolar' => $totalFacturaDolar
+                        ]);
+                        
                     }
-                    else{ 
-                        if($tamaño>0){
-                                $response = json_decode($response);
-                                $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
-                            
-                                
-                                
-                                $response = json_decode($response);
-                            
-                            
-                                //Obtener la respuesta del servidor
-                                $descripcion = $response->descripcion ?? $response->mensajeError ?? $response->error;
-
-                                //Codigos de error del banco                                
-                                if($descripcion == "Saldo insuficiente                "){
-                                    $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
-                                }
-                            
-                            
-                        }
-                        else{
+                    else{
+                        $response = $exception->getResponse()->getBody();
+                        $contenido= $exception->getResponse()->getBody()->getContents();
+                        $tamaño= strlen($contenido);             
+                        auditoriaPM::create([
+                            'paso' => "4 Error",
+                            'informacion' => $contenido,
+                            'caja' => $caja
+                        ]);                       
+                        
+                        if(str_contains($contenido, '<head>')){
                             $descripcion="Sin Conexion con el banco";
-                            
                         }
-                    }
-                    $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
-                    $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
-                    //registro en historico
-                    Vuelto::create([
-                        'fecha_hora' => date('Y-m-d H:i:s'),
-                        'id_factura' => $id_factura,
-                        'banco_cliente' => $this->obtener_banco($request->banco_destino),
-                        'cedula_cliente' => $cedula_cliente,
-                        'telefono_cliente' => $telefono_cliente,
-                        'estatus' => 'Error',
-                        'caja' => $caja,
-                        'sede' => $sede,
-                        'motivo_error' => $descripcion,
-                        'monto' => $request->monto,
-                        'montoPagado' => $montoPagado,
-                        'tasaVenta' => $tasa,
-                        'cedulaClienteFactura' => $cedulaClienteFactura,
-                        'nombreClienteFactura' => $nombreClienteFactura,
-                        'nombreCajeroFactura' => $nombreCajeroFactura,
-                        'totalFacturaBs' => $totalFactura,
-                        'totalFacturaDolar' => $totalFacturaDolar
-                    ]);
+                        else{ 
+                            if($tamaño>0){
+                                    $response = json_decode($response);
+                                    $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
+                                
+                                    
+                                    
+                                    $response = json_decode($response);
+                                
+                                
+                                    //Obtener la respuesta del servidor
+                                    $descripcion = $response->descripcion ?? $response->mensajeError ?? $response->error;
 
+                                    //Codigos de error del banco                                
+                                    if($descripcion == "Saldo insuficiente                "){
+                                        $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
+                                    }
+                                
+                                
+                            }
+                            else{
+                                $descripcion="Sin Conexion con el banco";
+                                
+                            }
+                        }
+                        $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+                        $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
+                        //registro en historico
+                        Vuelto::create([
+                            'fecha_hora' => date('Y-m-d H:i:s'),
+                            'id_factura' => $id_factura,
+                            'banco_cliente' => $this->obtener_banco($request->banco_destino),
+                            'cedula_cliente' => $cedula_cliente,
+                            'telefono_cliente' => $telefono_cliente,
+                            'estatus' => 'Error',
+                            'caja' => $caja,
+                            'sede' => $sede,
+                            'motivo_error' => $descripcion,
+                            'monto' => $request->monto,
+                            'montoPagado' => $montoPagado,
+                            'tasaVenta' => $tasa,
+                            'cedulaClienteFactura' => $cedulaClienteFactura,
+                            'nombreClienteFactura' => $nombreClienteFactura,
+                            'nombreCajeroFactura' => $nombreCajeroFactura,
+                            'totalFacturaBs' => $totalFactura,
+                            'totalFacturaDolar' => $totalFacturaDolar
+                        ]);
+                    }
                     return json_encode(['resultado' => 'error', 'error' => $descripcion]);
                 }
             
