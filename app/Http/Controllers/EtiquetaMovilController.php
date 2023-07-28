@@ -179,7 +179,7 @@ class EtiquetaMovilController extends Controller
 
         $connCPharma = FG_Conectar_CPharma();
 
-        $tasa = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
+        $tasa = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
 
         $ResultCPharma = mysqli_query($connCPharma,"SELECT * FROM unidads WHERE codigo_barra = '$codigo_barra'");
         $RowCPharma = mysqli_fetch_assoc($ResultCPharma);

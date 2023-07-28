@@ -246,7 +246,7 @@
                                 $inicioMonto = (strpos($body, 'Pago Movil Recibido')) + 20;                
                                 $substr = substr($body, $inicioMonto);                
                                 $finMonto = strpos($substr, ' Telf.');
-                                $monto = substr($substr, 0, $finMonto);
+                                $monto = str_replace(["=","\n","\r"," "], "",substr($substr, 0, $finMonto));
                             
                                 $inicioReferencia = (strpos($body, 'ef:')) + 3;                
                                 $substr = substr($body, $inicioReferencia);
@@ -647,25 +647,26 @@
                             $array = explode(' sent you ', $item->subject);
                             $enviadoPor = $array[0];
                             $enviadoPor = strtoupper($array[0]);
+                            
+                            if(count($array)>1){
+                                $monto = $array[1];
+                            
+                                $inicioComentario = strpos($body, 'Memo:');
+                                $finComentario = strpos($body, 'To learn more,');
+                                $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                $comentario = strip_tags($comentario);
+                                $comentario = str_replace('Memo:', '', $comentario);
 
-                            $monto = $array[1];
-
-                            $inicioComentario = strpos($body, 'Memo:');
-                            $finComentario = strpos($body, 'To learn more,');
-                            $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                            $comentario = strip_tags($comentario);
-                            $comentario = str_replace('Memo:', '', $comentario);
-
-                            $pagos[$i]['tipo'] = 'Zelle Chase';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
+                                $pagos[$i]['tipo'] = 'Zelle Chase';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+                                $i++;
+                            }                           
                         }
                     }
                 }
