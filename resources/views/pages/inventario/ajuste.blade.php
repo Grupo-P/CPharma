@@ -97,7 +97,7 @@
                     $query = sqlsrv_query($conn, $sql);
                     $conteo = sqlsrv_fetch_array($query, SQLSRV_FETCH_ASSOC);
                     $cantidad_inventariada = ($inventariado->re_conteo) ? $inventariado->re_conteo - $inventariado->existencia_actual : $inventariado->conteo - $inventariado->existencia_actual;
-                    $conteo = ($conteo['InvCausaId'] == 15) ? -$conteo['Cantidad'] : $conteo['Cantidad'];
+                    $conteo = ($conteo['InvCausaId'] == $__CAUSA_ID__) ? -$conteo['Cantidad'] : $conteo['Cantidad'];
                     $conteo = intval($conteo);
                     $resultado = $cantidad_inventariada - $conteo;
                     $total = $total + $resultado;
@@ -173,7 +173,7 @@
                         $query2 = mysqli_query($conn, $sql);
                         $row = mysqli_fetch_assoc($query2);
                         $cantidad_inventariada = ($row['re_conteo']) ? $row['re_conteo'] - $row['existencia_actual'] : $row['conteo'] - $row['existencia_actual'];
-                        $conteo = ($ajustados['causa'] == 15) ? -$ajustados['conteo'] : $ajustados['conteo'];
+                        $conteo = ($ajustados['causa'] == $__CAUSA_ID__) ? -$ajustados['conteo'] : $ajustados['conteo'];
                         $resultado = $cantidad_inventariada - $conteo;
 
                         $total = $total + $resultado;

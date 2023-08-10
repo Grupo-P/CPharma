@@ -259,14 +259,20 @@ class InventarioController extends Controller
         $inventario = Inventario::find($id);
         $inventariados = InventarioDetalle::where('codigo_conteo', $inventario->codigo)->get();
 
+        $ubicacion = FG_Mi_Ubicacion();
+        $__CAUSA_ID__ = 15;
+        if($ubicacion == 'FSM'){
+            $__CAUSA_ID__ = 28;
+        }
+
         if ($inventario->numero_ajuste) {
-            $conn = FG_Conectar_Smartpharma(FG_Mi_Ubicacion());
+            $conn = FG_Conectar_Smartpharma($ubicacion);
             $contador = 1;
         } else {
             $ajustados = '';
         }
 
-        return view('pages.inventario.ajuste', compact('inventariados', 'conn', 'query', 'contador', 'inventario'));
+        return view('pages.inventario.ajuste', compact('inventariados', 'conn', 'query', 'contador', 'inventario', '__CAUSA_ID__'));
     }
 
     /**
