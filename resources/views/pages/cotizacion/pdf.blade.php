@@ -99,17 +99,11 @@
     <tbody>
         @foreach($data['articulos'] as $item)
             @php
-                $precio_bs =  str_replace(',', 'c', $item['precio_bs']);
-                $precio_ds =  str_replace(',', 'c', $item['precio_ds']);
+                $precio_bs =  str_replace('.', '', $item['precio_bs']);
+                $precio_ds =  str_replace('.', '', $item['precio_ds']);
 
-                $precio_bs =  str_replace('.', 'p', $precio_bs);
-                $precio_ds =  str_replace('.', 'p', $precio_ds);
-
-                $precio_bs =  str_replace('c', '.', $precio_bs);
-                $precio_ds =  str_replace('c', '.', $precio_ds);
-
-                $precio_bs =  str_replace('p', ',', $precio_bs);
-                $precio_ds =  str_replace('p', ',', $precio_ds);
+                $precio_bs =  str_replace(',', '.', $precio_bs);
+                $precio_ds =  str_replace(',', '.', $precio_ds);
 
                 $precio_bs = (float) $precio_bs;
                 $precio_ds = (float) $precio_ds;
