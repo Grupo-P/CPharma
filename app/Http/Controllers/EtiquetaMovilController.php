@@ -180,7 +180,7 @@ class EtiquetaMovilController extends Controller
         $connCPharma = FG_Conectar_CPharma();
 
         $tasa = FG_Tasa_Fecha_Venta($connCPharma,date('Y-m-d'));
-
+                
         $ResultCPharma = mysqli_query($connCPharma,"SELECT * FROM unidads WHERE codigo_barra = '$codigo_barra'");
         $RowCPharma = mysqli_fetch_assoc($ResultCPharma);
 
@@ -203,19 +203,27 @@ class EtiquetaMovilController extends Controller
         }
         
         if ($dolarizado == 'SI') {
-            $response['precio'] = number_format($precio/$tasa, 2);
-            if($precio>0){
-                $precioPartes=explode(".",$precio);
-                if(substr($precioPartes[1],-2)=="01"){
-                    $response['precioCorrida'] =substr($precioPartes[1],-2);
+            
+            if($tasa>0){
+                $response['precio'] = number_format($precio/$tasa, 2);
+                if($precio>0){
+                    $precioPartes=explode(".",$precio);
+                    if(substr($precioPartes[1],-2)=="01"){
+                        $response['precioCorrida'] =substr($precioPartes[1],-2);
+                    }
+                    else{
+                        $response['precioCorrida'] = null;
+                    }
                 }
                 else{
                     $response['precioCorrida'] = null;
                 }
             }
             else{
-                $response['precioCorrida'] = null;
+                $response['precio'] = "0.00";
+                $response['precioCorrida'] = "tasa";
             }
+               
         }
 
         if ($dolarizado == 'SI' && $row1['precio']) {
