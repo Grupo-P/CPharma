@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OperacionFau extends Model
 {
-    protected $connection = 'devRecargas';
+    protected $connection = 'fauRecargas';
     protected $table = 'operacions';
 
     protected $fillable = [

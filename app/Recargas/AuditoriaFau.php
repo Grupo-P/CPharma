@@ -8,7 +8,7 @@ class AuditoriaFau extends Model
 {
     //black_boxes
     
-    protected $connection = 'devRecargas';
+    protected $connection = 'fauRecargas';
     protected $table = 'black_boxes';
     protected $fillable = [
         "id_operacion",

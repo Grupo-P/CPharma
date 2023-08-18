@@ -401,7 +401,7 @@ class AuditoriaController extends Controller
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
             $ffin=$request->fecha_fin;
-            $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+            $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
         }
         else{
             $fini=date("Y-m-d");
@@ -432,7 +432,7 @@ class AuditoriaController extends Controller
             {
                 case 'DBs':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -442,7 +442,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FAU':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -452,7 +452,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'GP':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -462,7 +462,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FTN':
                     if(FG_Validar_Conectividad('FTN')==1){
-                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('ftnRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -472,7 +472,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FLL':
                     if(FG_Validar_Conectividad('FLL')==1){
-                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fllRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -482,7 +482,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FSM':
                     if(FG_Validar_Conectividad('FSM')==1){
-                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fmRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -492,7 +492,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KDI':
                     if(FG_Validar_Conectividad('KDI')==1){
-                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kdiRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -502,7 +502,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FEC':                    
                     if(FG_Validar_Conectividad('FEC')==1){
-                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fecRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;                       
                     }
                     else{
@@ -512,7 +512,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KD73':
                     if(FG_Validar_Conectividad('KD73')==1){
-                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kd73Recargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;                        
                     }
                     else{
@@ -534,12 +534,12 @@ class AuditoriaController extends Controller
             {
                 case 'DBs':
                     
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;                    
                 break;
                 case 'FAU':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -549,7 +549,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'GP':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -559,7 +559,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FTN':
                     if(FG_Validar_Conectividad('FTN')==1){
-                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('ftnRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -569,7 +569,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FLL':
                     if(FG_Validar_Conectividad('FLL')==1){
-                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fllRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -579,7 +579,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FSM':
                     if(FG_Validar_Conectividad('FSM')==1){
-                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fmRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -589,7 +589,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KDI':
                     if(FG_Validar_Conectividad('KDI')==1){
-                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kdiRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -599,7 +599,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FEC':
                     if(FG_Validar_Conectividad('FEC')==1){
-                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fecRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -609,7 +609,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KD73':
                     if(FG_Validar_Conectividad('KD73')==1){
-                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kd73Recargas')->raw('SUM(black_boxes.monto) as totalMonto'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -698,7 +698,7 @@ class AuditoriaController extends Controller
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
             $ffin=$request->fecha_fin;
-            $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+            $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fauRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
         }
         else{
             $fini=date("Y-m-d");
@@ -729,7 +729,7 @@ class AuditoriaController extends Controller
             {
                 case 'DBs':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fauRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -739,7 +739,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FAU':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fauRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -749,7 +749,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'GP':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fauRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -759,7 +759,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FTN':
                     if(FG_Validar_Conectividad('FTN')==1){
-                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('ftnRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('ftnRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -769,7 +769,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FLL':
                     if(FG_Validar_Conectividad('FLL')==1){
-                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fllRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fllRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -779,7 +779,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FSM':
                     if(FG_Validar_Conectividad('FSM')==1){
-                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fmRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fmRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -789,7 +789,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KDI':
                     if(FG_Validar_Conectividad('KDI')==1){
-                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('id_usuario')->get();
+                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kdiRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('kdiRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('id_usuario')->get();
                         $mensaje=null;
                     }
                     else{
@@ -799,7 +799,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FEC':                    
                     if(FG_Validar_Conectividad('FEC')==1){
-                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fecRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fecRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;                       
                     }
                     else{
@@ -809,7 +809,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KD73':
                     if(FG_Validar_Conectividad('KD73')==1){
-                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kd73Recargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('kd73Recargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;                        
                     }
                     else{
@@ -831,12 +831,12 @@ class AuditoriaController extends Controller
             {
                 case 'DBs':
                     
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fauRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;                    
                 break;
                 case 'FAU':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fauRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -846,7 +846,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'GP':
                     if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFau::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fauRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fauRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -856,7 +856,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FTN':
                     if(FG_Validar_Conectividad('FTN')==1){
-                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFtn::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('ftnRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('ftnRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -866,7 +866,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FLL':
                     if(FG_Validar_Conectividad('FLL')==1){
-                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFll::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fllRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fllRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -876,7 +876,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FSM':
                     if(FG_Validar_Conectividad('FSM')==1){
-                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFsm::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fmRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fmRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -886,7 +886,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KDI':
                     if(FG_Validar_Conectividad('KDI')==1){
-                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kdiRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('kdiRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -896,7 +896,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'FEC':
                     if(FG_Validar_Conectividad('FEC')==1){
-                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaFec::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('fecRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('fecRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
@@ -906,7 +906,7 @@ class AuditoriaController extends Controller
                 break;
                 case 'KD73':
                     if(FG_Validar_Conectividad('KD73')==1){
-                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('devRecargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('devRecargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
+                        $vueltos =  AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->select("black_boxes.*",DB::connection('kd73Recargas')->raw('SUM(black_boxes.monto) as totalMonto'),DB::connection('kd73Recargas')->raw('COUNT(black_boxes.id) as totalOperaciones'))->groupBy('servicio')->get();
                         $mensaje=null;
                     }
                     else{
