@@ -77,4 +77,15 @@ class AuditoriaKd73 extends Model
         $servicio = ServiciosKd73::where('servicio','=',$servicio)->first();
         return $servicio->nombre;
     }
+
+    public static function servicioComision($servicio,$subservicio){
+        $servicio = ServiciosKd73::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
+        return $servicio->comision;
+    }
+
+    public static function calculoComision($servicio,$subservicio,$monto){
+        $servicio = ServiciosKd73::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
+        $total=$monto*($servicio->comision/100);
+        return number_format($total,2,',','.');
+    }
 }

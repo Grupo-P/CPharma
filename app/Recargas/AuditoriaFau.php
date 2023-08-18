@@ -79,4 +79,15 @@ class AuditoriaFau extends Model
         $servicio = ServiciosFau::where('servicio','=',$servicio)->first();
         return $servicio->nombre;
     }
+
+    public static function servicioComision($servicio,$subservicio){
+        $servicio = ServiciosFau::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
+        return $servicio->comision;
+    }
+
+    public static function calculoComision($servicio,$subservicio,$monto){
+        $servicio = ServiciosFau::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
+        $total=$monto*($servicio->comision/100);
+        return number_format($total,2,',','.');
+    }
 }

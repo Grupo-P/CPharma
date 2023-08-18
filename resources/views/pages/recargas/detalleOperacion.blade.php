@@ -134,9 +134,9 @@
     <br>
     <div class="row">    
 		<div class=" alert alert-info col-6">			
-			<strong><label for="">Total Recibido en divisas: $. {{$operacion->total_divisas}}</label><br>			</strong>
+			<strong><label for="">Total Recibido en divisas: $. {{number_format($operacion->total_divisas,2,',','.')}}</label><br>			</strong>
 		</div>
-		<div class=" alert alert-info col-6"><strong><label for="">Total Recibido en bolivares: Bs.{{$operacion->total_bolivares}}</label></strong>		</div>
+		<div class=" alert alert-info col-6"><strong><label for="">Total Recibido en bolivares: Bs.{{number_format($operacion->total_bolivares,2,',','.')}}</label></strong>		</div>
       @if(isset($mensaje))
         <div class="col-12">
           <div class="alert alert-danger">{{$mensaje}} </div>
@@ -175,13 +175,13 @@
                     <td style="text-align:center;">{{$vuelto->id_operacion }}</td>
                     <td>{{$vuelto->cajero->username}}</td>
                     <td>{{$vuelto->caja->nombre}}</td>
-                    <td>{{$vuelto->servicio}}</td>                                
+                    <td>{{$vuelto->servicioNombre($vuelto->servicio,$vuelto->subservicio) }}</td>                                
                     <td>{{$vuelto->telefono}}</td>                
                     <td>{{$vuelto->contrato}}</td>                
                     <td>{{$vuelto->placa}}</td>         
                     <td>Bs. {{number_format($vuelto->total_usado,2,',','.')}}</td>         
 					<td>Bs. {{number_format($vuelto->total_restante,2,',','.')}}</td>         
-                    <td>{{$vuelto->fecha}}</td>
+                    <td>{{date("d/m/Y g:i a",strtotime($vuelto->created_at))}}</td>
             </tr>
           @endforeach
         @endif

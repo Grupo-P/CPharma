@@ -194,8 +194,7 @@
                 <th scope="col" class="CP-sticky">Telefono</th>
                 <th scope="col" class="CP-sticky">Contrato</th>
                 <th scope="col" class="CP-sticky">Tarjeta</th>
-                <th scope="col" class="CP-sticky">Total usado</th>
-                <th scope="col" class="CP-sticky">Total restante</th>
+                <th scope="col" class="CP-sticky">Monto Recarga</th>                
                 <th scope="col" class="CP-sticky">Fecha</th>	      	                
 		    </tr>
 	  	</thead>
@@ -227,13 +226,12 @@
                       </td>
                       <td>{{$vuelto->cajero->username}}</td>
                       <td>{{$vuelto->caja->nombre}}</td>
-                      <td>{{$vuelto->servicioNombre($vuelto->servicio)}}</td>                                
+                      <td>{{$vuelto->servicioNombre($vuelto->servicio,$vuelto->subservicio)}}</td>                                
                       <td>{{$vuelto->telefono}}</td>                
                       <td>{{$vuelto->contrato}}</td>                
                       <td>{{$vuelto->placa}}</td>         
-                      <td>Bs. {{number_format($vuelto->total_usado,2,',','.')}}</td>         
-                      <td>Bs. {{number_format($vuelto->total_restante,2,',','.')}}</td>         
-                      <td>{{$vuelto->fecha}}</td>
+                      <td>Bs. {{number_format($vuelto->monto,2,',','.')}}</td>                             
+                      <td>{{date("d/m/Y g:i a",strtotime($vuelto->created_at))}}</td>
               </tr>
           @endforeach
         @endif

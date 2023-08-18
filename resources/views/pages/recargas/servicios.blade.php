@@ -148,6 +148,8 @@
                 <th scope="col" class="CP-sticky">Servicio</th>                
 				<th scope="col" class="CP-sticky">Total Recargas</th>
                 <th scope="col" class="CP-sticky">Monto Total Recargado (Bs)</th>                                                
+				<th scope="col" class="CP-sticky">Comision (%)</th>                                                
+				<th scope="col" class="CP-sticky">Monto Total Comision (Bs)</th>      
 		    </tr>
 	  	</thead>
 	  	<tbody>       
@@ -158,10 +160,13 @@
                     <td class="text-center">{{$vuelto->id_usuario }}</td>
                     <td class="text-center">{{$sede }}</td>
                     <td class="text-center">			
-						{{$vuelto->servicioNombre($vuelto->servicio) }}						
+						{{$vuelto->servicioNombre($vuelto->servicio,$vuelto->subservicio) }}						
                     </td>                      
 					<td class="text-center">{{$vuelto->totalOperaciones}}</td>
                     <td class="text-center">Bs. {{ number_format($vuelto->totalMonto,2,',','.') }}</td>
+					<td class="text-center">{{$vuelto->servicioComision($vuelto->servicio,$vuelto->subservicio) }}%</td>
+					<td class="text-center">Bs. {{$vuelto->calculoComision($vuelto->servicio,$vuelto->subservicio,$vuelto->totalMonto) }}</td>
+					
 					
               </tr>
           @endforeach

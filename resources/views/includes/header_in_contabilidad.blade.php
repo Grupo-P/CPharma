@@ -383,7 +383,7 @@
             <a class="nav-link CP-Links-Menu" href="{{ url('/historicoRecargas') }}">
               <span data-feather="home"></span>
               <i class="fas fa-money-bill-alt"></i>
-              Histórico de pago movil<span class="sr-only">(current)</span>
+              Histórico de recargas<span class="sr-only">(current)</span>
             </a>
           </li>
       @endif
