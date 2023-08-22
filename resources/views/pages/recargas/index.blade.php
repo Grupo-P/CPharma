@@ -114,7 +114,7 @@
             </div>
         @endif
                         
-        <form action="{{route("filtrofecha")}}" method="POST">
+        <form action="{{route("recargas2")}}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-4">
