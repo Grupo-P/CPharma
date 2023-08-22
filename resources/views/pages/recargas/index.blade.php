@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Histórico de pagos
+    Histórico de recargas
 @endsection
 
 @section('content')
