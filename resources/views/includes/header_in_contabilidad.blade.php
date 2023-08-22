@@ -172,16 +172,6 @@
           </li>
         @endif
 
-        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
-          <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/efectivoFEC') }}">
-              <span data-feather="home"></span>
-              <i class="fas fa-money-bill-alt"></i>
-              Pagos en efectivo dólares FEC<span class="sr-only">(current)</span>
-            </a>
-          </li>
-        @endif
-
         @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'ADMINISTRACION')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('bolivaresGP') }}">
@@ -231,16 +221,6 @@
             </a>
           </li>
         @endif
-
-        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
-          <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/bolivaresFEC') }}">
-              <span data-feather="home"></span>
-              <i class="fas fa-money-bill-alt"></i>
-              Pagos en efectivo bolívares FEC<span class="sr-only">(current)</span>
-            </a>
-          </li>
-        @endif
       @endif
 
 
@@ -286,6 +266,16 @@
           </li>
         @endif
 
+        @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresGP') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-lock"></i>
+              Diferidos en bolívares GP<span class="sr-only">(current)</span>
+            </a>
+          </li>
+        @endif
+
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFTN') }}">
@@ -326,25 +316,6 @@
           </li>
         @endif
 
-        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
-          <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosFEC') }}">
-              <span data-feather="home"></span>
-              <i class="fas fa-lock"></i>
-              Diferidos en dolares FEC<span class="sr-only">(current)</span>
-            </a>
-          </li>
-        @endif
-
-        @if(Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'GERENCIA')
-          <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresGP') }}">
-              <span data-feather="home"></span>
-              <i class="fas fa-lock"></i>
-              Diferidos en bolívares GP<span class="sr-only">(current)</span>
-            </a>
-          </li>
-        @endif
 
         @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.')
           <li class="nav-item">
@@ -385,16 +356,6 @@
             </a>
           </li>
         @endif
-
-        @if(Auth::user()->sede == 'GRUPO P, C.A' || Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.')
-          <li class="nav-item">
-            <a class="nav-link CP-Links-Menu" href="{{ url('/contabilidad/diferidosBolivaresFEC') }}">
-              <span data-feather="home"></span>
-              <i class="fas fa-lock"></i>
-              Diferidos en bolivares FEC<span class="sr-only">(current)</span>
-            </a>
-          </li>
-        @endif
       @endif
 
       @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA')
@@ -413,6 +374,16 @@
               <span data-feather="home"></span>
               <i class="fas fa-money-bill-alt"></i>
               Histórico de pago movil<span class="sr-only">(current)</span>
+            </a>
+          </li>
+      @endif
+
+      @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA')
+          <li class="nav-item">
+            <a class="nav-link CP-Links-Menu" href="{{ url('/historicoRecargas') }}">
+              <span data-feather="home"></span>
+              <i class="fas fa-money-bill-alt"></i>
+              Histórico de recargas<span class="sr-only">(current)</span>
             </a>
           </li>
       @endif
