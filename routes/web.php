@@ -641,8 +641,8 @@ Route::get('/detalleCajerosTransaccionalesError/{cajero}', 'Pagomovil\VueltoCont
 Route::post('/detalleCajerosTransaccionalesError2', 'Pagomovil\VueltoController@detalleCajerosErrores')->name('detalleCajerosTransaccionalesError2');
 
 //recargas
-Route::get('/historicoRecargas', 'Recargas\AuditoriaController@index')->middleware('auth');
-Route::post('/historicoRecargas2', 'Recargas\AuditoriaController@index')->middleware('auth')->name("filtrofecha");
+Route::get('/historicoRecargas', 'Recargas\AuditoriaController@index')->middleware('auth')->name("recargas");
+Route::post('/historicoRecargas2', 'Recargas\AuditoriaController@index')->middleware('auth')->name("recargas2");
 
 Route::get('/historicoServiciosRecargas', 'Recargas\AuditoriaController@serviciosTransaccion')->middleware('auth')->name('serviciosRecargas');
 Route::post('/historicoServiciosRecargas2', 'Recargas\AuditoriaController@serviciosTransaccion')->middleware('auth')->name('serviciosRecargas2');
