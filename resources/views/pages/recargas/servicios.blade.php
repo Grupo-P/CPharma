@@ -97,7 +97,7 @@
 	</table>
 	<br/>
     <div class="col-12">                        
-        <form action="{{route("cajerosRecargas2")}}" method="POST">
+        <form action="{{route("serviciosRecargas2")}}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-4">
