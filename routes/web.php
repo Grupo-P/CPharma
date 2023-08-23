@@ -653,6 +653,5 @@ Route::post('/detalleOperacionRecargas2', 'Recargas\AuditoriaController@detalleT
 Route::get('/historicoCajerosRecargas', 'Recargas\AuditoriaController@cajerosTransaccionales')->middleware('auth')->name('cajerosRecargas');
 Route::post('/historicoCajerosRecargas2', 'Recargas\AuditoriaController@cajerosTransaccionales')->middleware('auth')->name('cajerosRecargas2');
 
-Route::get('/detalleCajerosTransaccionales/{cajero}', 'Pagomovil\VueltoController@detalleCajeros')->middleware('auth')->name('detalleCajerosRecargas');
-Route::post('/detalleCajerosTransaccionales2', 'Pagomovil\VueltoController@detalleCajeros')->middleware('auth')->name('detalleCajerosRecargas2');
+
 
