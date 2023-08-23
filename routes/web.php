@@ -36,7 +36,9 @@ Route::get('/vuelto/vdc/info', 'VueltoVDCController@info');
 Route::get('/vuelto/vdc/actualizar', 'VueltoVDCController@actualizar');
 Route::get('/vuelto/vdc', 'VueltoVDCController@procesar');
 
-
+Route::get('/vuelto/mercantil/validar', 'VueltoMercantilController@validar');
+Route::get('/vuelto/mercantil/info', 'VueltoMercantilController@info');
+Route::post('/vuelto/mercantil', 'VueltoMercantilController@procesar');
 
 Route::resource('falla', 'FallaController');
 
@@ -281,6 +283,8 @@ Route::get('/reporte50', 'Reporte50Controller@reporte50');
 
 Route::view('/reporte51', 'pages.reporte.reporte51');
 
+Route::view('/reporte52', 'pages.reporte.reporte52');
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
@@ -480,7 +484,7 @@ Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
 
 Route::get('/syncategorias', 'CategorizacionController@syncategorias');
 
-//Route::resource('/cotizacion', 'CotizacionController');
+Route::resource('/cotizacion', 'CotizacionController');
 
 
 //***************************** RRHH routing *****************************//
