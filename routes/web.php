@@ -36,7 +36,9 @@ Route::get('/vuelto/vdc/info', 'VueltoVDCController@info');
 Route::get('/vuelto/vdc/actualizar', 'VueltoVDCController@actualizar');
 Route::get('/vuelto/vdc', 'VueltoVDCController@procesar');
 
-
+Route::get('/vuelto/mercantil/validar', 'VueltoMercantilController@validar');
+Route::get('/vuelto/mercantil/info', 'VueltoMercantilController@info');
+Route::post('/vuelto/mercantil', 'VueltoMercantilController@procesar');
 
 Route::resource('falla', 'FallaController');
 
@@ -281,6 +283,8 @@ Route::get('/reporte50', 'Reporte50Controller@reporte50');
 
 Route::view('/reporte51', 'pages.reporte.reporte51');
 
+Route::view('/reporte52', 'pages.reporte.reporte52');
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
@@ -480,7 +484,7 @@ Route::get('/procesarTxt', 'TrackImagenController@procesarTxt');
 
 Route::get('/syncategorias', 'CategorizacionController@syncategorias');
 
-//Route::resource('/cotizacion', 'CotizacionController');
+Route::resource('/cotizacion', 'CotizacionController');
 
 
 //***************************** RRHH routing *****************************//
@@ -549,6 +553,11 @@ Route::resource('efectivoGP', 'ContPagoEfectivoGPController');
 Route::get('/efectivoGP/soporte/{id}', 'ContPagoEfectivoGPController@soporte');
 Route::get('/contabilidad/diferidosGP', 'ContPagoEfectivoGPController@diferidos')->name('contabilidad.diferidosGP');
 
+Route::post('/efectivoFEC/validar', 'ContPagoEfectivoFECController@validar');
+Route::resource('efectivoFEC', 'ContPagoEfectivoFECController');
+Route::get('/efectivoFEC/soporte/{id}', 'ContPagoEfectivoFECController@soporte');
+Route::get('/contabilidad/diferidosFEC', 'ContPagoEfectivoFECController@diferidos')->name('contabilidad.diferidosFEC');
+
 Route::post('/efectivoFTN/validar', 'ContPagoEfectivoFTNController@validar');
 Route::resource('efectivoFTN', 'ContPagoEfectivoFTNController');
 Route::get('/efectivoFTN/soporte/{id}', 'ContPagoEfectivoFTNController@soporte');
@@ -573,6 +582,11 @@ Route::post('/bolivaresGP/validar', 'ContPagoBolivaresGPController@validar');
 Route::resource('bolivaresGP', 'ContPagoBolivaresGPController');
 Route::get('/bolivaresGP/soporte/{id}', 'ContPagoBolivaresGPController@soporte');
 Route::get('/contabilidad/diferidosBolivaresGP', 'ContPagoBolivaresGPController@diferidos')->name('contabilidad.diferidosBolivaresGP');
+
+Route::post('/bolivaresFEC/validar', 'ContPagoBolivaresFECController@validar');
+Route::resource('bolivaresFEC', 'ContPagoBolivaresFECController');
+Route::get('/bolivaresFEC/soporte/{id}', 'ContPagoBolivaresFECController@soporte');
+Route::get('/contabilidad/diferidosBolivaresFEC', 'ContPagoBolivaresFECController@diferidos')->name('contabilidad.diferidosBolivaresFEC');
 
 Route::post('/bolivaresFTN/validar', 'ContPagoBolivaresFTNController@validar');
 Route::resource('bolivaresFTN', 'ContPagoBolivaresFTNController');
@@ -653,6 +667,5 @@ Route::post('/detalleOperacionRecargas2', 'Recargas\AuditoriaController@detalleT
 Route::get('/historicoCajerosRecargas', 'Recargas\AuditoriaController@cajerosTransaccionales')->middleware('auth')->name('cajerosRecargas');
 Route::post('/historicoCajerosRecargas2', 'Recargas\AuditoriaController@cajerosTransaccionales')->middleware('auth')->name('cajerosRecargas2');
 
-Route::get('/detalleCajerosTransaccionales/{cajero}', 'Pagomovil\VueltoController@detalleCajeros')->middleware('auth')->name('detalleCajerosRecargas');
-Route::post('/detalleCajerosTransaccionales2', 'Pagomovil\VueltoController@detalleCajeros')->middleware('auth')->name('detalleCajerosRecargas2');
+
 

@@ -76,7 +76,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-cogs"></i>
-		Histórico de pagos moviles
+		Histórico de recargas
 	</h1>
 
 	<hr class="row align-items-start col-12">
@@ -143,7 +143,7 @@
 
                 <div class="col-12 text-center mt-3">
                     <input class="btn btn-success" type="submit" value="Enviar">
-                    <a class="btn btn-info" href="/historicoVueltos" type="button" >Limpiar</a>
+                    <a class="btn btn-info" href="/historicoRecargas" type="button" >Limpiar</a>
                 </div>
             </div>
         </form>
