@@ -170,21 +170,21 @@
 						{{$vuelto->caja->nombre }} 
                     </td>
 					<td class="text-center">{{$vuelto->cantidadRecargasCaja($fini,$ffin,$vuelto->id_caja)}}</td>
-					<td class="text-center">
-						$. {{number_format($vuelto->totalDivisas($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
+					<td class="text-center">						
+						$. {{number_format($vuelto->totalDivisasCaja($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
                     </td>
-					<td class="text-center">
-						Bs. {{number_format($vuelto->totalBolivares($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
+					<td class="text-center">						
+						Bs. {{number_format($vuelto->totalBolivaresCaja($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
                     </td>   
-					<td class="text-center">
-						Bs. {{number_format($vuelto->totalVueltos($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
+					<td class="text-center">						
+						Bs. {{number_format($vuelto->totalVueltosCaja($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
                     </td>                           
                     <td class="text-center">Bs. {{number_format($vuelto->totalMonto,2,',','.')}} Bs.</td>                                                                                          
 					@php
 						$totalRecargas = $totalRecargas + $vuelto->cantidadRecargasCaja($fini,$ffin,$vuelto->id_caja);
-						$totalGralDivisas = $totalGralDivisas + $vuelto->totalDivisas($vuelto->id_caja,$fini,$ffin);
-						$totalGralBolivares = $totalGralBolivares + $vuelto->totalBolivares($vuelto->id_caja,$fini,$ffin);
-						$totalGralVueltos = $totalGralVueltos + $vuelto->totalVueltos($vuelto->id_caja,$fini,$ffin);
+						$totalGralDivisas = $totalGralDivisas + $vuelto->totalDivisasCaja($vuelto->id_caja,$fini,$ffin);
+						$totalGralBolivares = $totalGralBolivares + $vuelto->totalBolivaresCaja($vuelto->id_caja,$fini,$ffin);
+						$totalGralVueltos = $totalGralVueltos + $vuelto->totalVueltosCaja($vuelto->id_caja,$fini,$ffin);
 					@endphp		
               </tr>
           @endforeach
