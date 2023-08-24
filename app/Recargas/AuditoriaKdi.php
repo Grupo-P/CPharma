@@ -38,8 +38,8 @@ class AuditoriaKdi extends Model
     {
         return $this->hasOne(CajaKdi::class,'id','id_caja');
     }
-    public static function totalDivisas($cajero){
-        $operaciones = OperacionKdi::where('id_user','=',$cajero)->get();
+    public static function totalDivisas($cajero,$fini,$ffin){
+        $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
         if($operaciones->SUM('total_divisas')>0){
             $resultado=$operaciones->SUM('total_divisas');
         }
@@ -49,8 +49,8 @@ class AuditoriaKdi extends Model
         return $resultado;
     }
 
-    public static function totalBolivares($cajero){
-        $operaciones = OperacionKdi::where('id_user','=',$cajero)->get();
+    public static function totalBolivares($cajero,$fini,$ffin){
+        $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
         if($operaciones->SUM('total_bolivares')>0){
             $resultado=$operaciones->SUM('total_bolivares');
         }
@@ -60,8 +60,8 @@ class AuditoriaKdi extends Model
         return  $resultado;
     }
 
-    public static function totalVueltos($cajero){
-        $operaciones = OperacionKdi::where('id_user','=',$cajero)->get();
+    public static function totalVueltos($cajero,$fini,$ffin){
+        $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
         if($operaciones->SUM('total_vuelto')>0){
             $resultado=$operaciones->SUM('total_vuelto');
         }
@@ -71,11 +71,44 @@ class AuditoriaKdi extends Model
         return  $resultado;
     }
 
-    public static function servicioNombre($servicio){
-        $servicio = ServiciosKdi::where('servicio','=',$servicio)->first();
-        return $servicio->nombre;
+    public static function totalDivisasCaja($caja,$fini,$ffin){
+        $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
+        if($operaciones->SUM('total_divisas')>0){
+            $resultado=$operaciones->SUM('total_divisas');
+        }
+        else{
+            $resultado=0;
+        }
+        return $resultado;
     }
 
+    public static function totalBolivaresCaja($caja,$fini,$ffin){
+        $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
+        if($operaciones->SUM('total_bolivares')>0){
+            $resultado=$operaciones->SUM('total_bolivares');
+        }
+        else{
+            $resultado=0;
+        }
+        return  $resultado;
+    }
+
+    public static function totalVueltosCaja($caja,$fini,$ffin){
+        $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
+        if($operaciones->SUM('total_vuelto')>0){
+            $resultado=$operaciones->SUM('total_vuelto');
+        }
+        else{
+            $resultado=0;
+        }
+        return  $resultado;
+    }
+
+    public static function servicioNombre($servicio,$subservicio){
+        $servicio = ServiciosKdi::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
+        return $servicio->nombre;
+    }
+    
     public static function servicioComision($servicio,$subservicio){
         $servicio = ServiciosKdi::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
         return $servicio->comision;
@@ -84,6 +117,16 @@ class AuditoriaKdi extends Model
     public static function calculoComision($servicio,$subservicio,$monto){
         $servicio = ServiciosKdi::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
         $total=$monto*($servicio->comision/100);
-        return number_format($total,2,',','.');
+        return floatval($total);
+    }
+
+    public static function cantidadRecargasCajero($fini,$ffin,$cajero){        
+        $cantidad = AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_usuario','=',$cajero)->count();        
+        return $cantidad;
+    }
+    
+    public static function cantidadRecargasCaja($fini,$ffin,$caja){        
+        $cantidad = AuditoriaKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->count();        
+        return $cantidad;
     }
 }

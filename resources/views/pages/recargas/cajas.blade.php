@@ -1,7 +1,7 @@
 @extends('layouts.contabilidad')
 
 @section('title')
-    Cajeros mas transaccionales:
+    Cajas mas transaccionales:
 @endsection
 
 @section('content')
@@ -76,7 +76,7 @@
 
 	<h1 class="h5 text-info">
 		<i class="fas fa-cogs"></i>
-		Cajeros mas transaccionales:
+		Cajas mas transaccionales:
 	</h1>
 
 	<hr class="row align-items-start col-12">
@@ -97,7 +97,7 @@
 	</table>
 	<br/>
     <div class="col-12">                        
-        <form action="{{route("cajerosRecargas2")}}" method="POST">
+        <form action="{{route("cajasRecargas2")}}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-4">
@@ -145,7 +145,7 @@
 		    <tr>
 		      	<th scope="col" class="CP-sticky">Numero</th>
                 <th scope="col" class="CP-sticky">Sede</th>                				
-                <th scope="col" class="CP-sticky">Cajero</th>              
+                <th scope="col" class="CP-sticky">Caja</th>              
 				<th scope="col" class="CP-sticky">Cantidad Recargas</th>  
 				<th scope="col" class="CP-sticky">Total Recibido Divisas ($)</th>                                                
 				<th scope="col" class="CP-sticky">Total Recibido Bolivares (Bs)</th>                                                
@@ -164,27 +164,27 @@
 		@endphp		
           @foreach($vueltos as $vuelto)                  
               <tr>                
-                    <td class="text-center">{{$vuelto->id_usuario }}</td>
+                    <td class="text-center">{{$vuelto->id_caja }}</td>
                     <td class="text-center">{{$sede }}</td>
                     <td class="text-center">
-						{{$vuelto->cajero->username }} 
+						{{$vuelto->caja->nombre }} 
                     </td>
-					<td class="text-center">{{$vuelto->cantidadRecargasCajero($fini,$ffin,$vuelto->id_usuario)}}</td>
+					<td class="text-center">{{$vuelto->cantidadRecargasCaja($fini,$ffin,$vuelto->id_caja)}}</td>
 					<td class="text-center">
-						$. {{number_format($vuelto->totalDivisas($vuelto->id_usuario,$fini,$ffin),2,',','.') }} 
+						$. {{number_format($vuelto->totalDivisas($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
                     </td>
 					<td class="text-center">
-						Bs. {{number_format($vuelto->totalBolivares($vuelto->id_usuario,$fini,$ffin),2,',','.') }} 
+						Bs. {{number_format($vuelto->totalBolivares($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
                     </td>   
 					<td class="text-center">
-						Bs. {{number_format($vuelto->totalVueltos($vuelto->id_usuario,$fini,$ffin),2,',','.') }} 
+						Bs. {{number_format($vuelto->totalVueltos($vuelto->id_caja,$fini,$ffin),2,',','.') }} 
                     </td>                           
                     <td class="text-center">Bs. {{number_format($vuelto->totalMonto,2,',','.')}} Bs.</td>                                                                                          
 					@php
-						$totalRecargas = $totalRecargas + $vuelto->cantidadRecargasCajero($fini,$ffin,$vuelto->id_usuario);
-						$totalGralDivisas = $totalGralDivisas + $vuelto->totalDivisas($vuelto->id_usuario,$fini,$ffin);
-						$totalGralBolivares = $totalGralBolivares + $vuelto->totalBolivares($vuelto->id_usuario,$fini,$ffin);
-						$totalGralVueltos = $totalGralVueltos + $vuelto->totalVueltos($vuelto->id_usuario,$fini,$ffin);
+						$totalRecargas = $totalRecargas + $vuelto->cantidadRecargasCaja($fini,$ffin,$vuelto->id_caja);
+						$totalGralDivisas = $totalGralDivisas + $vuelto->totalDivisas($vuelto->id_caja,$fini,$ffin);
+						$totalGralBolivares = $totalGralBolivares + $vuelto->totalBolivares($vuelto->id_caja,$fini,$ffin);
+						$totalGralVueltos = $totalGralVueltos + $vuelto->totalVueltos($vuelto->id_caja,$fini,$ffin);
 					@endphp		
               </tr>
           @endforeach

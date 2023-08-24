@@ -155,6 +155,9 @@
 	  	<tbody>       
         
         @if(isset($vueltos))
+			@php
+				$totalGralComision = 0;
+			@endphp
           @foreach($vueltos as $vuelto)                  
               <tr>                
                     <td class="text-center">{{$vuelto->id_usuario }}</td>
@@ -165,11 +168,22 @@
 					<td class="text-center">{{$vuelto->totalOperaciones}}</td>
                     <td class="text-center">Bs. {{ number_format($vuelto->totalMonto,2,',','.') }}</td>
 					<td class="text-center">{{$vuelto->servicioComision($vuelto->servicio,$vuelto->subservicio) }}%</td>
-					<td class="text-center">Bs. {{$vuelto->calculoComision($vuelto->servicio,$vuelto->subservicio,$vuelto->totalMonto) }}</td>
-					
+					<td class="text-center">Bs. {{number_format($vuelto->calculoComision($vuelto->servicio,$vuelto->subservicio,$vuelto->totalMonto),3,',','.') }}</td>
+					@php
+						$totalGralComision = $totalGralComision + floatval($vuelto->calculoComision($vuelto->servicio,$vuelto->subservicio,$vuelto->totalMonto));
+					@endphp
 					
               </tr>
           @endforeach
+		  <tr>
+			<td colspan="3" style="font-weight: bold;text-align:right;">Totales:</td>
+			
+			<td style="font-weight: bold;text-align:center;">{{$vueltos->SUM('totalOperaciones')}}</td>
+			<td style="font-weight: bold;text-align:center;">Bs.{{ number_format($vueltos->SUM('totalMonto'),2,',','.')}}</td>
+			<td></td>
+			<td style="font-weight: bold;text-align:center;">Bs.{{number_format($totalGralComision,3,',','.')}}</td>
+
+		  </tr>
         @endif
 		</tbody>
 	</table>
