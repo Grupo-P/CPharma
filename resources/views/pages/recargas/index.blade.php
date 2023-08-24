@@ -150,7 +150,14 @@
         <div class="col-12 text-center mt-3">    
           <div class="row">
             <div class="col-4">
-                     
+              <form action="{{route("cajasRecargas2")}}" method="POST" target="_blank">
+                @csrf
+                <input name="fecha_ini" type="hidden" value="{{$fini}}">
+                <input name="fecha_fin" type="hidden" value="{{$ffin}}">
+                <input name="sede" type="hidden" value="{{$sede}}">
+
+                <button class="btn btn-info" type="submit" >Cajas Transaccionales</button>
+              </form>     
             </div>           
             <div class="col-4">
               <form action="{{route("cajerosRecargas2")}}" method="POST" target="_blank">
@@ -211,7 +218,7 @@
                   @endphp
               <tr>
                       
-                      <td>{{$contador}}</td>
+                      <td style="text-align:center;">{{$contador}}</td>
                       <td style="text-align:center;">
                         <form action="{{route("detalleOperacionRecarga2")}}" method="POST" target="_blank">
                           @csrf
@@ -224,16 +231,26 @@
                         </form>  
                         
                       </td>
-                      <td>{{$vuelto->cajero->username}}</td>
-                      <td>{{$vuelto->caja->nombre}}</td>
-                      <td>{{$vuelto->servicioNombre($vuelto->servicio,$vuelto->subservicio)}}</td>                                
-                      <td>{{$vuelto->telefono}}</td>                
-                      <td>{{$vuelto->contrato}}</td>                
-                      <td>{{$vuelto->placa}}</td>         
-                      <td>Bs. {{number_format($vuelto->monto,2,',','.')}}</td>                             
-                      <td>{{date("d/m/Y g:i a",strtotime($vuelto->created_at))}}</td>
+                      <td style="text-align:center;">{{$vuelto->cajero->username}}</td>
+                      <td style="text-align:center;">{{$vuelto->caja->nombre}}</td>
+                      <td style="text-align:center;">{{$vuelto->servicioNombre($vuelto->servicio,$vuelto->subservicio)}}</td>                                
+                      <td style="text-align:center;">{{$vuelto->telefono}}</td>                
+                      <td style="text-align:center;">{{$vuelto->contrato}}</td>                
+                      <td style="text-align:center;">{{$vuelto->placa}}</td>         
+                      <td style="text-align:center;">Bs. {{number_format($vuelto->monto,2,',','.')}}</td>                             
+                      <td style="text-align:center;">{{date("d/m/Y g:i a",strtotime($vuelto->created_at))}}</td>
               </tr>
           @endforeach
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="3" style="text-aling:right;font-weight:bold;">Totales:</td>            
+            <td style="text-align:center;font-weight:bold">Bs. {{number_format($vueltos->SUM('monto'),2,',','.')}}</td>                             
+            <td></td>
+          </tr>
         @endif
 		</tbody>
 	</table>
