@@ -40,66 +40,89 @@ class AuditoriaKdi extends Model
     }
     public static function totalDivisas($cajero,$fini,$ffin){
         $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
-        if($operaciones->SUM('total_divisas')>0){
-            $resultado=$operaciones->SUM('total_divisas');
-        }
-        else{
-            $resultado=0;
+
+        $resultado = 0;
+        foreach($operaciones as $operacion){
+            $auditoria = AuditoriaKdi::where('id_operacion','=',$operacion->id)->first();
+            if($auditoria != null){
+                if($operacion->total_divisas > 0){
+                    $resultado= $resultado + $operacion->total_divisas;
+                }
+            }
         }
         return $resultado;
     }
 
     public static function totalBolivares($cajero,$fini,$ffin){
         $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
-        if($operaciones->SUM('total_bolivares')>0){
-            $resultado=$operaciones->SUM('total_bolivares');
-        }
-        else{
-            $resultado=0;
+
+        $resultado = 0;
+        foreach($operaciones as $operacion){
+            $auditoria = AuditoriaKdi::where('id_operacion','=',$operacion->id)->first();
+            if($auditoria != null){
+                if($operacion->total_bolivares > 0){
+                    $resultado= $resultado + $operacion->total_bolivares;
+                }
+            }
         }
         return  $resultado;
     }
 
     public static function totalVueltos($cajero,$fini,$ffin){
         $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
-        if($operaciones->SUM('total_vuelto')>0){
-            $resultado=$operaciones->SUM('total_vuelto');
-        }
-        else{
-            $resultado=0;
+
+        $resultado = 0;
+        foreach($operaciones as $operacion){
+            $auditoria = AuditoriaKdi::where('id_operacion','=',$operacion->id)->first();
+            if($auditoria != null){
+                if($operacion->total_vuelto > 0){
+                    $resultado= $resultado + $operacion->total_vuelto;
+                }
+            }
         }
         return  $resultado;
     }
 
     public static function totalDivisasCaja($caja,$fini,$ffin){
         $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
-        if($operaciones->SUM('total_divisas')>0){
-            $resultado=$operaciones->SUM('total_divisas');
-        }
-        else{
-            $resultado=0;
+
+        $resultado = 0;
+        foreach($operaciones as $operacion){
+            $auditoria = AuditoriaKdi::where('id_operacion','=',$operacion->id)->first();
+            if($auditoria != null){
+                if($operacion->total_divisas > 0){
+                    $resultado= $resultado + $operacion->total_divisas;
+                }
+            }
         }
         return $resultado;
     }
 
     public static function totalBolivaresCaja($caja,$fini,$ffin){
         $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
-        if($operaciones->SUM('total_bolivares')>0){
-            $resultado=$operaciones->SUM('total_bolivares');
-        }
-        else{
-            $resultado=0;
+        $resultado = 0;
+        foreach($operaciones as $operacion){
+            $auditoria = AuditoriaKdi::where('id_operacion','=',$operacion->id)->first();
+            if($auditoria != null){
+                if($operacion->total_bolivares > 0){
+                    $resultado= $resultado + $operacion->total_bolivares;
+                }
+            }
         }
         return  $resultado;
     }
 
     public static function totalVueltosCaja($caja,$fini,$ffin){
         $operaciones = OperacionKdi::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
-        if($operaciones->SUM('total_vuelto')>0){
-            $resultado=$operaciones->SUM('total_vuelto');
-        }
-        else{
-            $resultado=0;
+
+        $resultado = 0;
+        foreach($operaciones as $operacion){
+            $auditoria = AuditoriaKdi::where('id_operacion','=',$operacion->id)->first();
+            if($auditoria != null){
+                if($operacion->total_vuelto > 0){
+                    $resultado= $resultado + $operacion->total_vuelto;
+                }
+            }
         }
         return  $resultado;
     }
