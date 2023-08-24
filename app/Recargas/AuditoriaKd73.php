@@ -38,8 +38,8 @@ class AuditoriaKd73 extends Model
     {
         return $this->hasOne(CajaKd73::class,'id','id_caja');
     }
-    public static function totalDivisas($cajero){
-        $operaciones = OperacionKd73::where('id_user','=',$cajero)->get();
+    public static function totalDivisas($cajero,$fini,$ffin){
+        $operaciones = OperacionKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
         if($operaciones->SUM('total_divisas')>0){
             $resultado=$operaciones->SUM('total_divisas');
         }
@@ -49,8 +49,8 @@ class AuditoriaKd73 extends Model
         return $resultado;
     }
 
-    public static function totalBolivares($cajero){
-        $operaciones = OperacionKd73::where('id_user','=',$cajero)->get();
+    public static function totalBolivares($cajero,$fini,$ffin){
+        $operaciones = OperacionKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
         
         if($operaciones->SUM('total_bolivares')>0){
             $resultado=$operaciones->SUM('total_bolivares');
@@ -61,8 +61,8 @@ class AuditoriaKd73 extends Model
         return  $resultado;
     }
 
-    public static function totalVueltos($cajero){
-        $operaciones = OperacionKd73::where('id_user','=',$cajero)->get();
+    public static function totalVueltos($cajero,$fini,$ffin){
+        $operaciones = OperacionKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_user','=',$cajero)->get();
         
         if($operaciones->SUM('total_vuelto')>0){
             $resultado=$operaciones->SUM('total_vuelto');
@@ -73,11 +73,43 @@ class AuditoriaKd73 extends Model
         return  $resultado;
     }
 
-    public static function servicioNombre($servicio){
-        $servicio = ServiciosKd73::where('servicio','=',$servicio)->first();
-        return $servicio->nombre;
+    public static function totalDivisasCaja($caja,$fini,$ffin){
+        $operaciones = OperacionKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
+        if($operaciones->SUM('total_divisas')>0){
+            $resultado=$operaciones->SUM('total_divisas');
+        }
+        else{
+            $resultado=0;
+        }
+        return $resultado;
     }
 
+    public static function totalBolivaresCaja($caja,$fini,$ffin){
+        $operaciones = OperacionKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
+        if($operaciones->SUM('total_bolivares')>0){
+            $resultado=$operaciones->SUM('total_bolivares');
+        }
+        else{
+            $resultado=0;
+        }
+        return  $resultado;
+    }
+
+    public static function totalVueltosCaja($caja,$fini,$ffin){
+        $operaciones = OperacionKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->get();
+        if($operaciones->SUM('total_vuelto')>0){
+            $resultado=$operaciones->SUM('total_vuelto');
+        }
+        else{
+            $resultado=0;
+        }
+        return  $resultado;
+    }
+
+    public static function servicioNombre($servicio,$subservicio){
+        $servicio = ServiciosKd73::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
+        return $servicio->nombre;
+    }
     public static function servicioComision($servicio,$subservicio){
         $servicio = ServiciosKd73::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
         return $servicio->comision;
@@ -86,6 +118,16 @@ class AuditoriaKd73 extends Model
     public static function calculoComision($servicio,$subservicio,$monto){
         $servicio = ServiciosKd73::where('servicio','=',$servicio)->where("subservicio","=",$subservicio)->first();
         $total=$monto*($servicio->comision/100);
-        return number_format($total,2,',','.');
+        return floatval($total);
+    }
+
+    public static function cantidadRecargasCajero($fini,$ffin,$cajero){        
+        $cantidad = AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_usuario','=',$cajero)->count();        
+        return $cantidad;
+    }
+    
+    public static function cantidadRecargasCaja($fini,$ffin,$caja){        
+        $cantidad = AuditoriaKd73::whereBetween('fecha',[ $fini,$ffin])->where('id_caja','=',$caja)->count();        
+        return $cantidad;
     }
 }
