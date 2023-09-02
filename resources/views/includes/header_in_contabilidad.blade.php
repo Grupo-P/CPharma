@@ -368,7 +368,7 @@
           </li>
       @endif
 
-      @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA')
+      @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'CONTABILIDAD')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/historicoVueltos') }}">
               <span data-feather="home"></span>
@@ -378,7 +378,7 @@
           </li>
       @endif
 
-      @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA')
+      @if(Auth::user()->departamento == 'GERENCIA' || Auth::user()->departamento == 'ADMINISTRACION' || Auth::user()->departamento == 'TESORERIA' || Auth::user()->departamento == 'TECNOLOGIA' || Auth::user()->departamento == 'CONTABILIDAD')
           <li class="nav-item">
             <a class="nav-link CP-Links-Menu" href="{{ url('/historicoRecargas') }}">
               <span data-feather="home"></span>
