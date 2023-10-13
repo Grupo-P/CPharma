@@ -322,7 +322,15 @@
 
                 // Binance
 
-                if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@ses.binance.com>') {
+                if (
+                    (   strpos($asunto, 'Payment Receive Successful')
+                        ||strpos($asunto, 'Pago recibido correctamente')
+                    )
+                    &&
+                    (   $item->from == 'Binance <do-not-reply@ses.binance.com>'
+                        || $item->from == 'Binance <do-not-reply@directmail2.binance.com>'
+                    )
+                ) {
 
                     $body = @imap_body($conn, $email);
                     $body = base64_decode($body);
