@@ -211,30 +211,30 @@
 
                     if (strpos($body, 'Pago Movil') && strpos($body, '- 2620')) {
 
-                        $inicioEnviadoPor =(strpos($body, 'Telf.')) + 5;                
-                        $substr = substr($body, $inicioEnviadoPor);                
-                        $finEnviadoPor = strpos($substr, ' ');                
-                        $enviadoPor = substr($substr, 0, $finEnviadoPor);                
+                        $inicioEnviadoPor =(strpos($body, 'Telf.')) + 5;
+                        $substr = substr($body, $inicioEnviadoPor);
+                        $finEnviadoPor = strpos($substr, ' ');
+                        $enviadoPor = substr($substr, 0, $finEnviadoPor);
                         $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
-                        
 
-                        $inicioMonto = (strpos($body, 'Pago Movil Recibido')) + 20;                
-                        $substr = substr($body, $inicioMonto);                
+
+                        $inicioMonto = (strpos($body, 'Pago Movil Recibido')) + 20;
+                        $substr = substr($body, $inicioMonto);
                         $finMonto = strpos($substr, ' Telf.');
                         $monto = str_replace(["=","\n","\r"," "], "",substr($substr, 0, $finMonto));
-                    
-                        $inicioReferencia = (strpos($body, 'ef:')) + 3;                
+
+                        $inicioReferencia = (strpos($body, 'ef:')) + 3;
                         $substr = substr($body, $inicioReferencia);
-                        
+
                         $finReferencia = strpos($substr, ' Llamar');
-                        $referencia = substr($substr, 0, $finReferencia);                
+                        $referencia = substr($substr, 0, $finReferencia);
 
                         $comentario = "Referencia: $referencia";
 
                         $decimales = explode('.', (string) $monto);
-                        
+
                         $decimales = $decimales[1];
-                    
+
                         $pagos[$i]['tipo'] = 'Pago móvil BNC';
                         $pagos[$i]['enviado_por'] = $enviadoPor;
                         $pagos[$i]['monto'] = $monto;
@@ -378,7 +378,7 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
-                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;                    
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
@@ -417,7 +417,7 @@
 
                 if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
 
-                    $body = @imap_body($conn, $email);                    
+                    $body = @imap_body($conn, $email);
 
                     $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pa')) + 41;
                     $substr = substr($body, $inicioEnviadoPor);
@@ -558,7 +558,7 @@
 
                     $inicioMonto = strpos($body, 'Amount:');
 
-                    $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'This was de') : strpos($body, 'Memo:');
+                    $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'The money will') : strpos($body, 'Memo:');
 
                     $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
                     $monto = strip_tags($monto);
@@ -566,10 +566,10 @@
                     $monto = trim($monto);
 
                     if (strpos($body, 'Memo:') === false) {
-                        $comentario = '';                   
+                        $comentario = '';
                     } else {
                         $inicioComentario = strpos($body, 'Memo:');
-                        $finComentario = strpos($body, 'This was de');
+                        $finComentario = strpos($body, 'The money will');
                         $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                         $comentario = strip_tags($comentario);
                         $comentario = str_replace(['Memo:', '&nbsp;'], '', $comentario);
@@ -626,7 +626,7 @@
 
             if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
                 continue;
-            
+
 }
             foreach ($overview as $item) {
 
