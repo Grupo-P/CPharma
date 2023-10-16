@@ -55,6 +55,8 @@
             include app_path() . '\functions\functions.php';
 
             $inicio = new DateTime();
+            define('SIMBOLO_BUSCAR', '$');
+            define('FINAL_MONTO', '<');
 
             $sede = isset($_GET['sede']) ? $_GET['sede'] : Auth::user()->sede;
 
@@ -586,6 +588,10 @@
 
                             $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'The money will') : strpos($body, 'Memo:');
 
+                            if(!$finMonto) {
+                                $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'This was de') : strpos($body, 'Memo:');
+                            }
+
                             $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
                             $monto = strip_tags($monto);
                             $monto = str_replace(['Amount:', '&nbsp;'], '', $monto);
@@ -596,6 +602,11 @@
                             } else {
                                 $inicioComentario = strpos($body, 'Memo:');
                                 $finComentario = strpos($body, 'The money will');
+                                
+                                if(!$finComentario) {
+                                    $finComentario = strpos($body, 'This was de');
+                                }
+
                                 $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                                 $comentario = strip_tags($comentario);
                                 $comentario = str_replace(['Memo:', '&nbsp;'], '', $comentario);
@@ -604,7 +615,7 @@
 
 
                             $decimales = explode('.', (string) $monto);
-                            $decimales = $decimales[1];
+                            $decimales = $decimales[1] ?? $monto;
 
                             $pagos[$i]['tipo'] = 'Zelle Truist';
                             $pagos[$i]['enviado_por'] = $enviadoPor;
