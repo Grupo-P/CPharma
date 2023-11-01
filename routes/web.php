@@ -19,7 +19,6 @@ Route::view('stellar/departamentos', 'stellar.departamentos');
 Route::view('stellar/grupos', 'stellar.grupos');
 Route::view('stellar/codigos', 'stellar.codigos');
 
-
 Route::get('/testingVuelto', function() {
     return view('testVuelto');
 });
@@ -325,6 +324,7 @@ Route::get('/Generar_Etiqueta_Unica', function() {
     return view('pages.etiqueta.Generar_Etiqueta_Unica');
 });
 
+
 Route::get('/Generar_Etiqueta_Promocion', function() {
     return view('pages.etiqueta.Generar_Etiqueta_Promocion');
 });
@@ -333,6 +333,11 @@ Route::get('/etiquetaMovil', 'EtiquetaMovilController@index');
 
 Route::get('/Generar_Etiqueta_Promocion_G', function() {
     return view('pages.etiqueta.Generar_Etiqueta_Promocion_G');
+});
+
+// Rutas de OFERTERO
+Route::get('/Generar_Etiqueta_Ofertero', function() {
+    return view('pages.etiqueta.ofertero.Generar_Etiqueta_Ofertero');
 });
 
 Route::get('/SearchAjuste', function() {
