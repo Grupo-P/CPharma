@@ -17,7 +17,7 @@
     --color-azul: #00B4DA;
     --color-fondo: #fff;
   }
-  
+
   /* Scan */
   .autocomplete {
     position: relative;
@@ -189,10 +189,10 @@
   .anaquel .codigo {
     margin-left: 2px !important;
   }
-  
+
   .anaquel .fecha {
     margin-right: 2px !important;
-  } 
+  }
 
   .piscina .arriba {
     font-size: 22px !important;
@@ -201,10 +201,10 @@
   .piscina .codigo {
     margin-left: 6px !important;
   }
-  
+
   .piscina .fecha {
     margin-right: 6px !important;
-  } 
+  }
 
   .arriba {
     position: absolute;
@@ -229,7 +229,7 @@
   .arriba .fecha {
     writing-mode: vertical-rl;
     margin-right: 10px;
-  } 
+  }
 
   /* Precio */
   .anaquel .precios {
@@ -250,7 +250,7 @@
     margin-bottom: 20px;
     padding-top: 12px;
   }
-  
+
   .piscina .precios .precio {
     padding: 4px 24px;
     border-radius: 26px;
@@ -291,12 +291,12 @@
   }
 
   .anaquel .precios .precio.antes .text {
-    font-size: 16px !important; 
+    font-size: 16px !important;
     margin-bottom: 0px !important;
   }
 
   .piscina .precios .precio.antes .text {
-    font-size: 24px !important; 
+    font-size: 24px !important;
     margin-bottom: 3px !important;
   }
 
@@ -517,8 +517,8 @@
   </script>
 
 	<script>
-    // var dominio = dominio(SedeConnectionJs);
-    var dominio = "http://cpharmagpde.com/"
+    var dominio = dominio(SedeConnectionJs);
+    //var dominio = "http://cpharmagpde.com/"
     const URLEtiquetaUnica = ''+dominio+'assets/functions/ofertero/functionEtiquetaOfertero.php';
 
 		$('#inputCodBar').attr("placeholder", "Haga scan o escriba el codigo de barra");
