@@ -403,10 +403,6 @@ Route::get('/CorridaPrecios', function() {
     return view('pages.corridas.corridaPrecio');
 });
 
-Route::get('/CorridaPrecios', function() {
-    return view('pages.corridas.corridaPrecio');
-});
-
 Route::get('/AuditoriaCorridaPrecios', function() {
     return view('pages.corridas.auditoria_corridas');
 });
