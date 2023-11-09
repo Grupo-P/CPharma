@@ -100,6 +100,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    page-break-inside: avoid;
   }
 
   /* Medidas */
