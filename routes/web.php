@@ -394,6 +394,11 @@ Route::get('/codigosPrincipal', function() {
     return view('pages.articulosExcel.codigosPrincipal');
 });
 
+Route::get('/AtributosMasivos', 'Correcciones\MasivasController@index')->name('atributos.masivos');
+Route::get('/AtributosMasivosConfirmar', 'Correcciones\MasivasController@confirmar')->name('atributos.confirmar');
+Route::get('/AtributosMasivosHistorial', 'Correcciones\MasivasController@historial')->name('atributos.historial');
+Route::post('/AtributosMasivos', 'Correcciones\MasivasController@excel')->name('atributos.excel');
+
 Route::get('/CorridaPrecios', function() {
     return view('pages.corridas.corridaPrecio');
 });

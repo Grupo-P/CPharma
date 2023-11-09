@@ -35,7 +35,7 @@
       </li>
     </div>
   </div>
-<!-- AGENDA -->
+<!-- TECNOLOGIA -->
 <!-------------------------------------------------------------------------------->
   <div class="btn-group navbar-brand">
     <button type="button" class="btn btn-outline-info dropdown-toggle textoI" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
