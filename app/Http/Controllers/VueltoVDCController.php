@@ -154,6 +154,8 @@ class VueltoVDCController extends Controller
             ]);
             return $descripcion;
         }
+
+        $numeroFactura = $row['NumeroFactura'];
         /////////////////////////////////////////////////////////////////
         // Valida que el cliente no tenga un vuelto ese mismo dia. 
         /////////////////////////////////////////////////////////////////
@@ -345,6 +347,44 @@ class VueltoVDCController extends Controller
             return $descripcion;            
         }
 
+        /////////////////////////////////////////////////////////////////
+        // Valida que la factura actual no tenga un pago movil con error inesperado. 
+        /////////////////////////////////////////////////////////////////
+        $errorInesperado = auditoriaPM::where('nro_factura', '=', $numeroFactura)
+            ->where('paso', '=', '3')
+            ->whereDoesntExist(function ($query) use ($numeroFactura) {
+                $query->from('auditoria_pm')
+                    ->where('nro_factura', $numeroFactura)
+                    ->where('paso', 'LIKE', '4%');
+            })
+        ->first();
+
+        if($errorInesperado) {
+            $descripcion = "Ya se ha encontrado un intento de pago movil a esta factura (N° $numeroFactura). Verifica con tu supervisor el pago movil.";
+
+            Vuelto::create([
+                'fecha_hora' => date('Y-m-d H:i:s'),
+                'id_factura' => $id_factura,
+                'banco_cliente' => $this->obtener_banco($request->banco_destino),
+                'cedula_cliente' => $request->cedula_cliente,
+                'telefono_cliente' => $request->telefono_cliente,
+                'estatus' => 'Error no esperado',
+                'caja' => $caja,
+                'sede' => $sede,
+                'motivo_error' => $descripcion,
+                'monto' => $request->monto,
+                'montoPagado' => $montoPagado,
+                'tasaVenta' => $tasa,
+                'cedulaClienteFactura' => $cedulaClienteFactura,
+                'nombreClienteFactura' => $nombreClienteFactura,
+                'nombreCajeroFactura' => $nombreCajeroFactura,
+                'totalFacturaBs' => $totalFactura,
+                'totalFacturaDolar' => $totalFacturaDolar
+            ]);
+
+            return $descripcion;
+        }
+
         return 'exito';
     }
 
@@ -386,16 +426,17 @@ class VueltoVDCController extends Controller
             $json['dt']['email'] = '';
             $json['dt']['monto'] = $request->monto;
             $json['dt']['banco'] = $request->banco_destino;
+
+            $numero_factura = $request->numero_factura;
             auditoriaPM::create([
                 'paso' => "3",
                 'informacion' => json_encode($json['dt']),
-                'caja' => $caja
+                'caja' => $caja,
+                'nro_factura' => $numero_factura
             ]);
+
             $json['dt'] = json_encode($json['dt']);
-
             $json['dt'] = openssl_encrypt($json['dt'], 'AES-128-CBC', $key, 0, $vi);
-
-            $numero_factura = $request->numero_factura;
 
             $sql = "
             SELECT TOP 1
@@ -447,7 +488,8 @@ class VueltoVDCController extends Controller
                     auditoriaPM::create([
                         'paso' => "4",
                         'informacion' => "Exito: ".$response->referenciaMovimiento,
-                        'caja' => $caja
+                        'caja' => $caja,
+                        'nro_factura' => $numero_factura
                     ]);
 
                     $confirmacion_banco = $response->referenciaMovimiento;
@@ -481,7 +523,8 @@ class VueltoVDCController extends Controller
                         auditoriaPM::create([
                             'paso' => "4 Error",
                             'informacion' => "Timeout",
-                            'caja' => $caja
+                            'caja' => $caja,
+                            'nro_factura' => $numero_factura
                         ]);
                         $descripcion = "El banco no respondio, Valide con administracion la ejecución del pago";
                         $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
@@ -515,7 +558,8 @@ class VueltoVDCController extends Controller
                         auditoriaPM::create([
                             'paso' => "4 Error",
                             'informacion' => $contenido,
-                            'caja' => $caja
+                            'caja' => $caja,
+                            'nro_factura' => $numero_factura
                         ]);                       
                         
                         if(str_contains($contenido, '<head>')){
@@ -655,12 +699,6 @@ class VueltoVDCController extends Controller
         $RutaUrl = FG_Mi_Ubicacion();
         //$RutaUrl = 'DBs';
         
-        auditoriaPM::create([
-            'paso' => "1",
-            'informacion' => "Carga de datos",
-            'caja' => $request->caja
-        ]);
-        
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
         $caja = $request->caja; 
@@ -705,19 +743,31 @@ class VueltoVDCController extends Controller
         $cliente = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
         $total_factura = number_format($row['totalFactura'], 2,'.','');
         $total_factura_pagado = number_format($row['MontoRecibido'], 2,'.','');
+
+        // Paso #1
+        auditoriaPM::create([
+            'paso' => "1",
+            'informacion' => "Carga de datos",
+            'caja' => $request->caja,
+            'nro_factura' => $numero_factura
+        ]);
+
+        // Paso #2
         auditoriaPM::create([
             'paso' => "2",
             'informacion' => "numero_factura: $numero_factura,
-            caja:  $caja,
-            tipo_cliente: $tipo_cliente,
-            cedula_cliente: $cedula_cliente,
-            telefono: $telefono,
-            monto:  $monto,
-            cliente: $cliente,
-            total_factura: $total_factura,
-            total_factura_pagado: $total_factura_pagado,",
-            'caja' =>$request->caja
+                caja:  $caja,
+                tipo_cliente: $tipo_cliente,
+                cedula_cliente: $cedula_cliente,
+                telefono: $telefono,
+                monto:  $monto,
+                cliente: $cliente,
+                total_factura: $total_factura,
+                total_factura_pagado: $total_factura_pagado,",
+            'caja' =>$request->caja,
+            'nro_factura' => $numero_factura
         ]);
+
         return [
             'numero_factura' => $numero_factura,
             'caja' => $caja,
