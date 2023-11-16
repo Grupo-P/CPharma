@@ -485,29 +485,27 @@ class VueltoVDCController extends Controller
                     ]);
 
                     $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;    
-                    
-                    auditoriaPM::create([
-                        'paso' => "6 Obtuvimos repuesta y tasa",
-                        'informacion' => ($respuestaJson.' | '.$tasa),
-                        'caja' => $caja,
-                        'nro_factura' => $numero_factura
-                    ]);   
-                    
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
 
                     auditoriaPM::create([
-                        'paso' => "7 Obtuvimos repuesta y la total",
-                        'informacion' => ($respuestaJson.' | TotalDolar: '.$totalFacturaDolar),
+                        'paso' => "6 Obtuvimos repuesta tasas",
+                        'informacion' => ($tasa),
                         'caja' => $caja,
                         'nro_factura' => $numero_factura
                     ]);
 
                     //obtener la respuesta del servidor
                     $response = json_decode($response->getBody()->getContents())->response;
-                    
                     $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
-                    
+                    $respuestaJSON = $response;
                     $response = json_decode($response);
+
+                    auditoriaPM::create([
+                        'paso' => "7 Obtuvimos repuesta y su body encode",
+                        'informacion' => ($respuestaJSON),
+                        'caja' => $caja,
+                        'nro_factura' => $numero_factura
+                    ]);
 
                     auditoriaPM::create([
                         'paso' => "4",
