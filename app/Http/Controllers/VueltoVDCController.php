@@ -475,8 +475,33 @@ class VueltoVDCController extends Controller
                         'https://cb.venezolano.com/rs/c2x',
                         ['timeout'=>120,'json' => $json]
                     );
-                    $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;                    
+                    $respuestaJson = json_encode($response);
+
+                    auditoriaPM::create([
+                        'paso' => "5 Obtuvimos repuesta",
+                        'informacion' => ($respuestaJson),
+                        'caja' => $caja,
+                        'nro_factura' => $numero_factura
+                    ]);
+
+                    $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;    
+                    
+                    auditoriaPM::create([
+                        'paso' => "6 Obtuvimos repuesta y tasa",
+                        'informacion' => ($respuestaJson.' | '.$tasa),
+                        'caja' => $caja,
+                        'nro_factura' => $numero_factura
+                    ]);   
+                    
                     $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
+
+                    auditoriaPM::create([
+                        'paso' => "7 Obtuvimos repuesta y la total",
+                        'informacion' => ($respuestaJson.' | TotalDolar: '.$totalFacturaDolar),
+                        'caja' => $caja,
+                        'nro_factura' => $numero_factura
+                    ]);
+
                     //obtener la respuesta del servidor
                     $response = json_decode($response->getBody()->getContents())->response;
                     
@@ -523,32 +548,32 @@ class VueltoVDCController extends Controller
 
                     auditoriaPM::create([
                         'paso' => "4 Error inesperado",
-                        'informacion' => ($error.' | '.$mensaje),
+                        'informacion' => ($error.' | Mensaje: '.$mensaje),
                         'caja' => $caja,
                         'nro_factura' => $numero_factura
                     ]);
 
-                    Vuelto::create([
-                        'fecha_hora' => date('Y-m-d H:i:s'),
-                        'id_factura' => $id_factura,
-                        'banco_cliente' => $this->obtener_banco($request->banco_destino),
-                        'cedula_cliente' => $cedula_cliente,
-                        'telefono_cliente' => $telefono_cliente,
-                        'estatus' => 'Error',
-                        'confirmacion_banco' => '',
-                        'caja' => $caja,
-                        'sede' => $sede,
-                        'motivo_error' => ($error.' | '.$mensaje),
-                        'monto' => $request->monto,
-                        'montoPagado' => $montoPagado,
-                        'tasaVenta' => $tasa,
-                        'cedulaClienteFactura' => $cedulaClienteFactura,
-                        'nombreClienteFactura' => $nombreClienteFactura,
-                        'nombreCajeroFactura' => $nombreCajeroFactura,
-                        'totalFacturaBs' => $totalFactura,
-                        'totalFacturaDolar' => $totalFacturaDolar
+                    // Vuelto::create([
+                    //     'fecha_hora' => date('Y-m-d H:i:s'),
+                    //     'id_factura' => $id_factura,
+                    //     'banco_cliente' => $this->obtener_banco($request->banco_destino),
+                    //     'cedula_cliente' => $cedula_cliente,
+                    //     'telefono_cliente' => $telefono_cliente,
+                    //     'estatus' => 'Error',
+                    //     'confirmacion_banco' => '',
+                    //     'caja' => $caja,
+                    //     'sede' => $sede,
+                    //     'motivo_error' => ($error.' | '.$mensaje),
+                    //     'monto' => $request->monto,
+                    //     'montoPagado' => $montoPagado,
+                    //     'tasaVenta' => $tasa,
+                    //     'cedulaClienteFactura' => $cedulaClienteFactura,
+                    //     'nombreClienteFactura' => $nombreClienteFactura,
+                    //     'nombreCajeroFactura' => $nombreCajeroFactura,
+                    //     'totalFacturaBs' => $totalFactura,
+                    //     'totalFacturaDolar' => $totalFacturaDolar
                         
-                    ]);
+                    // ]);
 
                     // if($exception->getResponse() == null){
                     //     auditoriaPM::create([
