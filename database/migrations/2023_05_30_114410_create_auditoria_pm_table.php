@@ -18,6 +18,7 @@ class CreateAuditoriaPmTable extends Migration
             $table->text("paso");
             $table->longText('informacion')->nullable();
             $table->text("caja")->nullable();
+            $table->text("nro_factura")->nullable();
             $table->timestamps();
         });
     }
