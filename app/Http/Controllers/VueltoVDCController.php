@@ -519,10 +519,11 @@ class VueltoVDCController extends Controller
                 }
                 catch (\Throwable $exception) {
                     $error = json_encode( $exception);
+                    $mensaje = $exception->getMessage();
 
                     auditoriaPM::create([
                         'paso' => "4 Error inesperado",
-                        'informacion' => $error,
+                        'informacion' => ($error.' | '.$mensaje),
                         'caja' => $caja,
                         'nro_factura' => $numero_factura
                     ]);
@@ -537,7 +538,7 @@ class VueltoVDCController extends Controller
                         'confirmacion_banco' => '',
                         'caja' => $caja,
                         'sede' => $sede,
-                        'motivo_error' => $error,
+                        'motivo_error' => ($error.' | '.$mensaje),
                         'monto' => $request->monto,
                         'montoPagado' => $montoPagado,
                         'tasaVenta' => $tasa,
