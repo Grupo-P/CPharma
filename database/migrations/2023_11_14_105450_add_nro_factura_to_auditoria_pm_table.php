@@ -14,7 +14,7 @@ class AddNroFacturaToAuditoriaPmTable extends Migration
     public function up()
     {
         Schema::table('auditoria_pm', function (Blueprint $table) {
-            $table->text('nro_factura')->after('caja');
+            $table->text('nro_factura')->nullable()->after('caja');
         });
     }
 

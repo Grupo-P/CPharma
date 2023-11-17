@@ -543,10 +543,11 @@ class VueltoVDCController extends Controller
                 catch (\Throwable $exception) {
                     $error = json_encode( $exception);
                     $mensaje = $exception->getMessage();
+                    $response = openssl_decrypt($mensaje, 'AES-128-CBC', $key, 0, $vi);
 
                     auditoriaPM::create([
                         'paso' => "4 Error inesperado",
-                        'informacion' => ($error.' | Mensaje: '.$mensaje),
+                        'informacion' => ($error.' | Mensaje: '.$mensaje.' | ENCRY: '. $response),
                         'caja' => $caja,
                         'nro_factura' => $numero_factura
                     ]);
