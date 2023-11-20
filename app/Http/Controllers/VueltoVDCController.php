@@ -48,7 +48,7 @@ class VueltoVDCController extends Controller
         $result = sqlsrv_query($conn, $sql);
         $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
-        $id_factura = $row['Id'];
+        $id_factura = $row['Id'] ?? 0; // Colocamos 0 como factura por defecto
         $cedulaClienteFactura=$row['CodigoCliente'];
         $nombreClienteFactura=mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
         $nombreCajeroFactura=$row['Auditoria_Usuario'];
