@@ -385,7 +385,7 @@ class VueltoVDCController extends Controller
             $json['dt']['titular'] = $request->cliente;
             $json['dt']['cedula'] = $request->cedula_cliente;
             $json['dt']['nacionalidad'] = $request->tipo_cliente;
-            $json['dt']['motivo'] = "vuelto|$caja|$numero_factura|$sede";
+            $json['dt']['motivo'] = "$caja|$numero_factura|$sede";
             $json['dt']['telefono'] = $telefono_cliente;
             $json['dt']['email'] = '';
             $json['dt']['monto'] = $monto_vuelto;
@@ -429,46 +429,101 @@ class VueltoVDCController extends Controller
             $totalFactura=number_format($row['totalFactura'],2,'.','');
 
             $cedula_cliente = $request->tipo_cliente . $request->cedula_cliente;
+            $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;    
+            $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
            
-           
-                try {
-                    $client = new GuzzleHttp;
-                    $response = $client->request(
-                        'POST',
-                        'https://cb.venezolano.com/rs/c2x',
-                        ['timeout'=>120,'json' => $json]
-                    );
-                    $respuestaJson = json_encode($response);
+            try {
+                $timeOutVuelto = 60;// 60 segundos => 1 minuto
+                $client = new GuzzleHttp;
+                $response = $client->request(
+                    'POST',
+                    'https://cb.venezolano.com/rs/c2x',
+                    ['timeout'=>$timeOutVuelto,'json' => $json]
+                );
+                $respuestaJson = json_encode($response);
 
-                    $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;    
-                    $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
+                //obtener la respuesta del servidor
+                $response = json_decode($response->getBody()->getContents())->response;
+                $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
+                $respuestaJSON = $response;
+                $response = json_decode($response);
 
-                    //obtener la respuesta del servidor
-                    $response = json_decode($response->getBody()->getContents())->response;
-                    $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
-                    $respuestaJSON = $response;
-                    $response = json_decode($response);
+                auditoriaPM::create([
+                    'paso' => "4",
+                    'informacion' => "Exito: ".$response->referenciaMovimiento,
+                    'caja' => $caja,
+                    'nro_factura' => $numero_factura
+                ]);
+
+                $confirmacion_banco = $response->referenciaMovimiento;
+
+                //Registro en caja negra
+                Vuelto::create([
+                    'fecha_hora' => date('Y-m-d H:i:s'),
+                    'id_factura' => $id_factura,
+                    'banco_cliente' => $this->obtener_banco($request->banco_destino),
+                    'cedula_cliente' => $cedula_cliente,
+                    'telefono_cliente' => $telefono_cliente,
+                    'estatus' => 'Aprobado',
+                    'confirmacion_banco' => $confirmacion_banco,
+                    'caja' => $caja,
+                    'sede' => $sede,
+                    'monto' => $request->monto,
+                    'montoPagado' => $montoPagado,
+                    'tasaVenta' => $tasa,
+                    'cedulaClienteFactura' => $cedulaClienteFactura,
+                    'nombreClienteFactura' => $nombreClienteFactura,
+                    'nombreCajeroFactura' => $nombreCajeroFactura,
+                    'totalFacturaBs' => $totalFactura,
+                    'totalFacturaDolar' => $totalFacturaDolar
+                    
+                ]);
+                
+                return json_encode(['resultado' => 'exito', 'referencia' => $confirmacion_banco]);
+            }
+            catch (GuzzleException $exception) {
+                if($exception->getResponse() == null)
+                {
+                    $estadoVuelto = $this->validar_vuelto($cedula_cliente, $caja, $numero_factura, $monto_vuelto, $sede, [
+                        'id_factura' => $id_factura,
+                        'banco_destino' => $request->banco_destino,
+                        'telefono_cliente' => $telefono_cliente,
+                        'montoPagado' => $montoPagado,
+                        'tasa' => $tasa,
+                        'cedulaClienteFactura' => $cedulaClienteFactura,
+                        'nombreClienteFactura' => $nombreClienteFactura,
+                        'nombreCajeroFactura' => $nombreCajeroFactura,
+                        'totalFacturaBs' => $totalFactura,
+                        'totalFacturaDolar' => $totalFacturaDolar
+                    ]);
 
                     auditoriaPM::create([
-                        'paso' => "4",
-                        'informacion' => "Exito: ".$response->referenciaMovimiento,
+                        'paso' => "4 Error",
+                        'informacion' => "Timeout",
                         'caja' => $caja,
                         'nro_factura' => $numero_factura
                     ]);
 
-                    $confirmacion_banco = $response->referenciaMovimiento;
+                    // Si la validacion fue exitosa, lo notificamos
+                    if($estadoVuelto['resultado'] != 'error') {
+                        return json_encode($estadoVuelto);
+                    }
 
-                    //Registro en caja negra
+                    $descripcion = "El banco no respondio, Valide con administracion la ejecución del pago";
+                    $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+                    $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
+
+                    //registro en historico
                     Vuelto::create([
                         'fecha_hora' => date('Y-m-d H:i:s'),
                         'id_factura' => $id_factura,
                         'banco_cliente' => $this->obtener_banco($request->banco_destino),
                         'cedula_cliente' => $cedula_cliente,
                         'telefono_cliente' => $telefono_cliente,
-                        'estatus' => 'Aprobado',
-                        'confirmacion_banco' => $confirmacion_banco,
+                        'estatus' => 'Error',
                         'caja' => $caja,
                         'sede' => $sede,
+                        'motivo_error' => $descripcion,
                         'monto' => $request->monto,
                         'montoPagado' => $montoPagado,
                         'tasaVenta' => $tasa,
@@ -477,116 +532,73 @@ class VueltoVDCController extends Controller
                         'nombreCajeroFactura' => $nombreCajeroFactura,
                         'totalFacturaBs' => $totalFactura,
                         'totalFacturaDolar' => $totalFacturaDolar
-                        
                     ]);
                     
-                    return json_encode(['resultado' => 'exito', 'referencia' => $confirmacion_banco]);
                 }
-                catch (\Throwable $exception) {
-                    // $error = json_encode( $exception);
-                    // $mensaje = $exception->getMessage();
-                    // $response = openssl_decrypt($mensaje, 'AES-128-CBC', $key, 0, $vi);
-
-                    if($exception->getResponse() == null)
-                    {
-                        $this->validar_vuelto($caja, $numero_factura, $sede);
-
-                        auditoriaPM::create([
-                            'paso' => "4 Error",
-                            'informacion' => "Timeout",
-                            'caja' => $caja,
-                            'nro_factura' => $numero_factura
-                        ]);
-                        $descripcion = "El banco no respondio, Valide con administracion la ejecución del pago";
-                        $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
-                        $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
-
-                        //registro en historico
-                        Vuelto::create([
-                            'fecha_hora' => date('Y-m-d H:i:s'),
-                            'id_factura' => $id_factura,
-                            'banco_cliente' => $this->obtener_banco($request->banco_destino),
-                            'cedula_cliente' => $cedula_cliente,
-                            'telefono_cliente' => $telefono_cliente,
-                            'estatus' => 'Error',
-                            'caja' => $caja,
-                            'sede' => $sede,
-                            'motivo_error' => $descripcion,
-                            'monto' => $request->monto,
-                            'montoPagado' => $montoPagado,
-                            'tasaVenta' => $tasa,
-                            'cedulaClienteFactura' => $cedulaClienteFactura,
-                            'nombreClienteFactura' => $nombreClienteFactura,
-                            'nombreCajeroFactura' => $nombreCajeroFactura,
-                            'totalFacturaBs' => $totalFactura,
-                            'totalFacturaDolar' => $totalFacturaDolar
-                        ]);
-                        
+                else{
+                    $response = $exception->getResponse()->getBody();
+                    $contenido= $exception->getResponse()->getBody()->getContents();
+                    $tamaño= strlen($contenido);             
+                    auditoriaPM::create([
+                        'paso' => "4 Error",
+                        'informacion' => $contenido,
+                        'caja' => $caja,
+                        'nro_factura' => $numero_factura
+                    ]);                       
+                    
+                    if(str_contains($contenido, '<head>')){
+                        $descripcion="Sin Conexion con el banco";
                     }
-                    else{
-                        $response = $exception->getResponse()->getBody();
-                        $contenido= $exception->getResponse()->getBody()->getContents();
-                        $tamaño= strlen($contenido);             
-                        auditoriaPM::create([
-                            'paso' => "4 Error",
-                            'informacion' => $contenido,
-                            'caja' => $caja,
-                            'nro_factura' => $numero_factura
-                        ]);                       
-                        
-                        if(str_contains($contenido, '<head>')){
+                    else{ 
+                        if($tamaño>0){
+                                $response = json_decode($response);
+                                $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
+                            
+                                
+                                
+                                $response = json_decode($response);
+                            
+                            
+                                //Obtener la respuesta del servidor
+                                $descripcion = $response->descripcion ?? $response->mensajeError ?? $response->error;
+
+                                //Codigos de error del banco                                
+                                if($descripcion == "Saldo insuficiente                "){
+                                    $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
+                                }
+                            
+                            
+                        }
+                        else{
                             $descripcion="Sin Conexion con el banco";
+                            
                         }
-                        else{ 
-                            if($tamaño>0){
-                                    $response = json_decode($response);
-                                    $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
-                                
-                                    
-                                    
-                                    $response = json_decode($response);
-                                
-                                
-                                    //Obtener la respuesta del servidor
-                                    $descripcion = $response->descripcion ?? $response->mensajeError ?? $response->error;
-
-                                    //Codigos de error del banco                                
-                                    if($descripcion == "Saldo insuficiente                "){
-                                        $descripcion = "Saldo insuficiente, porfavor contacte a un supervisor";
-                                    }
-                                
-                                
-                            }
-                            else{
-                                $descripcion="Sin Conexion con el banco";
-                                
-                            }
-                        }
-                        $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
-                        $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
-                        //registro en historico
-                        Vuelto::create([
-                            'fecha_hora' => date('Y-m-d H:i:s'),
-                            'id_factura' => $id_factura,
-                            'banco_cliente' => $this->obtener_banco($request->banco_destino),
-                            'cedula_cliente' => $cedula_cliente,
-                            'telefono_cliente' => $telefono_cliente,
-                            'estatus' => 'Error',
-                            'caja' => $caja,
-                            'sede' => $sede,
-                            'motivo_error' => $descripcion,
-                            'monto' => $request->monto,
-                            'montoPagado' => $montoPagado,
-                            'tasaVenta' => $tasa,
-                            'cedulaClienteFactura' => $cedulaClienteFactura,
-                            'nombreClienteFactura' => $nombreClienteFactura,
-                            'nombreCajeroFactura' => $nombreCajeroFactura,
-                            'totalFacturaBs' => $totalFactura,
-                            'totalFacturaDolar' => $totalFacturaDolar
-                        ]);
                     }
-                    return json_encode(['resultado' => 'error', 'error' => $error]);
+                    $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
+                    $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
+                    //registro en historico
+                    Vuelto::create([
+                        'fecha_hora' => date('Y-m-d H:i:s'),
+                        'id_factura' => $id_factura,
+                        'banco_cliente' => $this->obtener_banco($request->banco_destino),
+                        'cedula_cliente' => $cedula_cliente,
+                        'telefono_cliente' => $telefono_cliente,
+                        'estatus' => 'Error',
+                        'caja' => $caja,
+                        'sede' => $sede,
+                        'motivo_error' => $descripcion,
+                        'monto' => $request->monto,
+                        'montoPagado' => $montoPagado,
+                        'tasaVenta' => $tasa,
+                        'cedulaClienteFactura' => $cedulaClienteFactura,
+                        'nombreClienteFactura' => $nombreClienteFactura,
+                        'nombreCajeroFactura' => $nombreCajeroFactura,
+                        'totalFacturaBs' => $totalFactura,
+                        'totalFacturaDolar' => $totalFacturaDolar
+                    ]);
                 }
+                return json_encode(['resultado' => 'error', 'error' => $error]);
+            }
             
     }
 
@@ -755,9 +767,11 @@ class VueltoVDCController extends Controller
         
     }
 
-    private function validar_vuelto()
+    private function validar_vuelto($cedula_cliente, $caja, $numero_factura, $monto, $sede, $informacionFactura)
     {
         try {
+            $timeOutValidacion = 120; // 120 segundos => 2minutos
+
             $key = '6d0fa27ce7dbddfc';
             $vi = '260196cb0c40b50b';
 
@@ -773,19 +787,107 @@ class VueltoVDCController extends Controller
             $client = new GuzzleHttp;
             $response = $client->request(
                 'POST',
-                'https://cb.venezolano.com/rs/c2x',
-                ['timeout'=>120,'json' => $json]
+                'https://cb.venezolano.com/rs/getTxs',
+                ['timeout'=>$timeOutValidacion,'json' => $json]
             );
 
-            $original = $response;
             $bodyRes = $response->getBody()->getContents();
             $response = json_decode($bodyRes)->response;
-            
             $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
-            
             $response = json_decode($response);
-        } catch (\Throwable $exception) {
-            //throw $th;
+
+            $pagostLista = is_array($response->pagos) ? $response->pagos : [];
+            $vueltoExitoso = $this->buscarVuelto($pagostLista, $cedula_cliente, $caja, $numero_factura, $monto, $sede); //Validamos si el pago fue exitoso
+
+            if(!$vueltoExitoso) {
+                return ['resultado' => 'no_exitoso', 'referencia' => "El pago no se ha realizado exitosamente. Inténtalo de nuevo."];
+            }
+
+            //Registro en caja negra
+            Vuelto::create([
+                'fecha_hora' => date('Y-m-d H:i:s'),
+                'id_factura' => $informacionFactura['id_factura'],
+                'banco_cliente' => $this->obtener_banco($informacionFactura['banco_destino']),
+                'cedula_cliente' => $cedula_cliente,
+                'telefono_cliente' => $informacionFactura['telefono_cliente'],
+                'estatus' => 'Aprobado',
+                'confirmacion_banco' => $vueltoExitoso->ReferenciaP2C,
+                'caja' => $caja,
+                'sede' => $sede,
+                'monto' => $monto,
+                'montoPagado' => $informacionFactura['montoPagado'],
+                'tasaVenta' => $informacionFactura['tasa'],
+                'cedulaClienteFactura' => $informacionFactura['cedulaClienteFactura'],
+                'nombreClienteFactura' => $informacionFactura['nombreClienteFactura'],
+                'nombreCajeroFactura' => $informacionFactura['nombreCajeroFactura'],
+                'totalFacturaBs' => $informacionFactura['totalFacturaBs'],
+                'totalFacturaDolar' => $informacionFactura['totalFacturaDolar']
+                
+            ]);
+            
+            return ['resultado' => 'exito', 'referencia' => $vueltoExitoso->ReferenciaP2C];
+        } catch (GuzzleException $exception)
+        {
+            if($exception->getResponse() == null )
+            {
+                auditoriaPM::create([
+                    'paso' => "ERROR|VERIFICAR_PAGO",
+                    'informacion' => "Timeout",
+                    'caja' => $caja,
+                    'nro_factura' => $numero_factura."|$monto"
+                ]);
+            } else {
+                $response = $exception->getResponse()->getBody();
+                $contenido= $exception->getResponse()->getBody()->getContents();
+                $tamano= strlen($contenido);
+                $descripcion = '';
+
+                if($tamano > 0 && !str_contains($contenido, '<head>')) {
+                    $response = json_decode($response);
+                    $response = openssl_decrypt($response->response, 'AES-128-CBC', $key, 0, $vi);
+                    $response = json_decode($response);
+
+                    $descripcion = $response->descripcion ?? $response->mensajeError ?? $response->error;
+                } else {
+                    $descripcion="Sin Conexion con el banco";
+                }
+
+                auditoriaPM::create([
+                    'paso' => "ERROR|VERIFICAR_PAGO",
+                    'informacion' => $descripcion,
+                    'caja' => $caja,
+                    'nro_factura' => $numero_factura."|$monto"
+                ]);
+            }
+            return ['resultado' => 'error', 'referencia' => "Ocurrió un error al intentar validar el vuelto, valide con su supervisor."];
         }
+    }
+
+    private function buscarVuelto($pagos_lista, $cedula_cliente, $caja, $numero_factura, $monto, $sede)
+    {
+        $vueltoEncontrado = null;
+
+        foreach ($pagos_lista as $index => $pago)
+        {
+            if($vueltoEncontrado)
+                continue;
+
+            $concepto = explode('|', $pago->concepto);
+
+            if(count($concepto) < 2) {
+                continue;
+            }
+
+            $cajaPago = $concepto[0];
+            $facturaPago = $concepto[1];
+            $sedePago = $concepto[2];
+
+            if($cedula_cliente == $pago->rifDestino && $cajaPago == $caja && $facturaPago == $numero_factura && $pago->monto == $monto &&
+                $sedePago == $sede && $pago->estatus == 'Pagado') {
+                $vueltoEncontrado = $pago;
+            }
+        }
+
+        return $vueltoEncontrado;
     }
 }
