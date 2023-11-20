@@ -501,7 +501,6 @@ class VueltoVDCController extends Controller
                         $tasa = TasaVenta::where('moneda', 'Dolar')->first()->tasa;
                         $totalFacturaDolar=number_format($totalFactura/$tasa,2,'.','');
 
-
                         //registro en historico
                         Vuelto::create([
                             'fecha_hora' => date('Y-m-d H:i:s'),
@@ -758,6 +757,35 @@ class VueltoVDCController extends Controller
 
     private function validar_vuelto()
     {
-        
+        try {
+            $key = '6d0fa27ce7dbddfc';
+            $vi = '260196cb0c40b50b';
+
+            $json['hs'] = 'GFRyhmuM4waaJZlGSeg2NA==';
+
+            $json['dt']['inicio'] = date('d/m/Y');
+            $json['dt']['fin'] = date('d/m/Y');
+            $json['dt']['modalidadPago'] = 'C2X';
+            $json['dt'] = json_encode($json['dt']);
+            $json['dt'] = openssl_encrypt($json['dt'], 'AES-128-CBC', $key, 0, $vi);
+
+            // Enviar verificacion
+            $client = new GuzzleHttp;
+            $response = $client->request(
+                'POST',
+                'https://cb.venezolano.com/rs/c2x',
+                ['timeout'=>120,'json' => $json]
+            );
+
+            $original = $response;
+            $bodyRes = $response->getBody()->getContents();
+            $response = json_decode($bodyRes)->response;
+            
+            $response = openssl_decrypt($response, 'AES-128-CBC', $key, 0, $vi);
+            
+            $response = json_decode($response);
+        } catch (\Throwable $exception) {
+            //throw $th;
+        }
     }
 }
