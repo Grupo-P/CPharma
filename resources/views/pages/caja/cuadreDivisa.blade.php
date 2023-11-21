@@ -397,8 +397,6 @@
                                     procesandoVuelto = false;
                                     response = JSON.parse(response);
 
-                                    console.log(response.resultado);
-
                                     if (response.resultado == 'exito') {
                                         $('#countdownCaja').hide();
                                         $('.numero-referencia-container').html('Numero de referencia: ' + response.referencia);
@@ -408,9 +406,10 @@
                                         $('.btn-procesar-tpago').html('Procesado');
                                         return false;
                                     }
+                                    let mensaje = (response.error ? response.error:response.referencia);
                                     $('#countdownCaja').hide();
                                     $('#tpago-error-container').show();
-                                    $('#tpago-error-text').html(response.error);
+                                    $('#tpago-error-text').html(mensaje);
                                     $('#btn-procesar-pago').attr('disabled', false);
                                     $('.btn-procesar-tpago').html('Procesar');
 
