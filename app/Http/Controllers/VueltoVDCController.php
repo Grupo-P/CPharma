@@ -801,7 +801,7 @@ class VueltoVDCController extends Controller
             $vueltoExitoso = $this->buscarVuelto($pagostLista, $cedula_cliente, $caja, $numero_factura, $monto, $sede); //Validamos si el pago fue exitoso
 
             if(!$vueltoExitoso) {
-                return ['resultado' => 'no_exitoso', 'referencia' => "El pago no se ha realizado exitosamente. Inténtalo de nuevo."];
+                return ['resultado' => 'no_exitoso', 'referencia' => "El pago no se ha realizado. Inténtalo de nuevo."];
             }
 
             //Registro en caja negra
