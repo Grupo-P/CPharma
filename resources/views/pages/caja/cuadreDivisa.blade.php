@@ -7,96 +7,217 @@
 @section('estilosInternos')
     <style>
         form table thead + tbody tr td input {text-align:center;}
+
+        /* Container Vuelto */
+        .modal-dialog {
+            max-width: 70% !important;
+        }
+
+        .tpago-form-container {
+            display: flex !important;
+            align-items: stretch !important;
+            justify-content: space-between;
+        }
+
+        /* left */
+        .tpago-form-container .container-left {
+            width: 45% !important;
+            margin-right: 12px;
+            padding-right: 12px;
+            border-right: 1px solid #06af2b;
+        }
+
+        /* Right */
+        .tpago-form-container .container-right {
+            width: 55% !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tpago-form-container .container-right .info {
+            border-radius: 4px;
+            padding: 8px 12px;
+        }
+
+        /* Mensajes */
+        .tpago-form-container .container-right .mensajes {
+            margin-bottom: 20px;
+            text-align: center
+        }
+
+        .countdown .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 100% !important;
+            width: 160px;
+            height: 160px;
+            border: 2px solid #3030308e;
+            padding: 8px;
+            user-select: none;
+        }
+
+        #textoEstado {
+            font-weight: bold;
+            color: #303030e0;
+            font-size: 20px;
+        }
+
+        #countdown {
+            margin-top: 6px;
+            font-weight: bold;
+            font-size: 23px;
+            color: #f13131;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #countdown .minutos {
+            font-size: 15px;
+            margin-left: 6px;
+            color: #303030e0;
+        }
     </style>
 @endsection
 
 @section('scriptsCabecera')
     <script>
+        // Cuenta regresiva
+        const TIMEOUT_VUELTO = 1; // 1 minuto de espera
+        const TIMEOUT_VERIFICACION = 2; // 2 minutos de espera
+        const MINUTOS_CUENTA_REGRESIVA = (TIMEOUT_VUELTO+TIMEOUT_VERIFICACION);
+
+        var procesandoVuelto = false;
+        var now = null;
+        var targetTime = null;
+
+        function updateCountdown()
+        {
+            if(now == null || targetTime == null) {
+                return;
+            }
+
+            const currentTime = new Date().getTime();
+            const distance = targetTime - currentTime;
+
+            // Cálculos para obtener minutos y segundos restantes
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if(minutes <= TIMEOUT_VUELTO) {
+                document.getElementById("textoEstado").innerHTML = 'Verificando...'
+            }
+
+            // Mostrar la cuenta regresiva en el elemento con el id "countdown"
+            document.getElementById("countTiempo").innerHTML = minutes + ":" + (seconds < 10 ? '0':'') + seconds;
+
+            // Actualizar la cuenta regresiva cada segundo
+            if (distance > 0) {
+                setTimeout(updateCountdown, 1000);
+            } else {
+                document.getElementById("countTiempo").innerHTML = "0";
+            }
+        }
+
         /********************* FUNCIONES VUELTO PAGO MOVIL *********************/
         /* Funcion segun tipo de documento
             // para filtrar el campo documento
             */
+        function tipoDocumento(campo_tipo_doc,campo_documento)
+        {
+            var tipo_documento=$("#"+campo_tipo_doc).val();
 
-            function tipoDocumento(campo_tipo_doc,campo_documento)
-            {
-                var tipo_documento=$("#"+campo_tipo_doc).val();
+            switch(tipo_documento){
+                case "V":
+                    //cedula venezolana
+                    //filtrar documento
+                    stringWithNumbers = $("#"+campo_documento).val();
+                    onlyNumbers = stringWithNumbers.replace(/[^0-9]+/g, ""); // esto retorna '1234'
+                    $("#"+campo_documento).val(onlyNumbers);
+                    $("#"+campo_documento).attr( "minlength",'7' );
+                    $("#"+campo_documento).attr( "maxlength",'8' );
+                    $("#"+campo_documento).attr( "min",'1000000' );
+                    $("#"+campo_documento).attr( "max",'99999999' );
+                    $("#"+campo_documento).attr( "type",'number' );
+                    $("#"+campo_documento).val(onlyNumbers);
+                    $("#"+campo_documento).attr( "onkeypress",'return /[0-9]/i.test(event.key)' );
 
-                switch(tipo_documento){
-                    case "V":
-                        //cedula venezolana
-                        //filtrar documento
-                        stringWithNumbers = $("#"+campo_documento).val();
-                        onlyNumbers = stringWithNumbers.replace(/[^0-9]+/g, ""); // esto retorna '1234'
-                        $("#"+campo_documento).val(onlyNumbers);
-                        $("#"+campo_documento).attr( "minlength",'7' );
-                        $("#"+campo_documento).attr( "maxlength",'8' );
-                        $("#"+campo_documento).attr( "min",'1000000' );
-                        $("#"+campo_documento).attr( "max",'99999999' );
-                        $("#"+campo_documento).attr( "type",'number' );
-                        $("#"+campo_documento).val(onlyNumbers);
-                        $("#"+campo_documento).attr( "onkeypress",'return /[0-9]/i.test(event.key)' );
+                    campoDoc=document.getElementById("documento_cliente_pagoMovil")
+                    if (campoDoc.value.length > campoDoc.maxLength) campoDoc.value = campoDoc.value.slice(0, campoDoc.maxLength);
 
-                        campoDoc=document.getElementById("documento_cliente_pagoMovil")
-                        if (campoDoc.value.length > campoDoc.maxLength) campoDoc.value = campoDoc.value.slice(0, campoDoc.maxLength);
+                break;
+                case "J":
+                    //rif Juridico
+                    stringWithNumbers = $("#"+campo_documento).val();
+                    onlyNumbers = stringWithNumbers.replace(/[^0-9]/g, ""); // esto retorna '1234'
+                    $("#"+campo_documento).val(onlyNumbers);
+                    $("#"+campo_documento).attr( "minlength",'9' );
+                    $("#"+campo_documento).attr( "maxlength",'9' );
+                    $("#"+campo_documento).attr( "min",'' );
+                    $("#"+campo_documento).attr( "max",'' );
+                    $("#"+campo_documento).attr( "type",'text' );
 
-                    break;
-                    case "J":
-                        //rif Juridico
-                        stringWithNumbers = $("#"+campo_documento).val();
-                        onlyNumbers = stringWithNumbers.replace(/[^0-9]/g, ""); // esto retorna '1234'
-                        $("#"+campo_documento).val(onlyNumbers);
-                        $("#"+campo_documento).attr( "minlength",'9' );
-                        $("#"+campo_documento).attr( "maxlength",'9' );
-                        $("#"+campo_documento).attr( "min",'' );
-                        $("#"+campo_documento).attr( "max",'' );
-                        $("#"+campo_documento).attr( "type",'text' );
+                    $("#"+campo_documento).val(onlyNumbers);
+                    campoDoc=document.getElementById("documento_cliente_pagoMovil")
+                    if (campoDoc.value.length > campoDoc.maxLength) campoDoc.value = campoDoc.value.slice(0, campoDoc.maxLength);
+                break;
+                case "E":
+                    //cedula extranjera
+                    //filtrar documento
+                    stringWithNumbers = $("#"+campo_documento).val();
+                    onlyNumbers = stringWithNumbers.replace(/[^0-9]+/g, ""); // esto retorna '1234'
+                    $("#"+campo_documento).val(onlyNumbers);
+                    $("#"+campo_documento).attr( "minlength",'6' );
+                    $("#"+campo_documento).attr( "maxlength",'15' );
+                    $("#"+campo_documento).attr( "min",'100000' );
+                    $("#"+campo_documento).attr( "max",'999999999999999' );
+                    $("#"+campo_documento).attr( "type",'number' );
 
-                        $("#"+campo_documento).val(onlyNumbers);
-                        campoDoc=document.getElementById("documento_cliente_pagoMovil")
-                        if (campoDoc.value.length > campoDoc.maxLength) campoDoc.value = campoDoc.value.slice(0, campoDoc.maxLength);
-                    break;
-                    case "E":
-                        //cedula extranjera
-                        //filtrar documento
-                        stringWithNumbers = $("#"+campo_documento).val();
-                        onlyNumbers = stringWithNumbers.replace(/[^0-9]+/g, ""); // esto retorna '1234'
-                        $("#"+campo_documento).val(onlyNumbers);
-                        $("#"+campo_documento).attr( "minlength",'6' );
-                        $("#"+campo_documento).attr( "maxlength",'15' );
-                        $("#"+campo_documento).attr( "min",'100000' );
-                        $("#"+campo_documento).attr( "max",'999999999999999' );
-                        $("#"+campo_documento).attr( "type",'number' );
-
-                        $("#"+campo_documento).val(onlyNumbers);
-                    break;
-                }
+                    $("#"+campo_documento).val(onlyNumbers);
+                break;
             }
-            function copiarTexto(idCampo){
+        }
+        function copiarTexto(idCampo){
 
-                var texto = $("#"+idCampo).val();
+            var texto = $("#"+idCampo).val();
 
-               // Crea un campo de texto "oculto"
-                var aux = document.createElement("input");
+            // Crea un campo de texto "oculto"
+            var aux = document.createElement("input");
 
-                // Asigna el contenido del elemento especificado al valor del campo
-                aux.setAttribute("value", texto);
+            // Asigna el contenido del elemento especificado al valor del campo
+            aux.setAttribute("value", texto);
 
-                // Añade el campo a la página
-                document.body.appendChild(aux);
+            // Añade el campo a la página
+            document.body.appendChild(aux);
 
-                // Selecciona el contenido del campo
-                aux.select();
+            // Selecciona el contenido del campo
+            aux.select();
 
-                // Copia el texto seleccionado
-                document.execCommand("copy");
+            // Copia el texto seleccionado
+            document.execCommand("copy");
 
-                // Elimina el campo de la página
-                document.body.removeChild(aux);
-            }
-        $(document).ready(function () {
+            // Elimina el campo de la página
+            document.body.removeChild(aux);
+        }
 
+        $(document).ready(function () 
+        {
+            // Verficar al seleccionar cerrar modal
+            let botonesCerrar = document.querySelectorAll('.btn-cerrar');
 
-
+            botonesCerrar.forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    if(procesandoVuelto) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        return;
+                    }
+                });
+            });
             /*################# Verificador de pagos ############*/
             /* carga de pagos ultimos 30 minutos de zelle binance etc*/
             $.ajax({
@@ -132,9 +253,14 @@
             /* Ocultar mensaje de exito al cargar*/
             $('.tpago-existoso-container').hide();
             $('#tpago-error-container').hide();
+            $('#countdownCaja').hide();
 
             /*Actualizar la factura a la cual se le va a hacer el pago movil*/
             $("#actualizarPagoMovil").click(function (){
+                if(procesandoVuelto) {
+                    return;
+                }
+
                 $('#btn-procesar-pago').attr('disabled', false);
                 caja = $('#caja_pago_movil').val();
                 $.ajax({
@@ -227,6 +353,7 @@
                 $('.tpago-existoso-container').hide();
                 $('#tpago-error-container').hide();
                 $('#btn-procesar-pago').attr('disabled', true);
+                $('#countdownCaja').hide();
 
                 numero_factura = $('#numero_factura_pago_movil').val();
                 caja = $('#caja_pago_movil').val();
@@ -252,18 +379,28 @@
                     success: function (response) {
 
                         if (response == 'exito') {
+                            procesandoVuelto = true;
                             data = $('#vueltoVDC').serialize();
+                            
+                            // Iniciar conteo
+                            now = new Date().getTime();
+                            targetTime = now + (MINUTOS_CUENTA_REGRESIVA * 60 * 1000);
+                            updateCountdown();
+
+                            $('#countdownCaja').show();
 
                             $.ajax({
-                                type: 'GET',
+                                type: 'POST',
                                 url: '/vuelto/vdc',
                                 data: data,
                                 success: function (response) {
+                                    procesandoVuelto = false;
                                     response = JSON.parse(response);
 
                                     console.log(response.resultado);
 
                                     if (response.resultado == 'exito') {
+                                        $('#countdownCaja').hide();
                                         $('.numero-referencia-container').html('Numero de referencia: ' + response.referencia);
                                         $('.tpago-existoso-container').show();
                                         $('.tpago-form-container').hide();
@@ -271,6 +408,7 @@
                                         $('.btn-procesar-tpago').html('Procesado');
                                         return false;
                                     }
+                                    $('#countdownCaja').hide();
                                     $('#tpago-error-container').show();
                                     $('#tpago-error-text').html(response.error);
                                     $('#btn-procesar-pago').attr('disabled', false);
@@ -279,9 +417,16 @@
                                 },
                                 error: function (error) {
                                     console.log(error);
+                                    procesandoVuelto = false;
+                                    $('#countdownCaja').hide();
+                                    $('#tpago-error-container').show();
+                                    $('#tpago-error-text').html('Ha ocurrido un error inesperado. Consulta con soporte');
+                                    $('#btn-procesar-pago').attr('disabled', false);
+                                    $('.btn-procesar-tpago').html('Procesar');
                                 }
                             })
                         } else {
+                            $('#countdownCaja').hide();
                             $('#btn-procesar-pago').attr('disabled', false);
                             $('.btn-procesar-tpago').html('Procesar');
                             $('#tpago-error-container').show();
@@ -310,6 +455,7 @@
             });
 
             $('#darVuelto').on('hide.bs.modal', function (event) {
+                $('#countdownCaja').hide();
                 $('.tpago-existoso-container').hide();
                 $('#tpago-error-container').hide();
                 $('.tpago-form-container').show();
@@ -1280,176 +1426,194 @@
         <a href="#Inicio" title="Volver al inicio" class="btn btn-primary">Volver al inicio</a>
     </div>
 
-
-
     <!-- Modal Vuelto Pago Movil -->
     @if($montoMaximo>0)
-        <div class="modal fade" id="darVuelto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="darVuelto" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form id="vueltoVDC" action="/vuelto/vdc" method="GET">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Dar vuelto</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <button type="button" class="close btn-cerrar" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body" id="darVueltoBody">
                     <!-- Cuerpo del modal -->
-                    <!-- Mensaje Transaccion exitosa Pago Movil -->
-                    <div class="tpago-existoso-container">
-                        <center>
-                            <h4>
-                                <i class="fa fa-check text-success"></i>
-                                <br>
-                                ¡Transacción exitosa!
-                            </h4>
-
-                            <div class="numero-referencia-container"></div>
-                        </center>
-                    </div>
-                    
                     <div class="tpago-form-container">
+                        {{-- Container left --}}
+                        <div class="container-left">
+                            <!--datos factura-->
+                            <input type="hidden" id="numero_factura_pago_movil" name="numero_factura" value="{{ $numero_factura }}">
+                            <input type="hidden" id="caja_pago_movil" name="caja" value="{{ $caja }}">
+                            <input type="hidden" id="total_pagado_input" name="total_pagado" value="">
+                            @csrf
 
-                        <!--datos factura-->
-                        <input type="hidden" id="numero_factura_pago_movil" name="numero_factura" value="{{ $numero_factura }}">
-                        <input type="hidden" id="caja_pago_movil" name="caja" value="{{ $caja }}">
-                        <input type="hidden" id="total_pagado_input" name="total_pagado" value="">
-                        @csrf
+                            <!--Datos de la factura pago movil-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-outline-success btn-sm" id="actualizarPagoMovil"><i class="fa fa-sync">&nbsp;Actualizar</i></button>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
 
-                        <!--Datos de la factura pago movil-->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
+                                        <label for="total_factura" id="total_factura_PM">Total Factura: Bs. {{ $total_factura }}</label>
 
-                                    <button type="button" class="btn btn-outline-success btn-sm" id="actualizarPagoMovil"><i class="fa fa-sync">&nbsp;Actualizar</i></button>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="numero_factura" id="numero_factura_PM">Número factura : {{ $numero_factura }}</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="total_pagado" id="total_pagado_PM">Total Pagado : {{ $total_factura_pagado }}</label>
+
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="cliente" id="cliente_PM">Cliente : {{ $cliente }}</label>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Telefono de pago movil-->
+                            <div class="form-group">
+                                <label for="telefono_cliente">Teléfono celular del cliente</label>
+                                <input type="text"
+                                    id="telefono_PM"
+                                    name="telefono_cliente"
+                                    class="form-control" value="{{ $telefono }}"
+                                    onkeypress="return /[0-9]/i.test(event.key)"
+                                    minlength="11"
+                                    maxlength="11"
+                                    placeholder="04240055854"
+                                    required="required"
+                                    >
+
+                            </div>
+
+                            <!--bancos-->
+                            <div class="form-group">
+                                <label for="banco_destino">Banco de destino</label>
+                                <select name="banco_destino" id="banco_destino" class="form-control" required="required">
+                                    <option value=""></option>
+                                    @foreach($bancos as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!--Cedula de pago movil-->
+                            <div class="form-group">
+                                <label for="cedula_cliente">Cédula del cliente</label>
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <select name="tipo_cliente" required class="form-control" id="tipo_documento_pagoMovil"
+                                        onchange="tipoDocumento('tipo_documento_pagoMovil','documento_cliente_pagoMovil')"                   >
+                                            <option value="V">V</option>
+                                            <option value="E">E</option>
+                                            <option value="J">J</option>
+                                        </select>
+                                    </div>
+
+                                    <input type="text" class="form-control" value="{{ $cedula_cliente }}"
+                                        id="documento_cliente_pagoMovil"
+                                        name="cedula_cliente"
+                                        onkeypress="return /[0-9]/i.test(event.key)"
+                                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        minlength="7"
+                                        maxlength="8"
+                                        min="1000000"
+                                        max="99999999"
+                                        required="required"
+                                    >
 
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="form-group">
 
-                                    <label for="total_factura" id="total_factura_PM">Total Factura: Bs. {{ $total_factura }}</label>
-
-                                </div>
-                            </div>
-
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="numero_factura" id="numero_factura_PM">Número factura : {{ $numero_factura }}</label>
-
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="total_pagado" id="total_pagado_PM">Total Pagado : {{ $total_factura_pagado }}</label>
-
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="cliente" id="cliente_PM">Cliente : {{ $cliente }}</label>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--Telefono de pago movil-->
-                        <div class="form-group">
-                            <label for="telefono_cliente">Teléfono celular del cliente</label>
-                            <input type="text"
-                                id="telefono_PM"
-                                name="telefono_cliente"
-                                class="form-control" value="{{ $telefono }}"
-                                onkeypress="return /[0-9]/i.test(event.key)"
-                                minlength="11"
-                                maxlength="11"
-                                placeholder="04240055854"
+                            <!--Monto de pago movil-->
+                            <div class="form-group">
+                                <label for="monto">Monto del vuelto</label>
+                                <input class="form-control"
+                                id="monto_PM"
+                                type="number"
+                                onkeypress="return /[0-9,.]/i.test(event.key)"
+                                name="monto"
+                                value="{{ $monto }}"
+                                step="0.01"
+                                min="0.01"
+                                max="{{ $monto }}"
                                 required="required"
                                 >
-
-                        </div>
-
-                        <!--bancos-->
-                        <div class="form-group">
-                            <label for="banco_destino">Banco de destino</label>
-                            <select name="banco_destino" id="banco_destino" class="form-control" required="required">
-                                <option value=""></option>
-                                @foreach($bancos as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!--Cedula de pago movil-->
-                        <div class="form-group">
-                            <label for="cedula_cliente">Cédula del cliente</label>
-
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <select name="tipo_cliente" required class="form-control" id="tipo_documento_pagoMovil"
-                                    onchange="tipoDocumento('tipo_documento_pagoMovil','documento_cliente_pagoMovil')"                   >
-                                        <option value="V">V</option>
-                                        <option value="E">E</option>
-                                        <option value="J">J</option>
-                                    </select>
-                                </div>
-
-                                <input type="text" class="form-control" value="{{ $cedula_cliente }}"
-                                    id="documento_cliente_pagoMovil"
-                                    name="cedula_cliente"
-                                    onkeypress="return /[0-9]/i.test(event.key)"
-                                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                                    minlength="7"
-                                    maxlength="8"
-                                    min="1000000"
-                                    max="99999999"
-                                    required="required"
-                                >
-
                             </div>
                         </div>
 
-                        <!--Monto de pago movil-->
-                        <div class="form-group">
-                            <label for="monto">Monto del vuelto</label>
-                            <input class="form-control"
-                            id="monto_PM"
-                            type="number"
-                            onkeypress="return /[0-9,.]/i.test(event.key)"
-                            name="monto"
-                            value="{{ $monto }}"
-                            step="0.01"
-                            min="0.01"
-                            max="{{ $monto }}"
-                            required="required"
-                            >
+                        {{-- Container right --}}
+                        {{-- Informacion de pago Movil --}}
+                        <div class="container-right">
+                           {{-- Info --}}
+                           <div class="info" style="background-color:lightgray;">
+                                <span><strong>Requisitos para hacer un pago movil:</strong></span><br>
+                                <div>1.-Sólo un pago movil por cliente en el Día</strong></div>
+                                <div>2.-Sólo un pago movil por factura en el Día</strong></div>
+                                <div>3.-El monto del pago movil debe ser<strong> menor a Bs. {{$TasaDolar*$montoMaximo}} ({{$montoMaximo}}$)</strong></div>
+                                <div>4.-La factura se debe haber emitido en<strong> menos de {{$minutosMaximos}} minutos</strong></div>
+                           </div>
+
+                           {{-- Mensaje --}}
+                           <div class="mensajes">
+                                {{-- Cuenta regresiva --}}
+                                <div class="countdown" id="countdownCaja">
+                                    <div class="container">
+                                        <span id="textoEstado">Ejecutando</span>
+                                        <div id="countdown"><span id="countTiempo"></span> <span class="minutos">minutos</span></div>
+                                    </div>
+                                </div>
+
+                                <!-- Mensaje Transaccion exitosa Pago Movil -->
+                                <div class="tpago-existoso-container">
+                                    <center>
+                                        <h4>
+                                            <i class="fa fa-check text-success"></i>
+                                            <br>
+                                            ¡Transacción exitosa!
+                                        </h4>
+
+                                        <div class="numero-referencia-container"></div>
+                                    </center>
+                                </div>
+
+                                {{-- Mensaje de error --}}
+                                <div class="alert alert-danger" id="tpago-error-container">
+                                    <center>
+                                        <h4 >
+                                            <i class="fa fa-exclamation-triangle text-danger"></i>
+                                            <br>
+                                            ¡Error en la transaccion!<br>
+                                        </h4>
+
+                                        <div><span id="tpago-error-text"></span></div>
+            
+                                        <div class="numero-referencia-container"></div>
+                                    </center>
+                                </div>
+                           </div>
                         </div>
-                        <div class="alert alert-danger" id="tpago-error-container">
-                            <center>
-                                <h4 >
-                                    <i class="fa fa-exclamation-triangle text-danger"></i>
-                                    <br>
-                                    ¡Error en la transaccion!<br>
-                                    <span id="tpago-error-text"></span>
-                                </h4>
-    
-                                <div class="numero-referencia-container"></div>
-                            </center>
-                        </div>
-                        <ul style="background-color:lightgray;border-radius:25px;">
-                            <span style="text-align:center;"><strong>Requisitos para hacer un pago movil:</strong></span><br>
-                            <li>1.-Sólo un pago movil por cliente en el Día</strong></li>
-                            <li>2.-Sólo un pago movil por factura en el Día</strong></li>
-                            <li>3.-El monto del pago movil debe ser<strong> menor a Bs. {{$TasaDolar*$montoMaximo}} ({{$montoMaximo}}$)</strong></li>
-                            <li>4.-La factura se debe haber emitido en<strong> menos de {{$minutosMaximos}} minutos</strong></li>
-                        </ul>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <!--Procesar pago movil y boton cerrar modal-->
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit"  class="btn btn-primary btn-procesar-tpago" id="btn-procesar-pago">Procesar</button>
+                    <button type="button" class="btn btn-secondary btn-cerrar" data-dismiss="modal">Cerrar</button>
+                    <button type="submit"  class="btn btn-success btn-procesar-tpago" id="btn-procesar-pago">Procesar</button>
                 </div>
                 </form>
             </div>

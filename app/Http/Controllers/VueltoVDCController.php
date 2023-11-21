@@ -597,7 +597,8 @@ class VueltoVDCController extends Controller
                         'totalFacturaDolar' => $totalFacturaDolar
                     ]);
                 }
-                return json_encode(['resultado' => 'error', 'error' => $error]);
+
+                return json_encode(['resultado' => 'error', 'error' => $descripcion]);
             }
             
     }
