@@ -163,7 +163,7 @@ class VueltoVDCController extends Controller
         $id_factura= $row["idFactura"];
         $fecha=date("Y-m-d");
         
-        $vuelto = Vuelto::fecha($fecha, $fecha)->where('id_factura', $id_factura)->get();
+        $vuelto = Vuelto::fecha($fecha, $fecha)->where('id_factura', $id_factura)->where('estatus','=','Aprobado')->get();
 
         
         if ($vuelto->count()>0){
@@ -201,7 +201,7 @@ class VueltoVDCController extends Controller
         $cedula= $request->cedula_cliente;
         $fecha=date("Y-m-d");
             
-        $vuelto = Vuelto::fecha($fecha, $fecha)->where('cedula_cliente', $cedula)->get();
+        $vuelto = Vuelto::fecha($fecha, $fecha)->where('cedula_cliente', $cedula)->where('estatus','=','Aprobado')->get();
 
         
         if ($vuelto->count()>0){
