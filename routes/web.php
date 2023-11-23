@@ -563,6 +563,19 @@ Route::resource('efectivoGP', 'ContPagoEfectivoGPController');
 Route::get('/efectivoGP/soporte/{id}', 'ContPagoEfectivoGPController@soporte');
 Route::get('/contabilidad/diferidosGP', 'ContPagoEfectivoGPController@diferidos')->name('contabilidad.diferidosGP');
 
+// FLF
+Route::post('/efectivoFLF/validar', 'ContPagoEfectivoFLFController@validar');
+Route::resource('efectivoFLF', 'ContPagoEfectivoFLFController');
+Route::get('/efectivoFLF/soporte/{id}', 'ContPagoEfectivoFLFController@soporte');
+Route::get('/contabilidad/diferidosFLF', 'ContPagoEfectivoFLFController@diferidos')->name('contabilidad.diferidosFLF');
+
+// PAG
+Route::post('/efectivoPAG/validar', 'ContPagoEfectivoPAGController@validar');
+Route::resource('efectivoPAG', 'ContPagoEfectivoPAGController');
+Route::get('/efectivoPAG/soporte/{id}', 'ContPagoEfectivoPAGController@soporte');
+Route::get('/contabilidad/diferidosPAG', 'ContPagoEfectivoPAGController@diferidos')->name('contabilidad.diferidosPAG');
+
+// FEC
 Route::post('/efectivoFEC/validar', 'ContPagoEfectivoFECController@validar');
 Route::resource('efectivoFEC', 'ContPagoEfectivoFECController');
 Route::get('/efectivoFEC/soporte/{id}', 'ContPagoEfectivoFECController@soporte');
