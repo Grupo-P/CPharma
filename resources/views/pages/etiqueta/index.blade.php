@@ -535,64 +535,65 @@
 		<button class="btn btn-primary btn-lg btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     	ETIQUETAS PROMOCION (Grande)
   	</button>
-	<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-		<table class="dropdown-item table table-striped table-borderless col-12 sortable" style="width: 100%;">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col" colspan="6" style="text-align: center;">GENERAR ETIQUETAS DE PROMOCION</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td style="width:16%;" align="center">
-								<form action="{{ url('/Generar_Etiqueta_Promocion') }}" method="PRE" style="display: inline;" target="_blank">
-							
-								<input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
-								<input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
+  	<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+			<table class="dropdown-item table table-striped table-borderless col-12 sortable" style="width: 100%;">
+		  	<thead class="thead-dark">
+			    <tr>
+			      	<th scope="col" colspan="6" style="text-align: center;">GENERAR ETIQUETAS DE PROMOCION (Grande)</th>
+			    </tr>
+				</thead>
+				<tbody>
+			  	<tr>
+		        <td style="width:16%;" align="center">
+							<form action="{{ url('/Generar_Etiqueta_Promocion_G') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
+						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
 
-								<button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias ($)</button>
-								</form>
-					</td>
-
-					<td style="width:16%;" align="center">	
-								<form action="{{ url('/Generar_Etiqueta_Promocion') }}" method="PRE" style="display: inline;" target="_blank">
-							
-								<input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
-								<input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
-
-								<button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (NO $)</button>
-								</form>
-					</td>
-
-					<td style="width:16%;" align="center">	
-								<form action="{{ url('/Generar_Etiqueta_Promocion') }}" method="PRE" style="display: inline;" target="_blank">
-							
-								<input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
-								<input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
-								
-								<button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables ($)</button>
-								</form>
-					</td>
-
-					<td style="width:16%;" align="center">	
-							<form action="{{ url('/Generar_Etiqueta_Promocion') }}" method="PRE" style="display: inline;" target="_blank">
-							
-							<input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
-							<input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
-							
-							<button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (NO $)</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias ($)</button>
 							</form>
-					</td>
+			      </td>
 
-					<td style="width:16%;" align="center">
-							<form action="{{ url('/Generar_Etiquetas_Estrella') }}" style="display: inline;" target="_blank">
+			      <td style="width:16%;" align="center">	
+							<form action="{{ url('/Generar_Etiqueta_Promocion_G') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="OBLIGATORIO ETIQUETAR">
+						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
 
-							<button type="submit" role="button" class="btn btn-outline-info btn-sm">Artículos estrella</button>
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-success btn-sm" value="SI">Obligatorias (NO $)</button>
 							</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+			      </td>
+
+		        <td style="width:16%;" align="center">	
+							<form action="{{ url('/Generar_Etiqueta_Promocion_G') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+						    <input id="tipo" name="tipo" type="hidden" value="DOLARIZADO">
+						    
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables ($)</button>
+							</form>
+			      </td>
+
+			      <td style="width:16%;" align="center">	
+							<form action="{{ url('/Generar_Etiqueta_Promocion_G') }}" method="PRE" style="display: inline;" target="_blank">
+						  
+						    <input id="clasificacion" name="clasificacion" type="hidden" value="ETIQUETABLE">
+						    <input id="tipo" name="tipo" type="hidden" value="NO DOLARIZADO">
+						    
+						    <button type="submit" name="Generar" role="button" class="btn btn-outline-info btn-sm" value="SI">Etiquetables (NO $)</button>
+							</form>
+			      </td>
+
+                  <td style="width:16%;" align="center">
+                        <form action="{{ url('/Generar_Etiquetas_Estrella_G') }}" style="display: inline;" target="_blank">
+
+                            <button type="submit" role="button" class="btn btn-outline-info btn-sm">Artículos estrella</button>
+                        </form>
+                  </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<br/><br/>
 	{{-- Ofertero --}}
