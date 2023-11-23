@@ -101,9 +101,48 @@
             $fec = isset($fec[0]->created_at) ? $fec[0]->created_at : null;
 
             if ($pago <= $fec) {
-                $pago = $fsm;
+                $pago = $fec;
             }
 
+            // FLF
+            $flf = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FLF
+                WHERE
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $flf = isset($flf[0]->created_at) ? $flf[0]->created_at : null;
+
+            if ($pago <= $flf) {
+                $pago = $flf;
+            }
+
+            // PAG
+            $pag = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_PAG
+                WHERE
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $pag = isset($pag[0]->created_at) ? $pag[0]->created_at : null;
+
+            if ($pago <= $pag) {
+                $pago = $pag;
+            }
+
+            // Bancario
             $bancario = DB::select("
                 SELECT
                     DATE(created_at) AS created_at
@@ -237,6 +276,45 @@
                 $pago = $fec;
             }
 
+            // FLF
+            $flf = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_FLF
+                WHERE
+                    id_proveedor = '{$id_proveedor}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $flf = isset($flf[0]->created_at) ? $flf[0]->created_at : null;
+
+            if ($pago <= $flf) {
+                $pago = $flf;
+            }
+
+            // PAG
+            $pag = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_PAG
+                WHERE
+                    id_proveedor = '{$id_proveedor}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $pag = isset($pag[0]->created_at) ? $pag[0]->created_at : null;
+
+            if ($pago <= $pag) {
+                $pago = $pag;
+            }
+
+            // Bancario
             $bancario = DB::select("
                 SELECT
                     DATE(created_at) AS created_at
