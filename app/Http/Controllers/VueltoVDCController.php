@@ -800,6 +800,13 @@ class VueltoVDCController extends Controller
             $pagostLista = is_array($response->pagos) ? $response->pagos : [];
             $vueltoExitoso = $this->buscarVuelto($pagostLista, $cedula_cliente, $caja, $numero_factura, $monto, $sede); //Validamos si el pago fue exitoso
 
+            auditoriaPM::create([
+                'paso' => "5",
+                'informacion' => ("Vuelto: " . ($vueltoExitoso ? 'exitoso':'fallido')),
+                'caja' => $caja,
+                'nro_factura' => $numero_factura."|$monto"
+            ]);
+
             if(!$vueltoExitoso) {
                 return ['resultado' => 'no_exitoso', 'referencia' => "El pago no se ha realizado. Inténtalo de nuevo."];
             }
