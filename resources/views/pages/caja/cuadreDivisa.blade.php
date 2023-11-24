@@ -390,7 +390,7 @@
                             $('#countdownCaja').show();
 
                             $.ajax({
-                                type: 'POST',
+                                type: 'GET',
                                 url: '/vuelto/vdc',
                                 data: data,
                                 success: function (response) {
@@ -1724,8 +1724,6 @@
             type: "POST",
             success: function(data) {
               var respuesta = JSON.parse(data);
-
-              console.log(respuesta);
 
              if(respuesta['NombreCaja']!=null){
                 var nombreCaja = respuesta['NombreCaja'];

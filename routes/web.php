@@ -33,7 +33,7 @@ Route::get('/vuelto/vdc/test', 'VueltoVDCController@test');
 Route::get('/vuelto/vdc/validar', 'VueltoVDCController@validar');
 Route::get('/vuelto/vdc/info', 'VueltoVDCController@info');
 Route::get('/vuelto/vdc/actualizar', 'VueltoVDCController@actualizar');
-Route::post('/vuelto/vdc', 'VueltoVDCController@procesar');
+Route::get('/vuelto/vdc', 'VueltoVDCController@procesar');
 
 // Route::get('/vuelto/mercantil/validar', 'VueltoMercantilController@validar');
 // Route::get('/vuelto/mercantil/info', 'VueltoMercantilController@info');
