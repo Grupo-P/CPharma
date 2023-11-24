@@ -1601,8 +1601,6 @@
                                         </h4>
 
                                         <div><span id="tpago-error-text"></span></div>
-            
-                                        <div class="numero-referencia-container"></div>
                                     </center>
                                 </div>
                            </div>
