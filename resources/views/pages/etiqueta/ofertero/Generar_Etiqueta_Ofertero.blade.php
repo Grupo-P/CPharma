@@ -274,14 +274,14 @@
   /* Antes */
   .anaquel .precios .precio.antes {
     margin-right: 4px !important;
-    font-size: 14px !important;
-    line-height: 14px !important;
+    font-size: 28px !important;
+    line-height: 28px !important;
   }
 
   .piscina .precios .precio.antes {
     margin-right: 10px !important;
-    font-size: 28px !important;
-    line-height: 26px !important;
+    font-size: 30px !important;
+    line-height: 30px !important;
   }
 
   .precios .precio.antes {
