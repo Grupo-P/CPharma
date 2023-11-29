@@ -104,10 +104,11 @@ class ReportesController extends Controller
                     INNER JOIN InvArticulo ON InvCodigoBarra.InvArticuloId = InvArticulo.Id
                     INNER JOIN VenFacturaDetalle ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
                     INNER JOIN VenFactura ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+                    LEFT JOIN VenDevolucion ON VenDevolucion.VenFacturaId = VenFactura.Id
                     WHERE 
-                        InvCodigoBarra.CodigoBarra = '".($codigos['barra'] ?? $codigos)."' AND
+                         InvCodigoBarra.CodigoBarra = '".($codigos['barra'] ?? $codigos)."' AND
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
-                        VenFactura.estadoFactura = 2
+                        VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
                     GROUP BY 
                         VenFactura.Auditoria_Usuario, InvArticulo.Descripcion
                 ";

@@ -16,7 +16,6 @@
 	<script>
 		$(document).ready(function() {
 			$('#tablaCajeros').DataTable({
-				//Ordenado DataTable
                 order: [[2, 'desc']],
 				paging: false,
         		searching: false,
@@ -148,8 +147,8 @@
 						<tr>
 							<th>Nro</th>
 							<th>Cajero</th>
-							<th>Cantidad</th>
-							<th>Monto (Bsf)</th>
+							<th>Unidades (Total)</th>
+							<th>Monto total facturas Bs. (Sin IVA)</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -175,7 +174,8 @@
 									</form>
 								</td>
 								<td class="font-weight-bold">{{ $sumasTotales['cantidad'] }}</td>
-								<td>Bsf. {{ helper_formatoPrecio($sumasTotales['monto']) }}</td>							</tr>
+								<td>{{ helper_formatoPrecio($sumasTotales['monto']) }}</td>
+							</tr>
 						@endforeach
 					</tbody>
 				</table>
@@ -206,7 +206,7 @@
 
 		function helper_formatoPrecio($numero)
 		{
-			return number_format($numero, 2, ',', '.');
+			return number_format($numero, 2, '.', ',');
 		}
     ?>
 @endsection
