@@ -284,6 +284,10 @@ Route::view('/reporte51', 'pages.reporte.reporte51');
 
 Route::view('/reporte52', 'pages.reporte.reporte52');
 
+Route::view('/reporte53', 'pages.reporte.reporte53');
+
+Route::post('/reportes', 'Reportes\ReportesController@excel')->name('reporte.generar');
+
 Route::get('/seccion1', function() {
     return view('pages.reporte.seccion1');
 });
