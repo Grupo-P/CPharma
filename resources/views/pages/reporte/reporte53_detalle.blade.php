@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-  Reporte | Ventas concursos
+  Reporte
 @endsection
 
 @section('scriptsHead')
@@ -138,7 +138,7 @@
 		<div class="mt-4 px-4">
 			{{-- Titulo --}}
 			<div>
-				<h2 class="h2">Lista de cajeros</h2>
+				<h3 class="h3 text-uppercase font-weight-bold">Cajero: {{ $cajero }}</h3>
 			</div>
 
 			{{-- Tabla --}}
@@ -147,35 +147,19 @@
 					<thead class="thead-dark">
 						<tr>
 							<th>Nro</th>
-							<th>Cajero</th>
+							<th>Artículo</th>
 							<th>Cantidad</th>
 							<th>Monto (Bsf)</th>
 						</tr>
 					</thead>
 					<tbody>
-						@php
-							$conteoFilas = 0;
-						@endphp
-						@foreach ($datos_concurso as $cajero => $articulos)
-							@php
-								$conteoFilas++;
-								$sumasTotales = sumarCantidadesMonto($articulos);
-							@endphp
+						@foreach ($cajeroInfo as $index => $articulo)
 							<tr>
-								<th>{{ $conteoFilas }}</th>
-								<td class="font-weight-bold text-uppercase">
-									<form action="{{ route('reporte53.detalle') }}" method="POST">
-										@csrf
-										<input type="hidden" name="cajero" value="{{ $cajero }}">
-										<input type="hidden" name="inicio" value="{{ $fechaInicio }}">
-										<input type="hidden" name="limite" value="{{ $fechaLimite }}">
-										<input type="hidden" name="codigos" value="{{ $codigos }}">
-										<input type="hidden" name="sede" value="{{ $sede }}">
-										<button class="btn btn-light text-primary font-weight-bold cajeroLink">{{ $cajero }}</button>
-									</form>
-								</td>
-								<td class="font-weight-bold">{{ $sumasTotales['cantidad'] }}</td>
-								<td>Bsf. {{ helper_formatoPrecio($sumasTotales['monto']) }}</td>							</tr>
+								<th>{{ $index+1 }}</th>
+								<td class="text-uppercase">{!! $articulo['articulo'] !!}</td>
+								<td class="font-weight-bold">{{ $articulo['cantidad'] }}</td>
+								<td>Bsf. {{ helper_formatoPrecio($articulo['monto']) }}</td>
+							</tr>
 						@endforeach
 					</tbody>
 				</table>
@@ -188,26 +172,12 @@
         $IntervalCarga = $InicioCarga->diff($FinCarga);
         echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
 
-		function sumarCantidadesMonto($lista_articulos)
-		{
-			$cantidades = 0;
-			$monto = 0;
-
-			foreach ($lista_articulos as $index => $articulo) {
-				$cantidades+= intVal($articulo['cantidad']);
-				$monto+= floatVal($articulo['monto']);
-			}
-			
-			return [
-				'cantidad' => $cantidades,
-				'monto' => $monto
-			];
-		}
 
 		function helper_formatoPrecio($numero)
 		{
 			return number_format($numero, 2, ',', '.');
 		}
+
     ?>
 @endsection
 

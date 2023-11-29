@@ -50,14 +50,36 @@ class ReportesController extends Controller
             return redirect()->back()->withErrors(['excel_file' => $error])->withInput();
         }
 
-        $datos_concurso = $this->obtenerVentas($this->obtener_conexionSmart(), $listaCodigos, $fechaInicio, $fechaLimite);
+        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $listaCodigos, $fechaInicio, $fechaLimite);
 
         $fechaInicio = new DateTime($fechaInicio);
         $fechaInicio = $fechaInicio->format('d/m/Y');
 
         $fechaLimite = new DateTime($fechaLimite);
         $fechaLimite = $fechaLimite->format('d/m/Y');
-        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'fechaInicio', 'fechaLimite'));
+
+        $datos_concurso = $registrosVentas['registros'];
+        $codigos = implode(',', $registrosVentas['codigos']);
+
+        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'fechaInicio', 'fechaLimite', 'sede'));
+    }
+
+    public function detalle(Request $request)
+    {
+        $inicio = str_replace('/', '-', $request->input('inicio'));
+        $limite = str_replace('/', '-', $request->input('limite'));
+
+        $cajero = $request->input('cajero');
+        $fechaInicio = $request->input('inicio');
+        $fechaLimite = $request->input('limite');
+        $codigosLista = explode(',', $request->input('codigos'));
+        $sede = $request->input('sede');
+
+        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $codigosLista, $inicio, $limite);
+
+        $cajeroInfo = $registrosVentas['registros'][$cajero];
+
+        return view('pages.reporte.reporte53_detalle', compact('cajeroInfo', 'cajero', 'sede', 'fechaInicio', 'fechaLimite'));
     }
 
     private function obtenerVentas($conn, $listaCodigos, $fechaInicio, $fechaLimite)
@@ -67,9 +89,12 @@ class ReportesController extends Controller
         $fechaFinal = $fechaFinal->format('Y-m-d');
 
         $registrosCajeros = [];
+        $codigosValidos = [];
 
         foreach ($listaCodigos as $index => $codigos) {
-            if($codigos['barra']) {
+            if(!isset($codigos['barra']) || $codigos['barra']) {
+                array_push($codigosValidos, $codigos['barra'] ?? $codigos);
+
                 $sql = "SELECT
                         VenFactura.Auditoria_Usuario AS USUARIO,
                         InvArticulo.Descripcion AS ARTICULO,
@@ -80,7 +105,7 @@ class ReportesController extends Controller
                     INNER JOIN VenFacturaDetalle ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
                     INNER JOIN VenFactura ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
                     WHERE 
-                        InvCodigoBarra.CodigoBarra = '".$codigos['barra']."' AND
+                        InvCodigoBarra.CodigoBarra = '".($codigos['barra'] ?? $codigos)."' AND
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
                         VenFactura.estadoFactura = 2
                     GROUP BY 
@@ -94,13 +119,16 @@ class ReportesController extends Controller
                     $registrosCajeros[$usuario][] = [
                         'articulo' => $row['ARTICULO'],
                         'cantidad' => $row['CANTIDAD'],
-                        'monto' => $row['MONTO']
+                        'monto' => $row['MONTO'],
                     ];
                 }
             }
         }
 
-        return $registrosCajeros;
+        return [
+            'registros' => $registrosCajeros,
+            'codigos' => $codigosValidos
+        ];
     }
 
     private function obtener_arrayCodigos($file)

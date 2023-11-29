@@ -1,7 +1,7 @@
 @extends('layouts.model')
 
 @section('title')
-  Reporte
+  Reporte | Ventas Concursos
 @endsection
 
 @section('content')
