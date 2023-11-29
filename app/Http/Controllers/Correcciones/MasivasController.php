@@ -293,12 +293,12 @@ class MasivasController extends Controller
             {
                 $colValue = strval($columna->getCalculatedValue());
 
-                if(strpos(strtolower($colValue), 'barra') && !$columnaIndex_barra) {
+                if(strpos(strtolower($colValue), 'barra') > -1  && !$columnaIndex_barra) {
                     $columnaIndex_barra = $indexCol;
                     continue;
                 }
 
-                if(strpos(strtolower($colValue), 'interno') && !$columnaIndex_interno) {
+                if(strpos(strtolower($colValue), 'interno') > -1  && !$columnaIndex_interno) {
                     $columnaIndex_interno = $indexCol;
                     continue;
                 }
