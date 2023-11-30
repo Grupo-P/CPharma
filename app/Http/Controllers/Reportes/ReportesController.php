@@ -96,6 +96,7 @@ class ReportesController extends Controller
         foreach ($listaCodigos as $index => $codigos) {
             if(!isset($codigos['barra']) || $codigos['barra']) {
                 if(!$this->codigoEncontrado($codigos['barra'] ?? $codigos, $conn)) {
+                    $codigosNoFound[] = $codigos['barra'] ?? $codigos;
                     continue;
                 }
 
