@@ -115,15 +115,35 @@ class ReportesController extends Controller
                         VenFactura.Auditoria_Usuario, InvArticulo.Descripcion
                 ";
 
-                $result = sqlsrv_query($conn,$sql,[],['QueryTimeout'=>7200]);
+                $sqlFacturas = "SELECT
+                        VenFactura.Id AS ID_FACTURA,
+                        VenFactura.Auditoria_Usuario AS USUARIO,
+                        CONCAT(MAX(GenPersona.Nombre), ' ', MAX(GenPersona.Apellido)) AS NOMBRE,
+                        InvArticulo.Descripcion AS ARTICULO,
+                        CAST(SUM(VenFacturaDetalle.Cantidad) AS decimal(18, 0)) AS CANTIDAD,
+                        CAST(ROUND(SUM(VenFacturaDetalle.PrecioNeto * VenFacturaDetalle.Cantidad), 2) AS decimal(18, 2)) AS MONTO
+                    FROM InvCodigoBarra
+                    INNER JOIN InvArticulo ON InvCodigoBarra.InvArticuloId = InvArticulo.Id
+                    INNER JOIN VenFacturaDetalle ON InvArticulo.Id = VenFacturaDetalle.InvArticuloId
+                    INNER JOIN VenFactura ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
+                    INNER JOIN VenCajero ON VenFactura.Auditoria_Usuario = VenCajero.CodigoUsuarioCaja
+                    INNER JOIN GenPersona ON VenCajero.GenPersonaId = GenPersona.Id
+                    LEFT JOIN VenDevolucion ON VenDevolucion.VenFacturaId = VenFactura.Id
+                    WHERE 
+                        InvCodigoBarra.CodigoBarra = '".($codigos['barra'] ?? $codigos)."' AND
+                        (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
+                        VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
+                    GROUP BY 
+                        VenFactura.Auditoria_Usuario, InvArticulo.Descripcion, VenFactura.Id
+                ";
 
+                $result = sqlsrv_query($conn,$sqlFacturas,[],['QueryTimeout'=>7200]);
                 while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
                     $usuario = trim($row['USUARIO']);
-                    $registrosCajeros[$usuario][] = [
-                        'articulo' => $row['ARTICULO'],
-                        'cantidad' => $row['CANTIDAD'],
-                        'monto' => $row['MONTO'],
-                    ];
+                    $registrosCajeros[$usuario] = array_merge(
+                        ['nombre' => $row['NOMBRE']],
+                        $this->ordenarResultados($row, $registrosCajeros[$usuario] ?? [])
+                    );
                 }
 
                 // Validar si no se encontraron registros
@@ -140,6 +160,61 @@ class ReportesController extends Controller
         ];
     }
 
+    private function ordenarResultados($fila, $registros_cajero)
+    {
+        if(count($registros_cajero) < 1) {
+            return [
+                'lista_facturas' => [$fila['ID_FACTURA'] => true],
+                'articulos' => [
+                    str_replace(' ', '_', $fila['ARTICULO']) => [
+                        'nombre' => $fila['ARTICULO'],
+                        'cantidad' => $fila['CANTIDAD'],
+                        'monto' => $fila['MONTO']
+                    ]
+                ]
+            ];
+        }
+
+
+        $listaArticulos = $registros_cajero['articulos'];
+        $listaFacturas = $registros_cajero['lista_facturas'];
+        $idFactura = $fila['ID_FACTURA'];
+        $articuloKey = str_replace(' ', '_', $fila['ARTICULO']);
+        
+        $listaFacturas[$idFactura] = true; // Agregar nueva factura
+
+        if(array_key_exists($articuloKey, $listaArticulos))
+        {
+            return [
+                'lista_facturas' => $listaFacturas,
+                'articulos' => array_merge(
+                    $listaArticulos,
+                    [
+                        $articuloKey => [
+                            'nombre' => $fila['ARTICULO'],
+                            'cantidad' => ($listaArticulos[$articuloKey]['cantidad'] + $fila['CANTIDAD']),
+                            'monto' => ($listaArticulos[$articuloKey]['monto'] + $fila['MONTO'])
+                        ]
+                    ]
+                )
+            ];
+        }
+
+        return [
+            'lista_facturas' => $listaFacturas,
+            'articulos' => array_merge(
+                $listaArticulos,
+                [
+                    $articuloKey => [
+                        'nombre' => $fila['ARTICULO'],
+                        'cantidad' => $fila['CANTIDAD'],
+                        'monto' => $fila['MONTO']
+                    ]
+                ]
+            )
+        ];
+    }
+    
     private function obtener_arrayCodigos($file)
     {
         // Leer Excel

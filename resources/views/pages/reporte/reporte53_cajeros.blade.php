@@ -33,7 +33,7 @@
                         text: '<i class="fa fa-file-excel" data-toggle="tooltip" data-placement="right" title="Excel"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4, 5 ]
                         },
                         className : 'flat-button ico-excel mr-1'
                     },
@@ -42,7 +42,7 @@
                         text: '<i class="fa fa-file-csv" data-toggle="tooltip" data-placement="right" title="CSV"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4, 5 ]
                         },
                         className : 'flat-button ico-csv mr-1'
                     },
@@ -50,7 +50,7 @@
                         extend: 'print',
                         text: '<i class="fa fa-print" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4, 5 ]
                         },
                         className : 'flat-button ico-imprimir mr-1'
                     },
@@ -59,7 +59,7 @@
                         text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4, 5 ]
                         },
                         className : 'flat-button ico-pdf mr-1'
                     },
@@ -166,6 +166,8 @@
 							<th>Nro</th>
 							<th>Cajero</th>
 							<th>Unidades (Total)</th>
+							<th>Artículos</th>
+							<th>Facturas (Total)</th>
 							<th>Monto total facturas Bs. (Sin IVA)</th>
 						</tr>
 					</thead>
@@ -173,10 +175,10 @@
 						@php
 							$conteoFilas = 0;
 						@endphp
-						@foreach ($datos_concurso as $cajero => $articulos)
+						@foreach ($datos_concurso as $cajero => $informacion)
 							@php
 								$conteoFilas++;
-								$sumasTotales = sumarCantidadesMonto($articulos);
+								$sumasTotales = sumarCantidadesMonto($informacion['articulos']);
 							@endphp
 							<tr>
 								<th>{{ $conteoFilas }}</th>
@@ -188,10 +190,12 @@
 										<input type="hidden" name="limite" value="{{ $fechaLimite }}">
 										<input type="hidden" name="codigos" value="{{ $codigos }}">
 										<input type="hidden" name="sede" value="{{ $sede }}">
-										<button class="btn btn-light text-primary font-weight-bold cajeroLink">{{ $cajero }}</button>
+										<button class="btn btn-light text-primary font-weight-bold cajeroLink">{!! utf8_encode($informacion['nombre']) !!} ({{ $cajero }})</button>
 									</form>
 								</td>
 								<td class="font-weight-bold">{{ $sumasTotales['cantidad'] }}</td>
+								<td class="font-weight-bold">{{ count($informacion['articulos']) }}</td>
+								<td class="font-weight-bold">{{ count($informacion['lista_facturas']) }}</td>
 								<td>{{ helper_formatoPrecio($sumasTotales['monto']) }}</td>
 							</tr>
 						@endforeach

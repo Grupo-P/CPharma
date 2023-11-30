@@ -137,7 +137,19 @@
 		<div class="mt-4 px-4">
 			{{-- Titulo --}}
 			<div>
-				<h3 class="h3 text-uppercase font-weight-bold">Cajero: {{ $cajero }}</h3>
+				<h3 class="h3 text-uppercase font-weight-bold">Cajero: {!! utf8_encode($cajeroInfo['nombre']) !!} ({{ $cajero }})</h3>
+			</div>
+
+			{{-- Informacion --}}
+			<div> 
+				<div style="font-size: 18px;">
+					<span class="font-weight-bold">Total artículos:</span>
+					<span>{{ count($cajeroInfo['articulos'] )}}</span>
+				</div>
+				<div style="font-size: 18px;">
+					<span class="font-weight-bold">Total facturas:</span>
+					<span>{{ count($cajeroInfo['lista_facturas'] )}}</span>
+				</div>
 			</div>
 
 			{{-- Tabla --}}
@@ -152,10 +164,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($cajeroInfo as $index => $articulo)
+						@php
+							$listaArticulos  = $cajeroInfo['articulos'];
+							$conteo = 0;
+						@endphp
+						@foreach ($listaArticulos as $index => $articulo)
 							<tr>
-								<th>{{ $index+1 }}</th>
-								<td class="text-uppercase">{!! $articulo['articulo'] !!}</td>
+								<th>{{ $conteo = $conteo+1 }}</th>
+								<td class="text-uppercase">{!! utf8_encode($articulo['nombre']) !!}</td>
 								<td class="font-weight-bold">{{ $articulo['cantidad'] }}</td>
 								<td>{{ helper_formatoPrecio($articulo['monto']) }}</td>
 							</tr>
