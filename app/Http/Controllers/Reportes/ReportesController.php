@@ -119,6 +119,7 @@ class ReportesController extends Controller
                         VenFactura.Id AS ID_FACTURA,
                         VenFactura.Auditoria_Usuario AS USUARIO,
                         CONCAT(MAX(GenPersona.Nombre), ' ', MAX(GenPersona.Apellido)) AS NOMBRE,
+                        InvArticulo.CodigoArticulo AS CODIGO_INTERNO,
                         InvArticulo.Descripcion AS ARTICULO,
                         CAST(SUM(VenFacturaDetalle.Cantidad) AS decimal(18, 0)) AS CANTIDAD,
                         CAST(ROUND(SUM(VenFacturaDetalle.PrecioNeto * VenFacturaDetalle.Cantidad), 2) AS decimal(18, 2)) AS MONTO
@@ -134,7 +135,7 @@ class ReportesController extends Controller
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
                         VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
                     GROUP BY 
-                        VenFactura.Auditoria_Usuario, InvArticulo.Descripcion, VenFactura.Id
+                        VenFactura.Auditoria_Usuario, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, VenFactura.Id
                 ";
 
                 $result = sqlsrv_query($conn,$sqlFacturas,[],['QueryTimeout'=>7200]);
@@ -167,6 +168,7 @@ class ReportesController extends Controller
                 'lista_facturas' => [$fila['ID_FACTURA'] => true],
                 'articulos' => [
                     str_replace(' ', '_', $fila['ARTICULO']) => [
+                        'codigo' => $fila['CODIGO_INTERNO'],
                         'nombre' => $fila['ARTICULO'],
                         'cantidad' => $fila['CANTIDAD'],
                         'monto' => $fila['MONTO']
@@ -191,6 +193,7 @@ class ReportesController extends Controller
                     $listaArticulos,
                     [
                         $articuloKey => [
+                            'codigo' => $fila['CODIGO_INTERNO'],
                             'nombre' => $fila['ARTICULO'],
                             'cantidad' => ($listaArticulos[$articuloKey]['cantidad'] + $fila['CANTIDAD']),
                             'monto' => ($listaArticulos[$articuloKey]['monto'] + $fila['MONTO'])
@@ -206,6 +209,7 @@ class ReportesController extends Controller
                 $listaArticulos,
                 [
                     $articuloKey => [
+                        'codigo' => $fila['CODIGO_INTERNO'],
                         'nombre' => $fila['ARTICULO'],
                         'cantidad' => $fila['CANTIDAD'],
                         'monto' => $fila['MONTO']

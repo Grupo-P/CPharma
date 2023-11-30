@@ -16,7 +16,7 @@
 	<script>
 		$(document).ready(function() {
 			$('#tablaCajeros').DataTable({
-                order: [[2, 'desc']],
+                order: [[3, 'desc']],
 				paging: false,
         		searching: false,
 
@@ -33,7 +33,7 @@
                         text: '<i class="fa fa-file-excel" data-toggle="tooltip" data-placement="right" title="Excel"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-excel mr-1'
                     },
@@ -42,7 +42,7 @@
                         text: '<i class="fa fa-file-csv" data-toggle="tooltip" data-placement="right" title="CSV"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-csv mr-1'
                     },
@@ -50,7 +50,7 @@
                         extend: 'print',
                         text: '<i class="fa fa-print" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-imprimir mr-1'
                     },
@@ -59,7 +59,7 @@
                         text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-pdf mr-1'
                     },
@@ -158,6 +158,7 @@
 					<thead class="thead-dark">
 						<tr>
 							<th>Nro</th>
+							<th>Código interno</th>
 							<th>Artículo</th>
 							<th>Unidades (Total)</th>
 							<th>Monto total facturas Bs. (Sin IVA)</th>
@@ -171,6 +172,7 @@
 						@foreach ($listaArticulos as $index => $articulo)
 							<tr>
 								<th>{{ $conteo = $conteo+1 }}</th>
+								<td><span class="d-block text-center">{{ $articulo['codigo'] }}</span></td>
 								<td class="text-uppercase">{!! utf8_encode($articulo['nombre']) !!}</td>
 								<td class="font-weight-bold">{{ $articulo['cantidad'] }}</td>
 								<td>{{ helper_formatoPrecio($articulo['monto']) }}</td>
