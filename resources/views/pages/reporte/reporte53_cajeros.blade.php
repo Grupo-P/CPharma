@@ -100,6 +100,24 @@
 			transform: translateX(4px);
 			transition: all ease-in-out .2s;
 		}
+
+		.lista {
+            list-style: none !important;
+        }
+
+        .lista_item > div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 16px !important;
+        }
+
+        .codigoDivisor {
+            margin: 0px 8px;
+            padding: 0px 8px;
+            border-left: 2px solid #444444;
+            border-right: 2px solid #444444;
+        }
 	</style>
 
 	<h1 class="h5 text-info px-4">
@@ -180,6 +198,38 @@
 					</tbody>
 				</table>
 			</div>
+		</div>
+
+		{{-- No encontrado --}}
+		<div class="mt-4 px-4">
+			 {{-- Titulo --}}
+			 <div class="mb-4 mt-4 border-bottom border-top border-secondary pt-2 pb-2">
+				<h4 class="h4 px-2">Artículos no encontrados <span class="text-danger"><i class="fas fa-times"></i></span></h4>
+			</div>
+	
+			{{-- Lista --}}
+			<ul class="lista exitosa px-4">
+				@foreach($codigosNotFound as $codigo)
+					<li class="lista_item">
+						<div>
+							{{-- Titulo --}}
+							<div class="font-weight-bold">
+								<span>Código</span>
+							</div>
+	
+							{{-- Codigo --}}
+							<div class="font-weight-bold codigoDivisor">
+								<span>{{ $codigo }}</span>
+							</div>
+	
+							{{-- Icono --}}
+							<div class="text-danger">
+								<span><i class="fas fa-times"></i></span>
+							</div>
+						</div>
+					</li>
+				@endforeach
+			</ul>
 		</div>
     </div>
 

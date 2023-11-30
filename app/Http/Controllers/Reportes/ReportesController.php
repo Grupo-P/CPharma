@@ -60,8 +60,9 @@ class ReportesController extends Controller
 
         $datos_concurso = $registrosVentas['registros'];
         $codigos = implode(',', $registrosVentas['codigos']);
+        $codigosNotFound = $registrosVentas['no_encontrado'];
 
-        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'fechaInicio', 'fechaLimite', 'sede'));
+        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'codigosNotFound', 'fechaInicio', 'fechaLimite', 'sede'));
     }
 
     public function detalle(Request $request)
@@ -90,6 +91,7 @@ class ReportesController extends Controller
 
         $registrosCajeros = [];
         $codigosValidos = [];
+        $codigosNoFound = [];
 
         foreach ($listaCodigos as $index => $codigos) {
             if(!isset($codigos['barra']) || $codigos['barra']) {
@@ -123,12 +125,18 @@ class ReportesController extends Controller
                         'monto' => $row['MONTO'],
                     ];
                 }
+
+                // Validar si no se encontraron registros
+                if(!sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
+                    $codigosNoFound[] = $codigos['barra'] ?? $codigos;
+                }
             }
         }
 
         return [
             'registros' => $registrosCajeros,
-            'codigos' => $codigosValidos
+            'codigos' => $codigosValidos,
+            'no_encontrado' => $codigosNoFound
         ];
     }
 
