@@ -95,6 +95,10 @@ class ReportesController extends Controller
 
         foreach ($listaCodigos as $index => $codigos) {
             if(!isset($codigos['barra']) || $codigos['barra']) {
+                if(!$this->codigoEncontrado($codigos['barra'] ?? $codigos, $conn)) {
+                    continue;
+                }
+
                 array_push($codigosValidos, $codigos['barra'] ?? $codigos);
 
                 $sql = "SELECT
@@ -146,11 +150,6 @@ class ReportesController extends Controller
                         $this->ordenarResultados($row, $registrosCajeros[$usuario] ?? [])
                     );
                 }
-
-                // Validar si no se encontraron registros
-                if(!sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
-                    $codigosNoFound[] = $codigos['barra'] ?? $codigos;
-                }
             }
         }
 
@@ -159,6 +158,16 @@ class ReportesController extends Controller
             'codigos' => $codigosValidos,
             'no_encontrado' => $codigosNoFound
         ];
+    }
+
+    private function codigoEncontrado($codigo, $conn)
+    {
+        $sql = "SELECT TOP (1) InvArticuloId
+            FROM InvCodigoBarra
+            WHERE InvCodigoBarra.CodigoBarra = '".$codigo."'";
+
+        $result = sqlsrv_query($conn,$sql,[],['QueryTimeout'=>7200]);
+        return sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
     }
 
     private function ordenarResultados($fila, $registros_cajero)
