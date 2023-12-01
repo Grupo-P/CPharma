@@ -119,10 +119,10 @@
   }
 
   .anaquel {
-    min-width: 6.5cm;
-    min-height: 6cm;
-    max-width: 6.5cm;
-    max-height: 6cm;
+    min-width: 13cm;
+    min-height: 13cm;
+    max-width: 13cm;
+    max-height: 13cm;
   }
 
   /* Imagen */
@@ -138,7 +138,7 @@
   }
 
   .anaquel .imagen-ofertero img {
-    width: 100px !important;
+    width: 270px !important;
   }
 
   .piscina .imagen-ofertero img {
@@ -151,11 +151,11 @@
 
   /* Titulo */
   .anaquel .titulo {
-    font-size: 12px !important;
+    font-size: 26px !important;
   }
   .anaquel .titulo p {
     max-width: 74%;
-    line-height: 14px;
+    line-height: 26px;
     margin-bottom: 6px;
   }
 
@@ -184,15 +184,15 @@
 
   /* Arriba */
   .anaquel .arriba {
-    font-size: 12px !important;
+    font-size: 18px !important;
   }
 
   .anaquel .codigo {
-    margin-left: 2px !important;
+    margin-left: 4px !important;
   }
 
   .anaquel .fecha {
-    margin-right: 2px !important;
+    margin-right: 4px !important;
   }
 
   .piscina .arriba {
@@ -274,14 +274,14 @@
   /* Antes */
   .anaquel .precios .precio.antes {
     margin-right: 4px !important;
-    font-size: 14px !important;
-    line-height: 14px !important;
+    font-size: 28px !important;
+    line-height: 28px !important;
   }
 
   .piscina .precios .precio.antes {
     margin-right: 10px !important;
-    font-size: 28px !important;
-    line-height: 26px !important;
+    font-size: 30px !important;
+    line-height: 30px !important;
   }
 
   .precios .precio.antes {
@@ -312,14 +312,15 @@
 
   /* Ahora */
   .anaquel .precios .precio.ahora {
-    font-size: 12px !important;
-    line-height: 14px !important;
+    font-size: 30px !important;
+    line-height: 30px !important;
+    font-weight: bold;
   }
 
   .anaquel .precios .precio.ahora .monto {
-    font-size: 16px !important;
-    line-height: 20px;
-    margin-top: 0px !important;
+    font-size: 35px !important;
+    line-height: 35px;
+    margin-top: 6px !important;
     padding-bottom: 0px !important;
   }
 
@@ -518,8 +519,8 @@
   </script>
 
 	<script>
-    var dominio = dominio(SedeConnectionJs);
-    //var dominio = "http://cpharmagpde.com/"
+    // var dominio = dominio(SedeConnectionJs);
+    var dominio = "http://cpharmagpde.com/"
     const URLEtiquetaUnica = ''+dominio+'assets/functions/ofertero/functionEtiquetaOfertero.php';
 
 		$('#inputCodBar').attr("placeholder", "Haga scan o escriba el codigo de barra");

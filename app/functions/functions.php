@@ -1835,6 +1835,9 @@
             case 'Lotes a la baja':
                 $ruta = '/reporte52';
             break;
+            case 'Ventas de concursos':
+                $ruta = '/reporte53';
+            break;
             default:
                 $ruta = '#';
             break;

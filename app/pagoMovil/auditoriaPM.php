@@ -11,6 +11,7 @@ class auditoriaPM extends Model
     protected $fillable=[
         'paso',
         'informacion',
-        'caja'
+        'caja',
+        'nro_factura'
     ];
 }
