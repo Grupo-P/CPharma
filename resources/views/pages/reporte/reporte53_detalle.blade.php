@@ -16,7 +16,7 @@
 	<script>
 		$(document).ready(function() {
 			$('#tablaCajeros').DataTable({
-                order: [[3, 'desc']],
+                order: [[2, 'desc']],
 				paging: false,
         		searching: false,
 
@@ -153,11 +153,29 @@
 			</div>
 
 			{{-- Tabla --}}
-			<div class="table-responsive mt-4">
+			<div class="table-responsive mt-4 d-flex">
+				{{-- Conteo --}}
+				<div class="d-flex flex-column justify-content-between">
+					@php
+					 	$conteoFilas = 0;
+					@endphp
+					<div style="width: 12px;height: 120px;">
+						
+					</div>
+					@foreach($cajeroInfo['articulos'] as $articulo)
+						@php
+							$conteoFilas++;
+						@endphp
+						<div class="text-center font-weight-bold p-2"><span>{{ $conteoFilas }}</span></div>
+					@endforeach
+					<div style="width: 12px;height: 42px;">
+						
+					</div>
+				</div>
+				
 				<table id="tablaCajeros" class="table table-bordered table-hover table-striped">
 					<thead class="thead-dark">
 						<tr>
-							<th>Nro</th>
 							<th>Código interno</th>
 							<th>Artículo</th>
 							<th>Unidades (Total)</th>
@@ -167,11 +185,9 @@
 					<tbody>
 						@php
 							$listaArticulos  = $cajeroInfo['articulos'];
-							$conteo = 0;
 						@endphp
 						@foreach ($listaArticulos as $index => $articulo)
 							<tr>
-								<th>{{ $conteo = $conteo+1 }}</th>
 								<td><span class="d-block text-center">{{ $articulo['codigo'] }}</span></td>
 								<td class="text-uppercase">{!! utf8_encode($articulo['nombre']) !!}</td>
 								<td class="font-weight-bold">{{ $articulo['cantidad'] }}</td>

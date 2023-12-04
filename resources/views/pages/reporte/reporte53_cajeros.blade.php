@@ -16,7 +16,7 @@
 	<script>
 		$(document).ready(function() {
 			$('#tablaCajeros').DataTable({
-                order: [[2, 'desc']],
+                order: [[1, 'desc']],
 				paging: false,
         		searching: false,
 
@@ -159,11 +159,28 @@
 			</div>
 
 			{{-- Tabla --}}
-			<div class="table-responsive mt-4">
+			<div class="table-responsive mt-4 d-flex">
+				{{-- Conteo --}}
+				<div class="d-flex flex-column justify-content-between">
+					@php
+					 	$conteoFilas = 0;
+					@endphp
+					<div style="width: 12px;height: 86px;">
+						
+					</div>
+					@foreach($datos_concurso as $info)
+						@php
+							$conteoFilas++;
+						@endphp
+						<div class="text-center font-weight-bold p-2"><span>{{ $conteoFilas }}</span></div>
+					@endforeach
+					<div style="width: 12px;height: 42px;">
+						
+					</div>
+				</div>
 				<table id="tablaCajeros" class="table table-bordered table-hover table-striped">
 					<thead class="thead-dark">
 						<tr>
-							<th>Nro</th>
 							<th>Cajero</th>
 							<th>Unidades (Total)</th>
 							<th>Artículos</th>
@@ -172,16 +189,11 @@
 						</tr>
 					</thead>
 					<tbody>
-						@php
-							$conteoFilas = 0;
-						@endphp
 						@foreach ($datos_concurso as $cajero => $informacion)
 							@php
-								$conteoFilas++;
 								$sumasTotales = sumarCantidadesMonto($informacion['articulos']);
 							@endphp
 							<tr>
-								<th>{{ $conteoFilas }}</th>
 								<td class="font-weight-bold text-uppercase">
 									<form action="{{ route('reporte53.detalle') }}" method="POST">
 										@csrf
