@@ -79,8 +79,9 @@ class ReportesController extends Controller
         $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $codigosLista, $inicio, $limite);
 
         $cajeroInfo = $registrosVentas['registros'][$cajero];
+        $codigos = $registrosVentas['codigos'];
 
-        return view('pages.reporte.reporte53_detalle', compact('cajeroInfo', 'cajero', 'sede', 'fechaInicio', 'fechaLimite'));
+        return view('pages.reporte.reporte53_detalle', compact('cajeroInfo', 'cajero', 'codigos', 'sede', 'fechaInicio', 'fechaLimite'));
     }
 
     private function obtenerVentas($conn, $listaCodigos, $fechaInicio, $fechaLimite)
@@ -97,7 +98,7 @@ class ReportesController extends Controller
             if(!isset($codigos['barra']) || $codigos['barra']) {
                 $codigoBarra = $codigos['barra'] ?? $codigos;
                 // Valida si ya el codigo de barra se consulto
-                if(array_search($codigoBarra, $codigosValidos)) {
+                if(array_search($codigoBarra, $codigosValidos) !== false) {
                     continue;
                 }
 
