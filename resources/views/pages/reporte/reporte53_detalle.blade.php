@@ -4,6 +4,21 @@
   Reporte
 @endsection
 
+@php
+	$unidades = 0;
+	$articulos = count($cajeroInfo['articulos']);
+	$facturas = count($cajeroInfo['lista_facturas'] );
+	$montos = 0;
+	$codigosTotal = count($codigos);
+
+	foreach ($cajeroInfo['articulos'] as $index => $articulo) {
+		$unidades += intVal($articulo['cantidad']);
+		$montos += floatVal($articulo['monto']);
+	}
+
+	$montos = helper_formatoPrecio($montos);
+@endphp
+
 @section('scriptsHead')
 	<link href="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-html5-2.4.2/b-print-2.4.2/r-2.5.0/datatables.min.css" rel="stylesheet">
  
@@ -15,8 +30,13 @@
 @section('scriptsFoot')
 	<script>
 		$(document).ready(function() {
-			$('#tablaCajeros').DataTable({
-                order: [[3, 'desc']],
+			var unidades = "<?= $unidades ?>";
+			var montos = "<?= $montos ?>";
+			var articulos = "<?= $articulos ?>";
+			var facturas = "<?= $facturas ?>";
+
+			var tablaCajeros = $('#tablaCajeros').DataTable({
+                order: [[2, 'desc']],
 				paging: false,
         		searching: false,
 
@@ -33,7 +53,7 @@
                         text: '<i class="fa fa-file-excel" data-toggle="tooltip" data-placement="right" title="Excel"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'flat-button ico-excel mr-1'
                     },
@@ -42,7 +62,7 @@
                         text: '<i class="fa fa-file-csv" data-toggle="tooltip" data-placement="right" title="CSV"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'flat-button ico-csv mr-1'
                     },
@@ -50,7 +70,7 @@
                         extend: 'print',
                         text: '<i class="fa fa-print" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'flat-button ico-imprimir mr-1'
                     },
@@ -59,12 +79,15 @@
                         text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4 ]
+                            columns: [ 0, 1, 2, 3 ]
                         },
                         className : 'flat-button ico-pdf mr-1'
                     },
                 ],
 			});
+
+			const rowData = ['Totales', '', unidades, montos];
+			tablaCajeros.row.add(rowData).draw().nodes().to$().addClass('filaTotales');
 
 			//Tooltip
             $(function () {
@@ -76,6 +99,13 @@
 
 @section('content')
 	<style>
+		tbody .filaTotales {
+			background-color: #dc3545 !important;
+			color: #fff !important;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+
 		.buttons-excel, .buttons-csv {
 			background-color: #28a745 !important;
 			border-color: #28a745 !important;
@@ -153,11 +183,29 @@
 			</div>
 
 			{{-- Tabla --}}
-			<div class="table-responsive mt-4">
+			<div class="table-responsive mt-4 d-flex">
+				{{-- Conteo --}}
+				<div class="d-flex flex-column justify-content-between">
+					@php
+					 	$conteoFilas = 0;
+					@endphp
+					<div style="width: 12px;height: 144px;">
+						
+					</div>
+					@foreach($cajeroInfo['articulos'] as $articulo)
+						@php
+							$conteoFilas++;
+						@endphp
+						<div class="text-center font-weight-bold p-2"><span>{{ $conteoFilas }}</span></div>
+					@endforeach
+					<div style="width: 12px;height: 42px;">
+						
+					</div>
+				</div>
+				
 				<table id="tablaCajeros" class="table table-bordered table-hover table-striped">
 					<thead class="thead-dark">
 						<tr>
-							<th>Nro</th>
 							<th>Código interno</th>
 							<th>Artículo</th>
 							<th>Unidades (Total)</th>
@@ -167,11 +215,9 @@
 					<tbody>
 						@php
 							$listaArticulos  = $cajeroInfo['articulos'];
-							$conteo = 0;
 						@endphp
 						@foreach ($listaArticulos as $index => $articulo)
 							<tr>
-								<th>{{ $conteo = $conteo+1 }}</th>
 								<td><span class="d-block text-center">{{ $articulo['codigo'] }}</span></td>
 								<td class="text-uppercase">{!! utf8_encode($articulo['nombre']) !!}</td>
 								<td class="font-weight-bold">{{ $articulo['cantidad'] }}</td>
@@ -188,7 +234,6 @@
         $FinCarga = new DateTime("now");
         $IntervalCarga = $InicioCarga->diff($FinCarga);
         echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
-
 
 		function helper_formatoPrecio($numero)
 		{

@@ -12,11 +12,34 @@
 	<script src="https://cdn.datatables.net/v/bs4/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-html5-2.4.2/b-print-2.4.2/r-2.5.0/datatables.min.js"></script>
 @endsection
 
+@php
+	$unidades = 0;
+	$articulos = 0;
+	$facturas = 0;
+	$montos = 0;
+	$codigosTotal = count(explode(',', $codigos));
+
+	foreach ($datos_concurso as $cajero => $informacion) {
+		$sumasTotales = sumarCantidadesMonto($informacion['articulos']);
+		$unidades += $sumasTotales['cantidad'];
+		$montos += $sumasTotales['monto'];
+		$articulos += count($informacion['articulos']);
+		$facturas += count($informacion['lista_facturas']);
+	}
+
+	$montos = helper_formatoPrecio($montos);
+@endphp
+
 @section('scriptsFoot')
 	<script>
+		var unidades = "<?= $unidades ?>";
+		var montos = "<?= $montos ?>";
+		var articulos = "<?= $codigosTotal ?>";
+		var facturas = "<?= $facturas ?>";
+
 		$(document).ready(function() {
-			$('#tablaCajeros').DataTable({
-                order: [[2, 'desc']],
+			var tablaCajeros = $('#tablaCajeros').DataTable({
+                order: [[1, 'desc']],
 				paging: false,
         		searching: false,
 
@@ -33,7 +56,7 @@
                         text: '<i class="fa fa-file-excel" data-toggle="tooltip" data-placement="right" title="Excel"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4, 5 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-excel mr-1'
                     },
@@ -42,7 +65,7 @@
                         text: '<i class="fa fa-file-csv" data-toggle="tooltip" data-placement="right" title="CSV"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4, 5 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-csv mr-1'
                     },
@@ -50,7 +73,7 @@
                         extend: 'print',
                         text: '<i class="fa fa-print" data-toggle="tooltip" data-placement="right" title="Imprimir"></i>',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4, 5 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-imprimir mr-1'
                     },
@@ -59,12 +82,15 @@
                         text: '<i class="fa fa-file-pdf" data-toggle="tooltip" data-placement="right" title="PDF"></i>',
                         title: 'Reporte Concurso',
                         exportOptions: {
-                            columns: [ 0, 1, 2, 3, 4, 5 ]
+                            columns: [ 0, 1, 2, 3, 4 ]
                         },
                         className : 'flat-button ico-pdf mr-1'
                     },
                 ],
 			});
+
+			const rowData = ['Totales', unidades, articulos, facturas, montos];
+			tablaCajeros.row.add(rowData).draw().nodes().to$().addClass('filaTotales');
 
 			//Tooltip
             $(function () {
@@ -76,6 +102,13 @@
 
 @section('content')
 	<style>
+		tbody .filaTotales {
+			background-color: #dc3545 !important;
+			color: #fff !important;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+
 		.buttons-excel, .buttons-csv {
 			background-color: #28a745 !important;
 			border-color: #28a745 !important;
@@ -159,11 +192,28 @@
 			</div>
 
 			{{-- Tabla --}}
-			<div class="table-responsive mt-4">
+			<div class="table-responsive mt-4 d-flex">
+				{{-- Conteo --}}
+				<div class="d-flex flex-column justify-content-between">
+					@php
+					 	$conteoFilas = 0;
+					@endphp
+					<div style="width: 12px;height: 140px;">
+						
+					</div>
+					@foreach($datos_concurso as $info)
+						@php
+							$conteoFilas++;
+						@endphp
+						<div class="text-center font-weight-bold p-2"><span>{{ $conteoFilas }}</span></div>
+					@endforeach
+					<div style="width: 12px;height: 42px;">
+						
+					</div>
+				</div>
 				<table id="tablaCajeros" class="table table-bordered table-hover table-striped">
 					<thead class="thead-dark">
 						<tr>
-							<th>Nro</th>
 							<th>Cajero</th>
 							<th>Unidades (Total)</th>
 							<th>Artículos</th>
@@ -172,16 +222,11 @@
 						</tr>
 					</thead>
 					<tbody>
-						@php
-							$conteoFilas = 0;
-						@endphp
 						@foreach ($datos_concurso as $cajero => $informacion)
 							@php
-								$conteoFilas++;
 								$sumasTotales = sumarCantidadesMonto($informacion['articulos']);
 							@endphp
 							<tr>
-								<th>{{ $conteoFilas }}</th>
 								<td class="font-weight-bold text-uppercase">
 									<form action="{{ route('reporte53.detalle') }}" method="POST">
 										@csrf
@@ -193,9 +238,9 @@
 										<button class="btn btn-light text-primary font-weight-bold cajeroLink">{!! utf8_encode($informacion['nombre']) !!} ({{ $cajero }})</button>
 									</form>
 								</td>
-								<td class="font-weight-bold">{{ $sumasTotales['cantidad'] }}</td>
-								<td class="font-weight-bold">{{ count($informacion['articulos']) }}</td>
-								<td class="font-weight-bold">{{ count($informacion['lista_facturas']) }}</td>
+								<td>{{ $sumasTotales['cantidad'] }}</td>
+								<td>{{ count($informacion['articulos']) }}</td>
+								<td>{{ count($informacion['lista_facturas']) }}</td>
 								<td>{{ helper_formatoPrecio($sumasTotales['monto']) }}</td>
 							</tr>
 						@endforeach

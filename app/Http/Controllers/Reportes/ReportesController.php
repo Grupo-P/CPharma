@@ -79,8 +79,9 @@ class ReportesController extends Controller
         $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $codigosLista, $inicio, $limite);
 
         $cajeroInfo = $registrosVentas['registros'][$cajero];
+        $codigos = $registrosVentas['codigos'];
 
-        return view('pages.reporte.reporte53_detalle', compact('cajeroInfo', 'cajero', 'sede', 'fechaInicio', 'fechaLimite'));
+        return view('pages.reporte.reporte53_detalle', compact('cajeroInfo', 'cajero', 'codigos', 'sede', 'fechaInicio', 'fechaLimite'));
     }
 
     private function obtenerVentas($conn, $listaCodigos, $fechaInicio, $fechaLimite)
@@ -95,12 +96,18 @@ class ReportesController extends Controller
 
         foreach ($listaCodigos as $index => $codigos) {
             if(!isset($codigos['barra']) || $codigos['barra']) {
-                if(!$this->codigoEncontrado($codigos['barra'] ?? $codigos, $conn)) {
-                    $codigosNoFound[] = $codigos['barra'] ?? $codigos;
+                $codigoBarra = $codigos['barra'] ?? $codigos;
+                // Valida si ya el codigo de barra se consulto
+                if(array_search($codigoBarra, $codigosValidos) !== false) {
                     continue;
                 }
 
-                array_push($codigosValidos, $codigos['barra'] ?? $codigos);
+                if(!$this->codigoEncontrado($codigoBarra, $conn)) {
+                    $codigosNoFound[] = $codigoBarra;
+                    continue;
+                }
+
+                array_push($codigosValidos, $codigoBarra);
 
                 $sql = "SELECT
                         VenFactura.Auditoria_Usuario AS USUARIO,
@@ -113,7 +120,7 @@ class ReportesController extends Controller
                     INNER JOIN VenFactura ON VenFacturaDetalle.VenFacturaId = VenFactura.Id
                     LEFT JOIN VenDevolucion ON VenDevolucion.VenFacturaId = VenFactura.Id
                     WHERE 
-                         InvCodigoBarra.CodigoBarra = '".($codigos['barra'] ?? $codigos)."' AND
+                         InvCodigoBarra.CodigoBarra = '".$codigoBarra."' AND
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
                         VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
                     GROUP BY 
@@ -136,7 +143,7 @@ class ReportesController extends Controller
                     INNER JOIN GenPersona ON VenCajero.GenPersonaId = GenPersona.Id
                     LEFT JOIN VenDevolucion ON VenDevolucion.VenFacturaId = VenFactura.Id
                     WHERE 
-                        InvCodigoBarra.CodigoBarra = '".($codigos['barra'] ?? $codigos)."' AND
+                        InvCodigoBarra.CodigoBarra = '".$codigoBarra."' AND
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
                         VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
                     GROUP BY 
