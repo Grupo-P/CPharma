@@ -66,7 +66,7 @@
 
   $_GET['SEDE'] = FG_Mi_Ubicacion();
 
-	if( (Auth::user()->departamento == 'ADMINISTRACION')
+	if( (Auth::user()->departamento == 'ADMINISTRACION') || (Auth::user()->departamento == 'COSTOS')
      || ((Auth::user()->departamento == 'GERENCIA') || (Auth::user()->departamento == 'TECNOLOGIA')
            &&
            ((Auth::user()->email == 'giordany@farmacia72.com')
