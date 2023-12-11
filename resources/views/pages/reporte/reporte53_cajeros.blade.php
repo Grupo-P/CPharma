@@ -216,9 +216,9 @@
 						<tr>
 							<th>Cajero</th>
 							<th>Unidades (Total)</th>
-							<th>Artículos</th>
+							<th>Artículos con venta</th>
 							<th>Facturas (Total)</th>
-							<th>Monto total facturas Bs. (Sin IVA)</th>
+							<th>Venta total de Artículos Bs. (Sin IVA)</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -249,10 +249,42 @@
 			</div>
 		</div>
 
+		{{-- Sin ventas --}}
+		<div class="mt-4 px-4">
+			{{-- Titulo --}}
+			<div class="mb-4 mt-4 border-bottom border-top border-warning pt-2 pb-2">
+			   <h4 class="h4 px-2">Artículos encontrados sin ventas <span class="text-warning"><i class="far fa-frown"></i></span></h4>
+		   </div>
+   
+		   {{-- Lista --}}
+		   <ul class="lista exitosa px-4">
+			   @foreach($codigosSinVenta as $codigo)
+				   <li class="lista_item">
+					   <div>
+						   {{-- Titulo --}}
+						   <div class="font-weight-bold">
+							   <span>Código</span>
+						   </div>
+   
+						   {{-- Codigo --}}
+						   <div class="font-weight-bold codigoDivisor">
+							   <span>{{ $codigo }}</span>
+						   </div>
+   
+						   {{-- Icono --}}
+						   <div class="text-danger">
+							   <span><i class="fas fa-times"></i></span>
+						   </div>
+					   </div>
+				   </li>
+			   @endforeach
+		   </ul>
+	   </div>
+
 		{{-- No encontrado --}}
 		<div class="mt-4 px-4">
 			 {{-- Titulo --}}
-			 <div class="mb-4 mt-4 border-bottom border-top border-secondary pt-2 pb-2">
+			 <div class="mb-4 mt-4 border-bottom border-top border-danger pt-2 pb-2">
 				<h4 class="h4 px-2">Artículos no encontrados <span class="text-danger"><i class="fas fa-times"></i></span></h4>
 			</div>
 	
