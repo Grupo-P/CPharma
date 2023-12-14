@@ -69,6 +69,7 @@
 
     function diasCero_PrecioAyer($IdArticulo, $precioHoy) {
         $fechaHoy = date('Y-m-d');
+        $fechaHoy = date('Y-m-d', strtotime('-1 month', strtotime($fechaHoy)));
 
         $sql = "
             SELECT precio, precio_dolar
@@ -204,7 +205,7 @@
                                     $Etiqueta = $Etiqueta."
                                     <div class='antes precio'>
                                         <span class='text'>ANTES</span>
-                                        <span class='monto'>ref ".number_format ($PrecioAyer,2,"," ,"." )."</span>
+                                        <span class='monto'>ref<br/>".number_format ($PrecioAyer,2,"," ,"." )."</span>
                                     </div>";
                                 }
 
@@ -212,7 +213,7 @@
 
                                     <div class='ahora precio'>
                                         <span class='text'>AHORA</span>
-                                        <span class='monto'>ref ".number_format ($PrecioHoy,2,"," ,"." )."</span>
+                                        <span class='monto'>ref<br/>".number_format ($PrecioHoy,2,"," ,"." )."</span>
                                     </div>
                                 </div>
 
