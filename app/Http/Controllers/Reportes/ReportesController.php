@@ -61,7 +61,7 @@ class ReportesController extends Controller
         $datos_concurso = $registrosVentas['registros'];
         $codigos = implode(',', $registrosVentas['codigos']);
         $codigosNotFound = $registrosVentas['no_encontrado'];
-        $codigosSinVenta = $registrosVentas['codigos_sin_venta'];
+        $codigosSinVenta = $this->obtenerNombre_articulo($registrosVentas['codigos_sin_venta']);
 
         return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'codigosNotFound', 'codigosSinVenta', 'fechaInicio', 'fechaLimite', 'sede'));
     }
@@ -306,4 +306,31 @@ class ReportesController extends Controller
 
         return FG_Conectar_Smartpharma($SedeConnection);
     }
+
+    private function obtenerNombre_articulo(array $codigos)
+		{
+			$conn = $this->obtener_conexionSmart();
+            $listaCodigos = [];
+
+            foreach ($codigos as $index => $codigo)
+            {
+                $sql = "
+                    SELECT InvArticulo.Descripcion
+                    FROM InvCodigoBarra
+                    INNER JOIN InvArticulo ON InvCodigoBarra.InvArticuloId = InvArticulo.Id
+                    WHERE InvCodigoBarra.CodigoBarra = '$codigo'
+			    ";
+
+                $result = sqlsrv_query($conn,$sql,[],['QueryTimeout'=>7200]);
+                if($result) {
+                    $result = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+                    array_push($listaCodigos, [
+                        'codigo' => $codigo,
+                        'nombre' => $result['Descripcion']
+                    ]);
+                }
+            }
+
+            return $listaCodigos;
+		}
 }

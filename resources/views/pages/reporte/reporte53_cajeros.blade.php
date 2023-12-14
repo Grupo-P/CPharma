@@ -268,11 +268,16 @@
    
 						   {{-- Codigo --}}
 						   <div class="font-weight-bold codigoDivisor">
-							   <span>{{ $codigo }}</span>
+							   <span>{{ $codigo['codigo'] }}</span>
 						   </div>
+
+						   {{-- Nombre --}}
+						   <div class="font-weight-bold">
+								<span>{!! utf8_encode($codigo['nombre']) !!}</span>
+							</div>
    
 						   {{-- Icono --}}
-						   <div class="text-danger">
+						   <div class="text-warning codigoDivisor">
 							   <span><i class="fas fa-times"></i></span>
 						   </div>
 					   </div>
