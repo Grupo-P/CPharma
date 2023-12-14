@@ -596,8 +596,8 @@
   </script>
 
 	<script>
-    // var dominio = dominio(SedeConnectionJs);
-    var dominio = "http://cpharmagpde.com/"
+    var dominio = dominio(SedeConnectionJs);
+    // var dominio = "http://cpharmagpde.com/"
     const URLEtiquetaUnica = ''+dominio+'assets/functions/ofertero/functionEtiquetaOfertero.php';
 
 		$('#inputCodBar').attr("placeholder", "Haga scan o escriba el codigo de barra");
