@@ -194,7 +194,7 @@
                             $domingoFecha = date('Y/m/d', strtotime('+1 day', strtotime($sabadoFecha)));
                         }
 
-                        $sabadoFecha = date('d/m/Y', strtotime($domingoFecha));
+                        $sabadoFecha = date('d/m/Y', strtotime($sabadoFecha));
                         $domingoFecha = date('d/m/Y', strtotime($domingoFecha));
 
                         $Etiqueta = $Etiqueta."
@@ -338,7 +338,7 @@
                         $domingoFecha = date('Y/m/d', strtotime('+1 day', strtotime($sabadoFecha)));
                     }
 
-                    $sabadoFecha = date('d/m/Y', strtotime($domingoFecha));
+                    $sabadoFecha = date('d/m/Y', strtotime($sabadoFecha));
                     $domingoFecha = date('d/m/Y', strtotime($domingoFecha));
 
                     $Etiqueta = $Etiqueta."
