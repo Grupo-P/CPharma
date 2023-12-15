@@ -209,7 +209,7 @@
 							<th>Código interno</th>
 							<th>Artículo</th>
 							<th>Unidades (Total)</th>
-							<th>Monto total facturas Bs. (Sin IVA)</th>
+							<th>Venta total de Artículos Bs. (Sin IVA)</th>
 						</tr>
 					</thead>
 					<tbody>

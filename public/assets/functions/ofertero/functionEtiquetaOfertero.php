@@ -69,7 +69,6 @@
 
     function diasCero_PrecioAyer($IdArticulo, $precioHoy) {
         $fechaHoy = date('Y-m-d');
-        $fechaHoy = date('Y-m-d', strtotime('-1 month', strtotime($fechaHoy)));
 
         $sql = "
             SELECT precio, precio_dolar
