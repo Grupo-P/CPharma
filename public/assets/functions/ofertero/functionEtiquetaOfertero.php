@@ -180,19 +180,22 @@
                     
                         // Fecha de proximo sabado
                         $today = date('Y/m/d'); // Obtén la fecha actual
-                        $sabadoFecha = date('d/m/Y', strtotime('next Saturday', strtotime($today)));
-                        $domingoFecha = date('m/d/Y', strtotime('+1 month', strtotime($sabadoFecha)));
+                        $sabadoFecha = date('Y/m/d', strtotime('next Saturday', strtotime($today)));
+                        $domingoFecha = date('Y/m/d', strtotime('+1 day', strtotime($sabadoFecha)));
                         $diaSemana = date('l');
 
                         if($diaSemana == 'Sunday') {
                             $today = date('Y/m/d'); // Obtén la fecha actual
-                            $sabadoFecha = date('d/m/Y', strtotime('last Saturday', strtotime($today)));
-                            $domingoFecha = date('d/m/Y');
+                            $sabadoFecha = date('Y/m/d', strtotime('last Saturday', strtotime($today)));
+                            $domingoFecha = date('Y/m/d');
                         } else if($diaSemana == 'Saturday') {
                             $today = date('Y/m/d'); // Obtén la fecha actual
-                            $sabadoFecha = date('d/m/Y');
-                            $domingoFecha = date('m/d/Y', strtotime('+1 month', strtotime($sabadoFecha)));
+                            $sabadoFecha = date('Y/m/d');
+                            $domingoFecha = date('Y/m/d', strtotime('+1 day', strtotime($sabadoFecha)));
                         }
+
+                        $sabadoFecha = date('d/m/Y', strtotime($domingoFecha));
+                        $domingoFecha = date('d/m/Y', strtotime($domingoFecha));
 
                         $Etiqueta = $Etiqueta."
                             <div class='titulo'>
@@ -322,18 +325,21 @@
                     // Fecha de proximo sabado
                     $today = date('Y/m/d'); // Obtén la fecha actual
                     $sabadoFecha = date('d/m/Y', strtotime('next Saturday', strtotime($today)));
-                    $domingoFecha = date('m/d/Y', strtotime('+1 month', strtotime($sabadoFecha)));
+                    $domingoFecha = date('m/d/Y', strtotime('+1 day', strtotime($sabadoFecha)));
                     $diaSemana = date('l');
 
                     if($diaSemana == 'Sunday') {
                         $today = date('Y/m/d'); // Obtén la fecha actual
-                        $sabadoFecha = date('d/m/Y', strtotime('last Saturday', strtotime($today)));
-                        $domingoFecha = date('d/m/Y');
+                        $sabadoFecha = date('Y/m/d', strtotime('last Saturday', strtotime($today)));
+                        $domingoFecha = date('Y/m/d');
                     } else if($diaSemana == 'Saturday') {
                         $today = date('Y/m/d'); // Obtén la fecha actual
-                        $sabadoFecha = date('d/m/Y');
-                        $domingoFecha = date('m/d/Y', strtotime('+1 month', strtotime($sabadoFecha)));
+                        $sabadoFecha = date('Y/m/d');
+                        $domingoFecha = date('Y/m/d', strtotime('+1 day', strtotime($sabadoFecha)));
                     }
+
+                    $sabadoFecha = date('d/m/Y', strtotime($domingoFecha));
+                    $domingoFecha = date('d/m/Y', strtotime($domingoFecha));
 
                     $Etiqueta = $Etiqueta."
                         <div>
