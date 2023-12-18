@@ -90,6 +90,7 @@ class ReportesController extends Controller
         $fechaFinal = new DateTime($fechaLimite);
         $fechaFinal->modify('+1 day');
         $fechaFinal = $fechaFinal->format('Y-m-d');
+        $fechaInicio = $fechaInicio->format('Y-m-d');
 
         $registrosCajeros = [];
         $codigosValidos = [];
