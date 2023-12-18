@@ -50,7 +50,7 @@ class ReportesController extends Controller
             return redirect()->back()->withErrors(['excel_file' => $error])->withInput();
         }
 
-        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $listaCodigos, $fechaInicio, $fechaLimite);
+        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $listaCodigos, date('Y-m-d', strtotime($fechaInicio)), $fechaLimite);
 
         $fechaInicio = new DateTime($fechaInicio);
         $fechaInicio = $fechaInicio->format('d/m/Y');
@@ -77,7 +77,7 @@ class ReportesController extends Controller
         $codigosLista = explode(',', $request->input('codigos'));
         $sede = $request->input('sede');
 
-        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $codigosLista, $inicio, $limite);
+        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $codigosLista, date('Y-m-d', strtotime($fechaInicio)), $limite);
 
         $cajeroInfo = $registrosVentas['registros'][$cajero];
         $codigos = $registrosVentas['codigos'];
