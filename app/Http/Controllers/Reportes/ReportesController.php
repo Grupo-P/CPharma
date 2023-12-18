@@ -53,10 +53,10 @@ class ReportesController extends Controller
         $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $listaCodigos, date('Y-m-d', strtotime($fechaInicio)), $fechaLimite);
 
         $fechaInicio = new DateTime($fechaInicio);
-        $fechaInicio = $fechaInicio->format('d/m/Y');
+        $fechaInicio = $fechaInicio->format('Y-m-d');
 
         $fechaLimite = new DateTime($fechaLimite);
-        $fechaLimite = $fechaLimite->format('d/m/Y');
+        $fechaLimite = $fechaLimite->format('Y-m-d');
 
         $datos_concurso = $registrosVentas['registros'];
         $codigos = implode(',', $registrosVentas['codigos']);
@@ -90,7 +90,6 @@ class ReportesController extends Controller
         $fechaFinal = new DateTime($fechaLimite);
         $fechaFinal->modify('+1 day');
         $fechaFinal = $fechaFinal->format('Y-m-d');
-        $fechaInicio = $fechaInicio->format('Y-m-d');
 
         $registrosCajeros = [];
         $codigosValidos = [];
