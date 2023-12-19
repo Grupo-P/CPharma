@@ -36,7 +36,7 @@
 			var facturas = "<?= $facturas ?>";
 
 			var tablaCajeros = $('#tablaCajeros').DataTable({
-                order: [[2, 'desc']],
+                order: [[2, 'desc'], [1, 'asc']],
 				paging: false,
         		searching: false,
 
@@ -86,8 +86,7 @@
                 ],
 			});
 
-			var unidadesTotales = ('.'+unidades);
-			const rowData = ['Totales', '', unidadesTotales, montos];
+			const rowData = ['Totales', '', unidades, montos];
 			tablaCajeros.row.add(rowData).draw().nodes().to$().addClass('filaTotales');
 
 			//Tooltip
