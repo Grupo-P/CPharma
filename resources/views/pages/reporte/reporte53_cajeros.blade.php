@@ -165,8 +165,6 @@
 		// include(app_path().'\functions\querys_mysql.php');
 		// include(app_path().'\functions\querys_sqlserver.php');
 
-		$InicioCarga = new DateTime("now");
-
 		if (isset($_GET['SEDE'])){
 			echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
 		}

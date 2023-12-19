@@ -36,6 +36,7 @@ class ReportesController extends Controller
             'fecha_limite' => 'Fecha limite'
         ]);
 
+        $InicioCarga = new DateTime("now");
         $file = $request->file('excel_file');
         $fechaInicio = $request->input('fecha_inicio');
         $fechaLimite = $request->input('fecha_limite');
@@ -63,11 +64,12 @@ class ReportesController extends Controller
         $codigosNotFound = $registrosVentas['no_encontrado'];
         $codigosSinVenta = $this->obtenerNombre_articulo($registrosVentas['codigos_sin_venta']);
 
-        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'codigosNotFound', 'codigosSinVenta', 'fechaInicio', 'fechaLimite', 'sede'));
+        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'codigosNotFound', 'codigosSinVenta', 'fechaInicio', 'fechaLimite', 'sede', 'InicioCarga'));
     }
 
     public function detalle(Request $request)
     {
+        $InicioCarga = new DateTime("now");
         $inicio = str_replace('/', '-', $request->input('inicio'));
         $limite = str_replace('/', '-', $request->input('limite'));
 
@@ -82,7 +84,7 @@ class ReportesController extends Controller
         $cajeroInfo = $registrosVentas['registros'][$cajero];
         $codigos = $registrosVentas['codigos'];
 
-        return view('pages.reporte.reporte53_detalle', compact('cajeroInfo', 'cajero', 'codigos', 'sede', 'fechaInicio', 'fechaLimite'));
+        return view('pages.reporte.reporte53_detalle', compact('cajeroInfo', 'cajero', 'codigos', 'sede', 'fechaInicio', 'fechaLimite', 'InicioCarga'));
     }
 
     private function obtenerVentas($conn, $listaCodigos, $fechaInicio, $fechaLimite)

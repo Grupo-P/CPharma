@@ -178,6 +178,10 @@
                 <th scope="col">52</th>
                 <td scope="col">Lotes a la baja</td>
             </tr>
+            <tr>
+                <th scope="col">53</th>
+                <td scope="col">Ventas de concursos</td>
+            </tr>
         </tbody>
     </table>
 
