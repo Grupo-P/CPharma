@@ -318,6 +318,8 @@
                     $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor, 0, 1) . rand(100, 999) . $decimales;
 
                     $i++;
+
+                    continue;
                 }
 
                 // Binance
@@ -359,6 +361,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
 
                 if (strpos($asunto, 'Pago recibido correctamente:') && $item->from == 'Binance <do-not-reply@ses.binance.com>') {
@@ -390,6 +394,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
 
                 if (strpos($asunto, 'Pago recibido correctamente:') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
@@ -421,6 +427,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
 
                 if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
@@ -451,6 +459,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
 
                 if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
@@ -480,6 +490,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
 
                 if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
@@ -511,6 +523,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
 
                 // PNC
@@ -548,6 +562,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
 
                 // Truist
@@ -613,6 +629,8 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
+
+                    continue;
                 }
             }
         }
