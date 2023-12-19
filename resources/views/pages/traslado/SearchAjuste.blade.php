@@ -203,7 +203,7 @@
   function Q_Lista_Ajuste()
   {
     $fechaActual = date('Y-m-d', strtotime('+1 day', strtotime(date('Y-m-d'))));
-    $fechaInicio = date('Y-m-d', strtotime('-15 days', strtotime($fechaActual)));
+    $fechaInicio = date('Y-m-d', strtotime('-10 days', strtotime($fechaActual)));
 
     $sql = "SELECT * FROM InvAjuste 
       WHERE InvAjuste.Id IN (
