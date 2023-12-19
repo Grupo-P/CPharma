@@ -14,7 +14,7 @@
 	* {
     box-sizing: border-box;
     --color-naranja: #FF5800;
-    --color-azul: #00B4DA;
+    --color-azul: #189CD8;
     --color-fondo: #fff;
   }
 
@@ -90,17 +90,38 @@
     overflow: hidden;
     position: relative;
     width: 25cm;
-    border: 2px solid var(--color-naranja);
     border-radius: 25px;
     background-color: var(--color-fondo);
-    margin: 1px;
+    margin: 3px;
     padding-bottom: 12px;
-    padding-top: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     page-break-inside: avoid;
+  }
+
+  .divPromo::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 54px;
+    border: 33px solid var(--color-azul);
+  }
+
+  .divPromo.piscina::before {
+    border: 40px solid var(--color-azul);
+  }
+
+  .divPromo.estibas::before {
+    border-radius: 65px !important;
+    border: 50px solid var(--color-azul);
   }
 
   /* Medidas */
@@ -126,45 +147,79 @@
   }
 
   /* Imagen */
-  .anaquel .imagen-ofertero {
+  /* .anaquel .imagen-ofertero {
     padding: 6px 0px;
-  }
+  } */
 
   .imagen-ofertero {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 12px 0px;
+    justify-content: space-between;
   }
 
-  .anaquel .imagen-ofertero img {
-    width: 270px !important;
+  .anaquel .imagen-ofertero img.logotema {
+    width: 360px !important;
+    position: relative;
+    object-fit: contain;
+    left: -17px;
+    top: -3px;
   }
 
-  .piscina .imagen-ofertero img {
-    width: 380px !important;
+  .anaquel .imagen-ofertero img.logo {
+    width: 82px !important;
+    object-fit: contain;
+    position: relative;
+    top: -12px;
+    right: 12px;
   }
 
-  .estibas .imagen-ofertero img {
-    width: 480px !important;
+  .piscina .imagen-ofertero img.logotema {
+    width: 410px !important;
+    position: relative;
+    object-fit: contain;
+    left: -33px;
+    top: -2px;
+  }
+
+  .piscina .imagen-ofertero img.logo {
+    width: 112px !important;
+    object-fit: contain;
+    position: relative;
+    top: -1px;
+    right: 19px;
+  }
+
+  .estibas .imagen-ofertero img.logotema {
+    width: 440px !important;
+    position: relative;
+    object-fit: contain;
+    left: -102px;
+    top: -2px;
+  }
+
+  .estibas .imagen-ofertero img.logo {
+    width: 131px !important;
+    object-fit: contain;
+    position: relative;
+    top: 16px;
+    right: -67px;
   }
 
   /* Titulo */
   .anaquel .titulo {
-    font-size: 26px !important;
+    font-size: 28px !important;
   }
   .anaquel .titulo p {
-    max-width: 74%;
-    line-height: 26px;
+    max-width: 80%;
+    line-height: 28px;
     margin-bottom: 6px;
   }
 
   .piscina .titulo {
-    font-size: 34px !important;
+    font-size: 32px !important;
   }
   .piscina .titulo p {
-    max-width: 74%;
-    line-height: 38px;
+    max-width: 80%;
+    line-height: 34px;
   }
 
   .titulo {
@@ -212,13 +267,17 @@
     top: 0px;
     left: 0px;
     right: 0px;
-    bottom: 0px;
-    color: var(--color-azul);
+    bottom: 50px;
+    color: #fff;
     font-size: 25px;
     display: flex;
     width: 100%;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
+  }
+
+  .estibas .arriba {
+    bottom: 65px !important;
   }
 
   .arriba .codigo {
@@ -233,47 +292,53 @@
   }
 
   /* Precio */
-  .anaquel .precios {
-    margin-bottom: 0px !important;
-    padding-top: 0px !important;
-  }
-
-  .anaquel .precios .precio {
-    border: 1px solid var(--color-naranja);
-    padding: 4px 12px;
-    border-radius: 12px;
-  }
-
   .precios {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    margin-bottom: 20px;
     padding-top: 12px;
-  }
-
-  .piscina .precios .precio {
-    padding: 4px 24px;
-    border-radius: 26px;
+    z-index: 1000;
   }
 
   .precios .precio {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 2px solid var(--color-naranja);
-    padding: 4px 28px;
-    border-radius: 30px;
+    flex-direction: row;
+    border: 2px solid var(--color-azul) !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
   }
 
   .precios .precio .monto {
     font-family: CocoGoose;
     text-transform: uppercase;
+    color: var(--color-azul) !important;
+    margin-top: 0px !important;
+    padding: 4px 26px;
+    text-align: center !important;
+    background: #fff !important;
+  }
+
+  .precios .precio .text {
+    font-family: CocoGoose;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 12px;
+    background: var(--color-naranja);
+    color: #fff;
   }
 
   /* Antes */
+  .precios .precio.antes {
+    margin-bottom: 2px;
+    position: relative;
+    font-size: 32px !important;
+    color: var(--color-naranja) !important;
+    line-height: 30px;
+    margin-bottom: 48px;
+  }
+
   .anaquel .precios .precio.antes {
-    margin-right: 4px !important;
     font-size: 28px !important;
     line-height: 28px !important;
   }
@@ -282,72 +347,84 @@
     margin-right: 10px !important;
     font-size: 30px !important;
     line-height: 30px !important;
+    margin-bottom: 65px;
   }
 
-  .precios .precio.antes {
-    margin-right: 12px;
-    font-size: 32px !important;
-    color: var(--color-azul) !important;
-    line-height: 30px;
+  .estibas .precios .precio.antes {
+    margin-bottom: 70px;
+    margin-right: 30px;
   }
 
   .anaquel .precios .precio.antes .text {
-    font-size: 16px !important;
+    font-size: 15px !important;
     margin-bottom: 0px !important;
   }
 
   .piscina .precios .precio.antes .text {
     font-size: 24px !important;
-    margin-bottom: 3px !important;
+    margin-bottom: 0px !important;
+  }
+
+  .estibas .precios .precio.antes .text {
+    margin-bottom: 0px !important;
   }
 
   .precios .precio.antes .text {
     font-size: 26px;
     margin-bottom: 4px;
+    font-family: CocoGoose;
   }
 
   .precios .precio.antes .monto {
     text-decoration:line-through !important;
+    color: var(--color-naranja) !important;
+    padding: 4px 15px;
+
   }
 
   /* Ahora */
   .anaquel .precios .precio.ahora {
-    font-size: 30px !important;
-    line-height: 30px !important;
+    font-size: 20px !important;
+    line-height: 20px !important;
     font-weight: bold;
+    z-index: 1000;
   }
 
   .anaquel .precios .precio.ahora .monto {
-    font-size: 35px !important;
-    line-height: 35px;
-    margin-top: 6px !important;
+    font-size: 34px !important;
+    line-height: 34px;
     padding-bottom: 0px !important;
+    background: #fff !important;
   }
 
   .piscina .precios .precio.ahora {
     font-size: 30px !important;
     line-height: 28px !important;
+    z-index: 1000;
   }
 
   .piscina .precios .precio.ahora .monto {
-    font-size: 46px !important;
-    line-height: 34px;
-    margin-top: 8px !important;
-    padding-bottom: 2px !important;
+    font-size: 40px !important;
+    line-height: 40px;
+    padding: 12px 16px;
+    background: #fff !important;
   }
 
+
   .precios .precio.ahora {
-    font-size: 32px !important;
+    font-size: 30px !important;
     color: var(--color-azul) !important;
     line-height: 28px;
+    z-index: 1000;
   }
 
   .precios .precio.ahora .monto {
-    color: var(--color-naranja) !important;
-    font-size: 48px !important;
-    line-height: 36px;
+    color: var(--color-azul) !important;
+    font-size: 43px !important;
+    line-height: 40px;
     margin-top: 10px;
-    padding-bottom: 3px;
+    padding: 8px 16px;
+    background: #fff !important;
   }
 
   /* cuando vayamos a imprimir ... */
@@ -624,7 +701,7 @@
               else{
 
                 var nuevoDiv = '<div class="divPromo ' + medida +'">';
-                nuevoDiv += "<div class='imagen-ofertero'><img src='assets/img/ofertero_logo.PNG'/></div>";
+                nuevoDiv += "<div class='imagen-ofertero'><img class='logotema' src='assets/img/logotema_oferta.png'/><img class='logo' src='assets/img/logo_farmaya.png'/></div>";
                 nuevoDiv += respuesta
                 nuevoDiv += '</div>';
             	 	var contenedor = $("#DivEtiquetas").html();

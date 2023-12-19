@@ -2005,6 +2005,9 @@
             case 52:
                 $nombre = 'Lotes a la baja';
             break;
+            case 53:
+                $nombre = 'Ventas de concurso';
+            break;
             default:
                 $nombre = 'Reporte desconocido';
             break;

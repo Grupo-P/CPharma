@@ -50,19 +50,20 @@ class ReportesController extends Controller
             return redirect()->back()->withErrors(['excel_file' => $error])->withInput();
         }
 
-        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $listaCodigos, $fechaInicio, $fechaLimite);
+        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $listaCodigos, date('Y-m-d', strtotime($fechaInicio)), $fechaLimite);
 
         $fechaInicio = new DateTime($fechaInicio);
-        $fechaInicio = $fechaInicio->format('d/m/Y');
+        $fechaInicio = $fechaInicio->format('Y-m-d');
 
         $fechaLimite = new DateTime($fechaLimite);
-        $fechaLimite = $fechaLimite->format('d/m/Y');
+        $fechaLimite = $fechaLimite->format('Y-m-d');
 
         $datos_concurso = $registrosVentas['registros'];
         $codigos = implode(',', $registrosVentas['codigos']);
         $codigosNotFound = $registrosVentas['no_encontrado'];
+        $codigosSinVenta = $this->obtenerNombre_articulo($registrosVentas['codigos_sin_venta']);
 
-        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'codigosNotFound', 'fechaInicio', 'fechaLimite', 'sede'));
+        return view('pages.reporte.reporte53_cajeros', compact('datos_concurso', 'codigos', 'codigosNotFound', 'codigosSinVenta', 'fechaInicio', 'fechaLimite', 'sede'));
     }
 
     public function detalle(Request $request)
@@ -76,7 +77,7 @@ class ReportesController extends Controller
         $codigosLista = explode(',', $request->input('codigos'));
         $sede = $request->input('sede');
 
-        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $codigosLista, $inicio, $limite);
+        $registrosVentas = $this->obtenerVentas($this->obtener_conexionSmart(), $codigosLista, date('Y-m-d', strtotime($fechaInicio)), $limite);
 
         $cajeroInfo = $registrosVentas['registros'][$cajero];
         $codigos = $registrosVentas['codigos'];
@@ -92,6 +93,7 @@ class ReportesController extends Controller
 
         $registrosCajeros = [];
         $codigosValidos = [];
+        $codigosConVenta = [];
         $codigosNoFound = [];
 
         foreach ($listaCodigos as $index => $codigos) {
@@ -132,6 +134,7 @@ class ReportesController extends Controller
                         VenFactura.Auditoria_Usuario AS USUARIO,
                         CONCAT(MAX(GenPersona.Nombre), ' ', MAX(GenPersona.Apellido)) AS NOMBRE,
                         InvArticulo.CodigoArticulo AS CODIGO_INTERNO,
+                        InvCodigoBarra.CodigoBarra AS CODIGO_BARRA,
                         InvArticulo.Descripcion AS ARTICULO,
                         CAST(SUM(VenFacturaDetalle.Cantidad) AS decimal(18, 0)) AS CANTIDAD,
                         CAST(ROUND(SUM(VenFacturaDetalle.PrecioNeto * VenFacturaDetalle.Cantidad), 2) AS decimal(18, 2)) AS MONTO
@@ -147,7 +150,7 @@ class ReportesController extends Controller
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
                         VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
                     GROUP BY 
-                        VenFactura.Auditoria_Usuario, InvArticulo.CodigoArticulo, InvArticulo.Descripcion, VenFactura.Id
+                        VenFactura.Auditoria_Usuario, InvArticulo.CodigoArticulo, InvCodigoBarra.CodigoBarra, InvArticulo.Descripcion, VenFactura.Id
                 ";
 
                 $result = sqlsrv_query($conn,$sqlFacturas,[],['QueryTimeout'=>7200]);
@@ -157,14 +160,21 @@ class ReportesController extends Controller
                         ['nombre' => $row['NOMBRE']],
                         $this->ordenarResultados($row, $registrosCajeros[$usuario] ?? [])
                     );
+
+                    if(array_search($row['CODIGO_BARRA'], $codigosConVenta) === false) {
+                        array_push($codigosConVenta,$row['CODIGO_BARRA']);
+                    }
                 }
             }
         }
 
+        $codigosSinVenta = array_diff($codigosValidos, $codigosConVenta);
+
         return [
             'registros' => $registrosCajeros,
-            'codigos' => $codigosValidos,
-            'no_encontrado' => $codigosNoFound
+            'codigos' => $codigosConVenta,
+            'no_encontrado' => $codigosNoFound,
+            'codigos_sin_venta' => $codigosSinVenta
         ];
     }
 
@@ -296,4 +306,31 @@ class ReportesController extends Controller
 
         return FG_Conectar_Smartpharma($SedeConnection);
     }
+
+    private function obtenerNombre_articulo(array $codigos)
+		{
+			$conn = $this->obtener_conexionSmart();
+            $listaCodigos = [];
+
+            foreach ($codigos as $index => $codigo)
+            {
+                $sql = "
+                    SELECT InvArticulo.Descripcion
+                    FROM InvCodigoBarra
+                    INNER JOIN InvArticulo ON InvCodigoBarra.InvArticuloId = InvArticulo.Id
+                    WHERE InvCodigoBarra.CodigoBarra = '$codigo'
+			    ";
+
+                $result = sqlsrv_query($conn,$sql,[],['QueryTimeout'=>7200]);
+                if($result) {
+                    $result = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC);
+                    array_push($listaCodigos, [
+                        'codigo' => $codigo,
+                        'nombre' => $result['Descripcion']
+                    ]);
+                }
+            }
+
+            return $listaCodigos;
+		}
 }

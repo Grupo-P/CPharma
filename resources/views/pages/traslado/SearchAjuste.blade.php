@@ -172,31 +172,45 @@
     RETORNO: Lista de numeros de ajuste
     DESAROLLADO POR: NISA DELGADO
   */
-  function Q_Lista_Ajuste() {
-    $sql = "
-        SELECT
-          *
-        FROM
-            InvAjuste
-        WHERE
-            InvAjuste.Id IN (
-                SELECT
-                    InvAjusteDetalle.InvAjusteId
-                FROM
-                    InvAjusteDetalle
-                WHERE
-                    InvAjusteDetalle.InvCausaId = (
-                        SELECT
-                            InvCausa.Id
-                        FROM
-                            InvCausa
-                        WHERE
-                            InvCausa.Descripcion = 'Traslado'
-                    )
-                )
-        ORDER BY
-            InvAjuste.NumeroAjuste ASC
-    ";
+  // function Q_Lista_Ajuste() {
+  //   $sql = "
+  //       SELECT
+  //         *
+  //       FROM
+  //           InvAjuste
+  //       WHERE
+  //           InvAjuste.Id IN (
+  //               SELECT
+  //                   InvAjusteDetalle.InvAjusteId
+  //               FROM
+  //                   InvAjusteDetalle
+  //               WHERE
+  //                   InvAjusteDetalle.InvCausaId = (
+  //                       SELECT
+  //                           InvCausa.Id
+  //                       FROM
+  //                           InvCausa
+  //                       WHERE
+  //                           InvCausa.Descripcion = 'Traslado'
+  //                   )
+  //               )
+  //       ORDER BY
+  //           InvAjuste.NumeroAjuste ASC
+  //   ";
+  //   return $sql;
+  // }
+
+  function Q_Lista_Ajuste()
+  {
+    $fechaActual = date('Y-m-d');
+    $fechaInicio = date('Y-m-d', strtotime('-15 days', strtotime($fechaActual)));
+
+    $sql = "SELECT * FROM InvAjuste 
+      WHERE InvAjuste.Id IN (
+          SELECT InvAjusteDetalle.InvAjusteId FROM InvAjusteDetalle WHERE InvAjusteDetalle.InvCausaId = (
+              SELECT InvCausa.Id FROM InvCausa WHERE InvCausa.Descripcion = 'Traslado' 
+          )
+      ) AND InvAjuste.Fecha >='". $fechaInicio ."' AND InvAjuste.Fecha <= '".$fechaActual."' ORDER BY InvAjuste.NumeroAjuste ASC"; 
     return $sql;
   }
 ?>
