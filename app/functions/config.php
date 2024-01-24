@@ -100,10 +100,10 @@ define ("passGP" , "pCadm05");
 define ("nameGP" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE NISAUL **********************/
-define ("serverDBs" , "NISADELGADO\SQLEXPRESS");
+define ("serverDBs" , "NISADELGADO");
 define ("userDBs" , "sa");
-define ("passDBs" , "123");
-define ("nameDBs" , "smartpharma");
+define ("passDBs" , "Soporte123");
+define ("nameDBs" , "cpharmaftn");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO DE SERGIO ARG **********************/
 define ("serverDBsa" , "SERGIO-PC");
