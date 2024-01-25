@@ -38,7 +38,7 @@
                     }
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmaftn.com') {
-                        echo 'FARMACIA TIERRA NIEGRA, C. A.';
+                        echo 'FARMACIA TIERRA NEGRA, C. A.';
                     }
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmafll.com') {
@@ -61,7 +61,7 @@
             <td style="font-size:  12px; border: 1px solid black; border-collapse: collapse; padding: 10px" colspan="4" class="alinear-izq">
                 @php
                     if ($sede == 'FTN') {
-                        echo 'FARMACIA TIERRA NIEGRA, C. A.';
+                        echo 'FARMACIA TIERRA NEGRA, C. A.';
                     }
 
                     if ($sede == 'FAU') {

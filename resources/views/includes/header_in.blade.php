@@ -819,6 +819,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ route('atributos.masivos') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-award"></i>
+          Modificar Atributos<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/traslado?Tipo=0') }}">
           <span data-feather="home"></span>
           <i class="fas fa-people-carry"></i>
