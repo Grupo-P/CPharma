@@ -5,7 +5,11 @@
   </head>
   <body>
     <header>
-      @include('includes.header_in_contabilidad')
+      @if(Auth::user()->departamento == 'LÍDER DE TIENDA')
+        @include('includes.header_in')
+      @else
+        @include('includes.header_in_contabilidad')
+      @endif
       @yield('scriptsHead')
     </header>
     <div class="container-fluid">
