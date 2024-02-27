@@ -247,24 +247,29 @@
                   }
                   @endphp
               <tr style="{{$color}}">
-                      
+                      @php
+                        $monto_pagado_factura = str_replace(",", "", $vuelto->get("monto_pagado_factura"));
+                        $monto_pagado_factura_dolar = str_replace(",", "", $vuelto->get("monto_pagado_factura_dolar"));
+                        $monto = str_replace(",", "", $vuelto->get("monto"));
+                        $monto_dolar = str_replace(",", "", $vuelto->get("monto_dolar"));
+                      @endphp 
                       <td>{{$contador}}</td>
                       <td>{{$vuelto->get("sede")}}</td>
                       <td>{{$vuelto->get("fecha_hora_factura")}}</td>
                       <td>{{$vuelto->get("numero_factura")}}</td>
                       <td>{{$vuelto->get("cedula_cliente_factura")}}</td>                                
                       <td>{{$vuelto->get("nombre_cliente")}}</td>                
-                      <td>{{$vuelto->get("telefono_cliente_factura")}}</td>                
+                      <td>{{$vuelto->get("telefono_cliente_factura")}}</td>               
                       <td>{{number_format($vuelto->get("total_factura"), 2, ',', '.')}}</td>
                       <td>{{number_format($vuelto->get("total_factura_dolar"), 2, ',', '.')}}</td>
-                      <td>{{number_format($vuelto->get("monto_pagado_factura"), 2, ',', '.')}}</td>
-                      <td>{{number_format($vuelto->get("monto_pagado_factura_dolar"), 2, ',', '.')}}</td>
+                      <td>{{number_format($monto_pagado_factura, 2, ',', '.')}}</td>
+                      <td>{{number_format($monto_pagado_factura_dolar, 2, ',', '.')}}</td>
                       <td>{{$vuelto->get("caja")}}</td>                
                       <td>{{$vuelto->get("cajero_venta")}}</td>
                       <td>{{$vuelto->get("fecha_hora")}}</td>
                       <td>{{$vuelto->get("banco_cliente")}}</td>
-                      <td>{{number_format($vuelto->get("monto"), 2, ',', '.')}}</td>
-                      <td>{{number_format($vuelto->get("monto_dolar"), 2, ',', '.')}}</td>
+                      <td>{{number_format($monto, 2, ',', '.')}}</td>
+                      <td>{{number_format($monto_dolar, 2, ',', '.')}}</td>
                       <td>{{$vuelto->get("cedula_cliente")}}</td>
                       <td>{{$vuelto->get("telefono_pago_movil")}}</td>                
                       <td style="{{$font}}">{{$vuelto->get("estatus")}}</td>

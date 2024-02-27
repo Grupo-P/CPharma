@@ -38,7 +38,7 @@
                     }
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmaftn.com') {
-                        echo 'FARMACIA TIERRA NIEGRA, C. A.';
+                        echo 'FARMACIA TIERRA NEGRA, C. A.';
                     }
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmafll.com') {
