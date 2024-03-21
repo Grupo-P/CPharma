@@ -873,7 +873,7 @@
         @if($error == 0)
             @if(count($pagos))
                 @foreach($pagos as $pago)
-                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}', '{{ trim($caja) }}', '{{ trim($sede) }}')">
+                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', `{{ strval(trim($pago['comentario'])) }}`, '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}', '{{ trim($caja) }}', '{{ trim($sede) }}')">
                         <td class="text-center">{{ $contador++ }}</td>
                         <td class="text-center">{{ trim($pago['tipo']) }}</td>
                         <td class="text-center">{{ trim($pago['enviado_por']) }}</td>
@@ -909,7 +909,7 @@
     .modal-body-pago img {
         position: absolute;
         opacity: 0.6;
-        width: 50%;
+        width: 30%;
         margin-left: 25%;
         height: auto;
     }
@@ -917,11 +917,11 @@
 
 <script>
     function mostrar_modal(tipo, enviado_por, monto, comentario, fecha, hash, caja, sede) {
-        html = '<img src="/assets/img/icono.png">';
+        html = '<img src="/assets/img/icono.png" style="object-fit: contain;">';
         html = html + '<p>Tipo: '+tipo+'</p>';
         html = html + '<p>Enviado por: '+enviado_por+'</p>';
         html = html + '<p>Monto: '+monto+'</p>';
-        html = html + '<p>Comentario: '+comentario+'</p>';
+        html = html + '<p>Comentario: '+comentario +'</p>';
         html = html + '<p>Fecha: '+fecha+'</p>';
         html = html + '<p>Hash: '+hash+'</p>';
         html = html + '<p>Caja: '+caja+'</p>';
