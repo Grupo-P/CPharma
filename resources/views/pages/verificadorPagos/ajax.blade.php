@@ -695,7 +695,7 @@
             }
         }
 
-        // PNC
+        // PNC|BANESCO US
 
         $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'Laravel23.') or die (imap_last_error());
 
@@ -725,7 +725,9 @@
 
             foreach ($overview as $item) {
 
-                if ($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you')) {
+                    // PNC
+                if ($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you'))
+                {
                     $body = imap_fetchbody($conn, $email, 1);
 
                     $array = explode(' sent you ', $item->subject);
@@ -759,6 +761,43 @@
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                     $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
+                    $pagos[$i]['referencia'] = $i;
+
+                        $i++;
+                } 
+                // BANESCO USA
+                else if ($item->from == 'Banesco USA <customerservice@banescousa.com>' && strpos($item->subject, 'deposited your payment'))
+                {
+                    $body = imap_fetchbody($conn, $email, 1);
+
+                    $inicioMonto = strpos($body, 'have successfully deposited the ');
+                    $finMonto = strpos($body, ' payment from ');
+                    $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                    $monto = strip_tags($monto);
+                    $monto = str_replace('have successfully deposited the ', '', $monto);
+
+                    $finEnviado = strpos($body, ' (confirmation number ');
+                    $enviadoPor = substr($body, $finMonto, $finEnviado - $finMonto);
+                    $enviadoPor = str_replace(' payment from ', '', $enviadoPor);
+
+                    //$inicioComentario = strpos($body, 'Note:');
+                    //$finComentario = strpos($body, 'Date:');
+                    //$comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                    //$comentario = strip_tags($comentario);
+                    //$comentario = str_replace('Note:', '', $comentario);
+
+                    $finReferencia = strpos($body, ') into your account ');
+                    $referencia = substr($body, $finEnviado, $finReferencia-$finEnviado);
+                    $referencia = strip_tags($referencia);
+                    $referencia = str_replace(' (confirmation number ', '', $referencia);
+
+                    $pagos[$i]['tipo'] = 'Zelle BANESCO USA';
+                    $pagos[$i]['enviado_por'] = $enviadoPor;
+                    $pagos[$i]['monto'] = $monto;
+                    $pagos[$i]['fecha'] = $fecha;
+                    $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                    $pagos[$i]['comentario'] = 'Referencia: '.$referencia;
                     $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
                     $pagos[$i]['referencia'] = $i;
 
@@ -834,7 +873,7 @@
         @if($error == 0)
             @if(count($pagos))
                 @foreach($pagos as $pago)
-                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', '{{ trim($pago['comentario']) }}', '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}', '{{ trim($caja) }}', '{{ trim($sede) }}')">
+                    <tr class="tr-item" onclick="mostrar_modal('{{ trim($pago['tipo']) }}', '{{ trim($pago['enviado_por']) }}', '{{ trim($pago['monto']) }}', `{{ strval(trim($pago['comentario'])) }}`, '{{ trim($pago['fecha']) }}', '{{ trim($pago['hash']) }}', '{{ trim($caja) }}', '{{ trim($sede) }}')">
                         <td class="text-center">{{ $contador++ }}</td>
                         <td class="text-center">{{ trim($pago['tipo']) }}</td>
                         <td class="text-center">{{ trim($pago['enviado_por']) }}</td>
@@ -870,7 +909,7 @@
     .modal-body-pago img {
         position: absolute;
         opacity: 0.6;
-        width: 50%;
+        width: 30%;
         margin-left: 25%;
         height: auto;
     }
@@ -878,11 +917,11 @@
 
 <script>
     function mostrar_modal(tipo, enviado_por, monto, comentario, fecha, hash, caja, sede) {
-        html = '<img src="/assets/img/icono.png">';
+        html = '<img src="/assets/img/icono.png" style="object-fit: contain;">';
         html = html + '<p>Tipo: '+tipo+'</p>';
         html = html + '<p>Enviado por: '+enviado_por+'</p>';
         html = html + '<p>Monto: '+monto+'</p>';
-        html = html + '<p>Comentario: '+comentario+'</p>';
+        html = html + '<p>Comentario: '+comentario +'</p>';
         html = html + '<p>Fecha: '+fecha+'</p>';
         html = html + '<p>Hash: '+hash+'</p>';
         html = html + '<p>Caja: '+caja+'</p>';

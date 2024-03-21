@@ -700,7 +700,7 @@
                 }
             }
 
-            // PNC
+            // PNC/BANESCO US
 
             $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'Laravel23.') or die (imap_last_error());
 
@@ -729,6 +729,7 @@
 
                     foreach ($overview as $item) {
 
+                        // PNC
                         if ($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you')) {
                             $body = imap_fetchbody($conn, $email, 1);
 
@@ -763,6 +764,42 @@
                             $pagos[$i]['fecha'] = $fecha;
                             $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                             $pagos[$i]['comentario'] = $comentario;
+                            $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                            $pagos[$i]['referencia'] = $i;
+
+                            $i++;
+                        } 
+                        // BANESCO USA
+                        else if ($item->from == 'Banesco USA <customerservice@banescousa.com>' && strpos($item->subject, 'deposited your payment')) {
+                            $body = imap_fetchbody($conn, $email, 1);
+
+                            $inicioMonto = strpos($body, 'have successfully deposited the ');
+                            $finMonto = strpos($body, ' payment from ');
+                            $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                            $monto = strip_tags($monto);
+                            $monto = str_replace('have successfully deposited the ', '', $monto);
+
+                            $finEnviado = strpos($body, ' (confirmation number ');
+                            $enviadoPor = substr($body, $finMonto, $finEnviado - $finMonto);
+                            $enviadoPor = str_replace(' payment from ', '', $enviadoPor);
+
+                            //$inicioComentario = strpos($body, 'Note:');
+                            //$finComentario = strpos($body, 'Date:');
+                            //$comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                            //$comentario = strip_tags($comentario);
+                            //$comentario = str_replace('Note:', '', $comentario);
+
+                            $finReferencia = strpos($body, ') into your account ');
+                            $referencia = substr($body, $finEnviado, $finReferencia-$finEnviado);
+                            $referencia = strip_tags($referencia);
+                            $referencia = str_replace(' (confirmation number ', '', $referencia);
+
+                            $pagos[$i]['tipo'] = 'Zelle BANESCO USA';
+                            $pagos[$i]['enviado_por'] = $enviadoPor;
+                            $pagos[$i]['monto'] = $monto;
+                            $pagos[$i]['fecha'] = $fecha;
+                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                            $pagos[$i]['comentario'] = 'Referencia: '.$referencia;
                             $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
                             $pagos[$i]['referencia'] = $i;
 
