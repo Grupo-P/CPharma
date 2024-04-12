@@ -184,6 +184,14 @@
                         $finReferencia = strpos($substr, ',');
                         $referencia = substr($substr, 0, $finReferencia);
 
+                        $inicioFechaMensaje = strpos($substr, ', el ');
+                        $inicioFechaMensaje = str_replace(", el ", "", substr($substr, $inicioFechaMensaje));
+
+                        $finFechaMensaje = strpos($inicioFechaMensaje, ' a las');
+                        $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+
+                        if($fechaMensaje != date("d/m/Y")) continue;
+
                         $comentario = "Referencia: $referencia";
 
                         $decimales = explode('.', (string) $monto);
@@ -229,6 +237,14 @@
                         $finReferencia = strpos($substr, ' Llamar');
                         $referencia = substr($substr, 0, $finReferencia);
 
+                        $inicioFechaMensaje = strpos($substr, ', el ');
+                        $inicioFechaMensaje = str_replace(", el ", "", substr($substr, $inicioFechaMensaje));
+
+                        $finFechaMensaje = strpos($inicioFechaMensaje, ' a las');
+                        $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+
+                        if($fechaMensaje != date("d/m/Y")) continue;
+                        
                         $comentario = "Referencia: $referencia";
 
                         $decimales = explode('.', (string) $monto);
