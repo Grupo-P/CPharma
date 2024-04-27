@@ -98,7 +98,7 @@
                 $remitente = 'pagomovilfec@gmail.com';
             }
 
-            if ($sede == 'PAG') {
+            if ($sede == 'PAG' || $sede == 'OPERADORA PAG CANTA CLARO, C.A.') {
                 $username = 'deldiapagos@hotmail.com';
                 $password = 'atorvastatin@.PAG';
                 $remitente = 'pagomovilpag@gmail.com';
