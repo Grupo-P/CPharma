@@ -544,7 +544,48 @@
                 }
 
                 // PNC
-                if ($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you'))
+                $fromPNC = trim($item->from);
+                if (strpos($fromPNC, 'PNC Alerts')  !== false && strpos($item->subject, 'sent_you')  !== false)
+                {
+                    $body = imap_fetchbody($conn, $email, 1);
+
+                    $subjetPnc = mb_decode_mimeheader($item->subject);
+                    $array = explode('_sent_you_', $subjetPnc);
+                    $enviadoPor = str_replace('_', ' ', $array[0]);
+                    $enviadoPor = strtoupper($enviadoPor);
+
+                    $monto = '';
+
+                    $inicioMonto = strpos($body, 'Amount:');
+                    $finMonto = strpos($body, 'Note:');
+                    $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                    $monto = strip_tags($monto);
+                    $monto = str_replace('Amount:', '', $monto);
+
+                    $inicioComentario = strpos($body, 'Note:');
+                    $finComentario = strpos($body, 'Date:');
+                    $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                    $comentario = strip_tags($comentario);
+                    $comentario = str_replace('Note:', '', $comentario);
+
+                    $inicioReferencia = strpos($body, 'Transaction ID:');
+                    $finReferencia = strpos($body, 'The money will ');
+                    $referencia = substr($body, $inicioReferencia, $finReferencia-$inicioReferencia);
+                    $referencia = strip_tags($referencia);
+                    $referencia = str_replace('Transaction ID:', '', $referencia);
+                    $comentario = $comentario . ' Referencia: ' . $referencia;
+
+                    $pagos[$i]['tipo'] = 'Zelle PNC';
+                    $pagos[$i]['enviado_por'] = $enviadoPor;
+                    $pagos[$i]['monto'] = $monto;
+                    $pagos[$i]['fecha'] = $fecha;
+                    $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                    $pagos[$i]['comentario'] = $comentario;
+                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                    $pagos[$i]['referencia'] = $i;
+
+                    $i++;
+                } else if ($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you'))
                 {
                     $body = imap_fetchbody($conn, $email, 1);
 
