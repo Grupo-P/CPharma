@@ -237,13 +237,17 @@
                         $finReferencia = strpos($substr, ' Llamar');
                         $referencia = substr($substr, 0, $finReferencia);
 
-                        $inicioFechaMensaje = strpos($substr, ', el ');
-                        $inicioFechaMensaje = str_replace(", el ", "", substr($substr, $inicioFechaMensaje));
+                        $inicioFechaMensaje = strpos($substr, 'Operacion (');
+                        $inicioFechaMensaje = str_replace("Operacion (", "", substr($substr, $inicioFechaMensaje));
 
-                        $finFechaMensaje = strpos($inicioFechaMensaje, ' a las');
+                        $finFechaMensaje = strpos($inicioFechaMensaje, ' ');
                         $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+                        $fechaConsulta = date("d/m/Y");
 
-                        if($fechaMensaje != date("d/m/Y")) continue;
+                        $fechaMensaje = DateTime::createFromFormat('d/m/y', $fechaMensaje);
+                        $fechaConsulta = DateTime::createFromFormat('d/m/Y', $fechaConsulta);
+
+                        if($fechaMensaje != $fechaConsulta) continue;
                         
                         $comentario = "Referencia: $referencia";
 
