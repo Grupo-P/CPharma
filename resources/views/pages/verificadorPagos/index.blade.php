@@ -811,7 +811,7 @@
 
                 // PNC/BANESCO US/ TRUIS
 
-                $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'Laravel23.') or die (imap_last_error());
+                $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die (imap_last_error());
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
