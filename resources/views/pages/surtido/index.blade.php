@@ -120,7 +120,7 @@
                 </td>
 
                 <td style="width:30%;" align="center">
-                    <a href="/surtido?estatus=PROCESADO" class="btn btn-outline-success btn-sm">PROCESADO</a>
+                    <a href="/surtido?estatus=PROCESADO" class="btn btn-outline-success btn-sm">GENERADO</a>
                 </td>
 
                 <td style="width:30%;" align="center">
@@ -157,8 +157,8 @@
                     <td class="text-center">{{ $surtido->operador_generado }}</td>
                     <td class="text-center">{{ $surtido->sku }}</td>
                     <td class="text-center">{{ $surtido->unidades }}</td>
-                    <td class="text-center">{{ $surtido->primero }}</td>
-                    <td class="text-center">{{ $surtido->ultimo }}</td>
+                    <td class="text-center">{{ $surtido->getPrimeroAttribute() }}</td>
+                    <td class="text-center">{{ $surtido->getUltimoAttribute() }}</td>
                     <td class="text-center">
                         @if($surtido->estatus == 'GENERADO')
                             <a href="{{ '/surtido/' . $surtido->id }}" target="_blank" class="btn btn-outline-dark btn-sm" data-toggle="tooltip" data-placement="top"data-original-title="Ver soporte">
@@ -179,6 +179,8 @@
                 </tr>
             @endforeach
         </tbody>
+
+        {{ $surtidos->appends(["estatus" => $status])->links() }}
     </table>
 
     <script>
