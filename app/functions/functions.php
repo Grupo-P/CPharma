@@ -315,6 +315,12 @@
                 return $sede;
             break;
         //FIN BLOQUE FEC
+        //INICIO BLOQUE FLF
+            case 'FLF':
+                $sede = SedeFLF;
+                return $sede;
+            break;
+        //FIN BLOQUE FLF
         //INICIO BLOQUE KD73
             case 'KD73':
                 $sede = SedeKD73;

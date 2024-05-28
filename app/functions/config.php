@@ -31,6 +31,7 @@ define ("SedeKDI","FARMACIAS KD EXPRESS, C.A.");
 define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A.");
 define ("SedeFEC","FARMACIA EL CALLEJON, C.A.");
 define ("SedeKD73","FARMACIAS KD EXPRESS, C.A. - KD73");
+define ("SedeFLF","FARMACIA LA FUSTA");
 define ("SedeGP","Servidor de Testing");
 define ("SedeDBs","Servidor de Desarrollo");
 define ("SedeDBsa","Servidor de Desarrollo Sergio");
@@ -42,6 +43,7 @@ define ("SedeFAUOFF","FARMACIA AVENIDA UNIVERSIDAD, C.A.<br>OFF-LINE");
 define ("SedeKDIOFF","FARMACIAS KD EXPRESS, C.A.<br>OFF-LINE");
 define ("SedeFSMOFF","FARMACIA MILLENNIUM 2000, C.A.<br>OFF-LINE");
 define ("SedeFECOFF","FARMACIA EL CALLEJON, C.A.<br>OFF-LINE");
+define ("SedeFLFOFF","FARMACIA LA FUSTA<br>OFF-LINE");
 define ("SedeKD73OFF","FARMACIAS KD EXPRESS, C.A. - KD73<br>OFF-LINE");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FTN **********************************/
