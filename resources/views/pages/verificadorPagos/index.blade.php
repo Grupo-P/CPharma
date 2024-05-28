@@ -37,6 +37,7 @@
                             <option value="FSM">FSM</option>
                             <option value="FEC">FEC</option>
                             <option value="KD73">KD73</option>
+                            <option value="PAG">PAG</option>
                         </select>
                     </div>
                 @endif
@@ -95,6 +96,12 @@
                 $username = 'pagoselcallejon@hotmail.com';
                 $password = 'atorvastati@.YA';
                 $remitente = 'pagomovilfec@gmail.com';
+            }
+
+            if ($sede == 'PAG' || $sede == 'OPERADORA PAG CANTA CLARO, C.A.') {
+                $username = 'deldiapagos@hotmail.com';
+                $password = 'atorvastatin@.PAG';
+                $remitente = 'pagomovilpag@gmail.com';
             }
 
             $mailbox = '{outlook.office365.com:993/imap/ssl}';
@@ -215,6 +222,14 @@
                                 $finReferencia = strpos($substr, ',');
                                 $referencia = substr($substr, 0, $finReferencia);
 
+                                $inicioFechaMensaje = strpos($substr, ', el ');
+                                $inicioFechaMensaje = str_replace(", el ", "", substr($substr, $inicioFechaMensaje));
+
+                                $finFechaMensaje = strpos($inicioFechaMensaje, ' a las');
+                                $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+
+                                if($fechaMensaje != date("d/m/Y", strtotime(request()->fecha))) continue;
+
                                 $comentario = "Referencia: $referencia";
 
                                 $pagos[$i]['tipo'] = 'Pago móvil Mercantil';
@@ -255,6 +270,18 @@
                                 $finReferencia = strpos($substr, ' Llamar');
                                 $referencia = substr($substr, 0, $finReferencia);
 
+                                $inicioFechaMensaje = strpos($substr, 'Operacion (');
+                                $inicioFechaMensaje = str_replace("Operacion (", "", substr($substr, $inicioFechaMensaje));
+
+                                $finFechaMensaje = strpos($inicioFechaMensaje, ' ');
+                                $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+                                $fechaConsulta = date("d/m/Y", strtotime(request()->fecha));
+
+                                $fechaMensaje = DateTime::createFromFormat('d/m/y', $fechaMensaje);
+                                $fechaConsulta = DateTime::createFromFormat('d/m/Y', $fechaConsulta);
+
+                                if($fechaMensaje != $fechaConsulta) continue;
+                                
                                 $comentario = "Referencia: $referencia";
 
                                 $decimales = explode('.', (string) $monto);
@@ -279,413 +306,366 @@
 
             }
 
-            $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die (@imap_last_error());
+            if($sede !== "PAG")
+            {
+                $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die (@imap_last_error());
 
-            $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
+                $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
-            $search = is_iterable($search) ? $search : [];
+                $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
+                $search = is_iterable($search) ? $search : [];
 
-            foreach ($search as $email) {
-                $overview = @imap_fetch_overview($conn, $email);
+                foreach ($search as $email) {
+                    $overview = @imap_fetch_overview($conn, $email);
 
-                $header = @imap_header($conn, $email);
-                $filtroFecha=date('Y-m-d',strtotime($header->MailDate));
+                    $header = @imap_header($conn, $email);
+                    $filtroFecha=date('Y-m-d',strtotime($header->MailDate));
 
-                if(request()->fecha==$filtroFecha){
-                    $fechaInstancia = new DateTime($header->MailDate);
-                    $fecha = $fechaInstancia->format('d/m/Y h:i A');
-                    $fechaSinFormato = $fechaInstancia->format('Y-m-d H:i:s');
+                    if(request()->fecha==$filtroFecha){
+                        $fechaInstancia = new DateTime($header->MailDate);
+                        $fecha = $fechaInstancia->format('d/m/Y h:i A');
+                        $fechaSinFormato = $fechaInstancia->format('Y-m-d H:i:s');
 
-                    $arrayFecha = explode(' ', $fecha);
+                        $arrayFecha = explode(' ', $fecha);
 
-                    if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
-                        continue;
-                    }
-
-                    foreach ($overview as $item) {
-                        // Paypal
-                        if (isset($item->subject)) {
-                            $asunto = fix_text_subject($item->subject);
-                        }
-
-                        if ($asunto == 'Ha recibido un pago' && $item->from == '"service@paypal.com" <service@paypal.com>') {
-                            $body = @imap_qprint(@imap_body($conn, $email));
-
-                            $inicioEnviadoPor = strpos($body, 'Gedaca holding corp:');
-                            $finEnviadoPor = strpos($body, ' le ha enviado');
-                            $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
-                            $enviadoPor = strip_tags($enviadoPor);
-                            $enviadoPor = str_replace('Gedaca holding corp:', '', $enviadoPor);
-
-                            $inicioMonto = strpos($body, '<td><strong>Fondos recibidos</strong></td>');
-                            $monto = substr($body, $inicioMonto+37, 100);
-                            $monto = strip_tags($monto);
-                            $monto = str_replace('&nbsp;USD', '', $monto);
-
-                            $inicioComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-left.png');
-                            $finComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-right.png');
-                            $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                            $comentario = strip_tags('<img src="' . $comentario);
-
-
-                            $pagos[$i]['tipo'] = 'Paypal';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-                        }
-
-                        // Binance
-
-                        if (
-                            (   strpos($asunto, 'Payment Receive Successful')
-                                ||strpos($asunto, 'Pago recibido correctamente')
-                            )
-                            &&
-                            (   $item->from == 'Binance <do-not-reply@ses.binance.com>'
-                                || $item->from == 'Binance <do-not-reply@directmail2.binance.com>'
-                            )
-                        ) {
-
-                            $body = @imap_body($conn, $email);
-                            $body = base64_decode($body);
-
-                            $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
-                            $substr = substr($body, $inicioEnviadoPor);
-                            $finEnviadoPor = strpos($substr, ' por ');
-                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
-
-                            $inicioMonto = (strpos($body, ' por ')) + 5;
-                            $substr = substr($body, $inicioMonto);
-                            $finMonto = strpos($substr, '. Ve a la [Aplicación d');
-                            $monto = substr($substr, 0, $finMonto);
-
-                            $comentario = '';
-
-                            $decimales = explode('.', (string) $monto);
-
-                            $pagos[$i]['tipo'] = 'Binance';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-
+                        if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
                             continue;
                         }
 
-                        if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@ses.binance.com>') {
-
-                            $body = @imap_body($conn, $email);
-                            $body = base64_decode($body);
-
-                            $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
-                            $substr = substr($body, $inicioEnviadoPor);
-                            $finEnviadoPor = strpos($substr, ' por ');
-                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
-
-                            $inicioMonto = (strpos($body, ' por ')) + 5;
-                            $substr = substr($body, $inicioMonto);
-                            $finMonto = strpos($substr, '. Ve a la [Aplicación d');
-                            $monto = substr($substr, 0, $finMonto);
-
-                            $comentario = '';
-
-                            $decimales = explode('.', (string) $monto);
-
-                            $pagos[$i]['tipo'] = 'Binance';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-
-                            continue;
-                        }
-
-                        if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
-
-                            $body = @imap_body($conn, $email);
-                            $body = imap_qprint($body);
-
-                            $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
-                            $substr = substr($body, $inicioEnviadoPor);
-                            $finEnviadoPor = strpos($substr, ' por ');
-                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
-
-                            $inicioMonto = (strpos($body, ' por ')) + 5;
-                            $substr = substr($body, $inicioMonto);
-                            $finMonto = strpos($substr, '. Ve a la [Aplicación d');
-                            $monto = substr($substr, 0, $finMonto);
-
-                            $comentario = '';
-
-                            $pagos[$i]['tipo'] = 'Binance';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-
-                            continue;
-                        }
-
-                        if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
-
-                            $body = @imap_body($conn, $email);
-                            $body = base64_decode($body);
-
-                            $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
-                            $substr = substr($body, $inicioEnviadoPor);
-                            $finEnviadoPor = strpos($substr, ' por ');
-                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
-
-                            $inicioMonto = (strpos($body, ' por ')) + 5;
-                            $substr = substr($body, $inicioMonto);
-                            $finMonto = strpos($substr, '. Ve a la [Aplicación d');
-                            $monto = substr($substr, 0, $finMonto);
-
-                            $comentario = '';
-
-                            $decimales = explode('.', (string) $monto);
-
-                            $pagos[$i]['tipo'] = 'Binance';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-
-                            continue;
-                        }
-
-                        if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
-
-                            $body = @imap_body($conn, $email);
-
-                            $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pa')) + 41;
-                            $substr = substr($body, $inicioEnviadoPor);
-                            $finEnviadoPor = strpos($substr, ' por ');
-                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
-
-                            $inicioMonto = (strpos($body, ' por ')) + 5;
-                            $substr = substr($body, $inicioMonto);
-                            $finMonto = strpos($substr, '. Ve a la [Aplicaci');
-                            $monto = substr($substr, 0, $finMonto);
-
-                            $comentario = '';
-
-                            $decimales = explode('.', (string) $monto);
-
-                            $pagos[$i]['tipo'] = 'Binance';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999);
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-
-                            continue;
-                        }
-
-                        if (strpos($asunto, 'Pago recibido correctamente:') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
-
-                            $body = @imap_body($conn, $email);
-                            $body = base64_decode($body);
-
-                            $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
-                            $substr = substr($body, $inicioEnviadoPor);
-                            $finEnviadoPor = strpos($substr, ' por ');
-                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
-
-                            $inicioMonto = (strpos($body, ' por ')) + 5;
-                            $substr = substr($body, $inicioMonto);
-                            $finMonto = strpos($substr, '. Ve a la [Aplicación d');
-                            $monto = substr($substr, 0, $finMonto);
-
-                            $comentario = '';
-
-                            $decimales = explode('.', (string) $monto);
-
-                            $pagos[$i]['tipo'] = 'Binance';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999);
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-
-                            continue;
-                        }
-
-                        // PNC
-
-                        if (strpos($asunto, 'sent you a Zelle® payment.') && $item->from == 'PNC Alerts <pncalerts@pnc.com>') {
-
-                            $body = @imap_qprint(@imap_body($conn, $email));
-
-
-                            $enviadoPor = str_replace('sent you a Zelle® payment.', '', $asunto);
-                            $enviadoPor = ucwords(strtolower($enviadoPor));
-
-                            $inicioMonto = strpos($body, 'Amount:');
-                            $finMonto = strpos($body, 'Note:');
-                            $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
-                            $monto = strip_tags($monto);
-                            $monto = str_replace('Amount:', '', $monto);
-
-                            $inicioComentario = strpos($body, 'Note:');
-                            $finComentario = strpos($body, 'Date:');
-                            $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                            $comentario = strip_tags($comentario);
-                            $comentario = str_replace('Note:', '', $comentario);
-
-
-                            $pagos[$i]['tipo'] = 'Zelle PNC';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999);
-                            $pagos[$i]['referencia'] = $i;
-
-                            $i++;
-                        }
-
-                        if ($item->subject == 'Money was sent to you with Zelle' && $item->from == 'Truist Alerts <alertnotifications@message.truist.com>') {
-
-                            $body = imap_fetchbody($conn, $email, 1);
-                            $body = imap_base64($body);
-
-                            $inicioEnviadoPor = strpos($body, 'Sent by:');
-                            $finEnviadoPor = strpos($body, 'Amount');
-                            $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
-                            $enviadoPor = strip_tags($enviadoPor);
-                            $enviadoPor = str_replace(['Sent by:', '&nbsp;'], '', $enviadoPor);
-                            $enviadoPor = trim($enviadoPor);
-
-                            $inicioMonto = strpos($body, 'Amount:');
-
-                            $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'The money will') : strpos($body, 'Memo:');
-
-                            if(!$finMonto) {
-                                $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'This was de') : strpos($body, 'Memo:');
+                        foreach ($overview as $item) {
+                            // Paypal
+                            if (isset($item->subject)) {
+                                $asunto = fix_text_subject($item->subject);
                             }
 
-                            $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
-                            $monto = strip_tags($monto);
-                            $monto = str_replace(['Amount:', '&nbsp;'], '', $monto);
-                            $monto = trim($monto);
+                            if ($asunto == 'Ha recibido un pago' && $item->from == '"service@paypal.com" <service@paypal.com>') {
+                                $body = @imap_qprint(@imap_body($conn, $email));
 
-                            if (strpos($body, 'Memo:') === false) {
+                                $inicioEnviadoPor = strpos($body, 'Gedaca holding corp:');
+                                $finEnviadoPor = strpos($body, ' le ha enviado');
+                                $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
+                                $enviadoPor = strip_tags($enviadoPor);
+                                $enviadoPor = str_replace('Gedaca holding corp:', '', $enviadoPor);
+
+                                $inicioMonto = strpos($body, '<td><strong>Fondos recibidos</strong></td>');
+                                $monto = substr($body, $inicioMonto+37, 100);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace('&nbsp;USD', '', $monto);
+
+                                $inicioComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-left.png');
+                                $finComentario = strpos($body, 'https://www.paypalobjects.com/digitalassets/c/system-triggered-email/n/layout/images/quote-right.png');
+                                $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                $comentario = strip_tags('<img src="' . $comentario);
+
+
+                                $pagos[$i]['tipo'] = 'Paypal';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+                            }
+
+                            // Binance
+
+                            if (
+                                (   strpos($asunto, 'Payment Receive Successful')
+                                    ||strpos($asunto, 'Pago recibido correctamente')
+                                )
+                                &&
+                                (   $item->from == 'Binance <do-not-reply@ses.binance.com>'
+                                    || $item->from == 'Binance <do-not-reply@directmail2.binance.com>'
+                                )
+                            ) {
+
+                                $body = @imap_body($conn, $email);
+                                $body = base64_decode($body);
+
+                                $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
+                                $substr = substr($body, $inicioEnviadoPor);
+                                $finEnviadoPor = strpos($substr, ' por ');
+                                $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                                $inicioMonto = (strpos($body, ' por ')) + 5;
+                                $substr = substr($body, $inicioMonto);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $monto = substr($substr, 0, $finMonto);
+
                                 $comentario = '';
-                            } else {
-                                $inicioComentario = strpos($body, 'Memo:');
-                                $finComentario = strpos($body, 'The money will');
-                                
-                                if(!$finComentario) {
-                                    $finComentario = strpos($body, 'This was de');
+
+                                $decimales = explode('.', (string) $monto);
+
+                                $pagos[$i]['tipo'] = 'Binance';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+
+                                continue;
+                            }
+
+                            if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@ses.binance.com>') {
+
+                                $body = @imap_body($conn, $email);
+                                $body = base64_decode($body);
+
+                                $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
+                                $substr = substr($body, $inicioEnviadoPor);
+                                $finEnviadoPor = strpos($substr, ' por ');
+                                $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                                $inicioMonto = (strpos($body, ' por ')) + 5;
+                                $substr = substr($body, $inicioMonto);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $monto = substr($substr, 0, $finMonto);
+
+                                $comentario = '';
+
+                                $decimales = explode('.', (string) $monto);
+
+                                $pagos[$i]['tipo'] = 'Binance';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+
+                                continue;
+                            }
+
+                            if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
+
+                                $body = @imap_body($conn, $email);
+                                $body = imap_qprint($body);
+
+                                $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
+                                $substr = substr($body, $inicioEnviadoPor);
+                                $finEnviadoPor = strpos($substr, ' por ');
+                                $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                                $inicioMonto = (strpos($body, ' por ')) + 5;
+                                $substr = substr($body, $inicioMonto);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $monto = substr($substr, 0, $finMonto);
+
+                                $comentario = '';
+
+                                $pagos[$i]['tipo'] = 'Binance';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+
+                                continue;
+                            }
+
+                            if (strpos($asunto, 'Payment Receive Successful') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
+
+                                $body = @imap_body($conn, $email);
+                                $body = base64_decode($body);
+
+                                $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
+                                $substr = substr($body, $inicioEnviadoPor);
+                                $finEnviadoPor = strpos($substr, ' por ');
+                                $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                                $inicioMonto = (strpos($body, ' por ')) + 5;
+                                $substr = substr($body, $inicioMonto);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $monto = substr($substr, 0, $finMonto);
+
+                                $comentario = '';
+
+                                $decimales = explode('.', (string) $monto);
+
+                                $pagos[$i]['tipo'] = 'Binance';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+
+                                continue;
+                            }
+
+                            if (strpos($asunto, 'Pago recibido correctamente') && $item->from == 'Binance <do-not-reply@post.binance.com>') {
+
+                                $body = @imap_body($conn, $email);
+
+                                $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pa')) + 41;
+                                $substr = substr($body, $inicioEnviadoPor);
+                                $finEnviadoPor = strpos($substr, ' por ');
+                                $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                                $inicioMonto = (strpos($body, ' por ')) + 5;
+                                $substr = substr($body, $inicioMonto);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicaci');
+                                $monto = substr($substr, 0, $finMonto);
+
+                                $comentario = '';
+
+                                $decimales = explode('.', (string) $monto);
+
+                                $pagos[$i]['tipo'] = 'Binance';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999);
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+
+                                continue;
+                            }
+
+                            if (strpos($asunto, 'Pago recibido correctamente:') && $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>') {
+
+                                $body = @imap_body($conn, $email);
+                                $body = base64_decode($body);
+
+                                $inicioEnviadoPor = (strpos($body, 'Recibiste una transferencia de Pay de ')) + 38;
+                                $substr = substr($body, $inicioEnviadoPor);
+                                $finEnviadoPor = strpos($substr, ' por ');
+                                $enviadoPor = substr($substr, 0, $finEnviadoPor);
+
+                                $inicioMonto = (strpos($body, ' por ')) + 5;
+                                $substr = substr($body, $inicioMonto);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $monto = substr($substr, 0, $finMonto);
+
+                                $comentario = '';
+
+                                $decimales = explode('.', (string) $monto);
+
+                                $pagos[$i]['tipo'] = 'Binance';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999);
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+
+                                continue;
+                            }
+
+                            // TRUIST
+                            if ($item->subject == 'Money was sent to you with Zelle' && $item->from == 'Truist Alerts <alertnotifications@message.truist.com>') {
+
+                                $body = imap_fetchbody($conn, $email, 1);
+                                $body = imap_base64($body);
+
+                                $inicioEnviadoPor = strpos($body, 'Sent by:');
+                                $finEnviadoPor = strpos($body, 'Amount');
+                                $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
+                                $enviadoPor = strip_tags($enviadoPor);
+                                $enviadoPor = str_replace(['Sent by:', '&nbsp;'], '', $enviadoPor);
+                                $enviadoPor = trim($enviadoPor);
+
+                                $inicioMonto = strpos($body, 'Amount:');
+
+                                $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'The money will') : strpos($body, 'Memo:');
+
+                                if(!$finMonto) {
+                                    $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'This was de') : strpos($body, 'Memo:');
                                 }
 
-                                $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                                $comentario = strip_tags($comentario);
-                                $comentario = str_replace(['Memo:', '&nbsp;'], '', $comentario);
-                                $comentario = trim($comentario);
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace(['Amount:', '&nbsp;'], '', $monto);
+                                $monto = trim($monto);
+
+                                if (strpos($body, 'Memo:') === false) {
+                                    $comentario = '';
+                                } else {
+                                    $inicioComentario = strpos($body, 'Memo:');
+                                    $finComentario = strpos($body, 'The money will');
+                                    
+                                    if(!$finComentario) {
+                                        $finComentario = strpos($body, 'This was de');
+                                    }
+
+                                    $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                    $comentario = strip_tags($comentario);
+                                    $comentario = str_replace(['Memo:', '&nbsp;'], '', $comentario);
+                                    $comentario = trim($comentario);
+                                }
+
+
+                                $decimales = explode('.', (string) $monto);
+                                $decimales = $decimales[1] ?? $monto;
+
+                                $pagos[$i]['tipo'] = 'Zelle Truist';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
                             }
 
+                            // PNC
+                            $fromPNC = trim($item->from);
+                            if (strpos($fromPNC, 'PNC Alerts')  !== false && strpos($item->subject, 'sent_you')  !== false)
+                            {
+                                $body = imap_fetchbody($conn, $email, 1);
 
-                            $decimales = explode('.', (string) $monto);
-                            $decimales = $decimales[1] ?? $monto;
+                                $subjetPnc = mb_decode_mimeheader($item->subject);
+                                $array = explode('_sent_you_', $subjetPnc);
+                                $enviadoPor = str_replace('_', ' ', $array[0]);
+                                $enviadoPor = strtoupper($enviadoPor);
 
-                            $pagos[$i]['tipo'] = 'Zelle Truist';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
-                            $pagos[$i]['referencia'] = $i;
+                                $monto = '';
 
-                            $i++;
-                        }
-                    }
-                }
-            }
+                                $inicioMonto = strpos($body, 'Amount:');
+                                $finMonto = strpos($body, 'Note:');
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace('Amount:', '', $monto);
 
-            // Chase
-
-            $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die (imap_last_error());
-
-            $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
-
-            $search = imap_search($conn, 'SINCE "'.$fecha.'"');
-            $search = is_iterable($search) ? $search : [];
-
-            foreach ($search as $email) {
-                $overview = imap_fetch_overview($conn, $email);
-
-                $header = @imap_header($conn, $email);
-                $filtroFecha=date('Y-m-d',strtotime($header->MailDate));
-                if(request()->fecha==$filtroFecha){
-                    $fecha = new DateTime($header->MailDate);
-                    // $fecha->modify('-4hour');
-                    $fecha = $fecha->format('d/m/Y h:i A');
-
-                    $fechaSinFormato = new DateTime($header->MailDate);
-                    // $fechaSinFormato->modify('-4hour');
-                    $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
-
-                    $arrayFecha = explode(' ', $fecha);
-
-                    foreach ($overview as $item) {
-
-
-                        if ($item->from == 'Chase QuickPay Team <no-reply@alertsp.chase.com>') {
-                            $body = imap_fetchbody($conn, $email, 1);
-
-                            $array = explode(' sent you ', $item->subject);
-                            $enviadoPor = $array[0];
-                            $enviadoPor = strtoupper($array[0]);
-
-                            if(count($array)>1){
-                                $monto = $array[1];
-
-                                $inicioComentario = strpos($body, 'Memo:');
-                                $finComentario = strpos($body, 'To learn more,');
+                                $inicioComentario = strpos($body, 'Note:');
+                                $finComentario = strpos($body, 'Date:');
                                 $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
                                 $comentario = strip_tags($comentario);
-                                $comentario = str_replace('Memo:', '', $comentario);
+                                $comentario = str_replace('Note:', '', $comentario);
 
-                                $pagos[$i]['tipo'] = 'Zelle Chase';
+                                $inicioReferencia = strpos($body, 'Transaction ID:');
+                                $finReferencia = strpos($body, 'The money will ');
+                                $referencia = substr($body, $inicioReferencia, $finReferencia-$inicioReferencia);
+                                $referencia = strip_tags($referencia);
+                                $referencia = str_replace('Transaction ID:', '', $referencia);
+                                $comentario = $comentario . ' Referencia: ' . $referencia;
+
+                                $pagos[$i]['tipo'] = 'Zelle PNC';
                                 $pagos[$i]['enviado_por'] = $enviadoPor;
                                 $pagos[$i]['monto'] = $monto;
                                 $pagos[$i]['fecha'] = $fecha;
@@ -693,117 +673,390 @@
                                 $pagos[$i]['comentario'] = $comentario;
                                 $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
                                 $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+                            } else if($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you'))
+                            {
+                                $body = imap_fetchbody($conn, $email, 1);
+
+                                $array = explode(' sent you ', $item->subject);
+                                $enviadoPor = $array[0];
+                                $enviadoPor = strtoupper($array[0]);
+
+                                $monto = $array[1];
+
+                                $inicioMonto = strpos($body, 'Amount:');
+                                $finMonto = strpos($body, 'Note:');
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace('Amount:', '', $monto);
+
+                                $inicioComentario = strpos($body, 'Note:');
+                                $finComentario = strpos($body, 'Date:');
+                                $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                $comentario = strip_tags($comentario);
+                                $comentario = str_replace('Note:', '', $comentario);
+
+                                $inicioReferencia = strpos($body, 'Transaction ID:');
+                                $finReferencia = strpos($body, 'The money will ');
+                                $referencia = substr($body, $inicioReferencia, $finReferencia-$inicioReferencia);
+                                $referencia = strip_tags($referencia);
+                                $referencia = str_replace('Transaction ID:', '', $referencia);
+                                $comentario = $comentario . ' Referencia: ' . $referencia;
+
+                                $pagos[$i]['tipo'] = 'Zelle PNC';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+                            } else if (strpos($asunto, 'sent you a Zelle® payment.') && $item->from == 'PNC Alerts <pncalerts@pnc.com>') {
+
+                                $body = @imap_qprint(@imap_body($conn, $email));
+
+
+                                $enviadoPor = str_replace('sent you a Zelle® payment.', '', $asunto);
+                                $enviadoPor = ucwords(strtolower($enviadoPor));
+
+                                $inicioMonto = strpos($body, 'Amount:');
+                                $finMonto = strpos($body, 'Note:');
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace('Amount:', '', $monto);
+
+                                $inicioComentario = strpos($body, 'Note:');
+                                $finComentario = strpos($body, 'Date:');
+                                $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                $comentario = strip_tags($comentario);
+                                $comentario = str_replace('Note:', '', $comentario);
+
+
+                                $pagos[$i]['tipo'] = 'Zelle PNC';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . $fechaSinFormato . rand(100, 999);
+                                $pagos[$i]['referencia'] = $i;
+
                                 $i++;
                             }
                         }
                     }
                 }
-            }
 
-            // PNC/BANESCO US
+                // Chase
 
-            $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'Laravel23.') or die (imap_last_error());
+                $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die (imap_last_error());
 
-            $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
+                $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $search = imap_search($conn, 'SINCE "'.$fecha.'"');
-            $search = is_iterable($search) ? $search : [];
+                $search = imap_search($conn, 'SINCE "'.$fecha.'"');
+                $search = is_iterable($search) ? $search : [];
 
-            foreach ($search as $email) {
-                $overview = imap_fetch_overview($conn, $email);
+                foreach ($search as $email) {
+                    $overview = imap_fetch_overview($conn, $email);
 
-                $header = @imap_header($conn, $email);
-                $filtroFecha=date('Y-m-d',strtotime($header->MailDate));
-                if(request()->fecha==$filtroFecha){
-                    $fecha = new DateTime($header->MailDate);
-                    $fecha = $fecha->format('d/m/Y h:i A');
+                    $header = @imap_header($conn, $email);
+                    $filtroFecha=date('Y-m-d',strtotime($header->MailDate));
+                    if(request()->fecha==$filtroFecha){
+                        $fecha = new DateTime($header->MailDate);
+                        // $fecha->modify('-4hour');
+                        $fecha = $fecha->format('d/m/Y h:i A');
 
-                    $fechaSinFormato = new DateTime($header->MailDate);
-                    $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
+                        $fechaSinFormato = new DateTime($header->MailDate);
+                        // $fechaSinFormato->modify('-4hour');
+                        $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
-                    $arrayFecha = explode(' ', $fecha);
+                        $arrayFecha = explode(' ', $fecha);
 
-                    if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
-                        continue;
+                        foreach ($overview as $item) {
+
+
+                            if ($item->from == 'Chase QuickPay Team <no-reply@alertsp.chase.com>') {
+                                $body = imap_fetchbody($conn, $email, 1);
+
+                                $array = explode(' sent you ', $item->subject);
+                                $enviadoPor = $array[0];
+                                $enviadoPor = strtoupper($array[0]);
+
+                                if(count($array)>1){
+                                    $monto = $array[1];
+
+                                    $inicioComentario = strpos($body, 'Memo:');
+                                    $finComentario = strpos($body, 'To learn more,');
+                                    $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                    $comentario = strip_tags($comentario);
+                                    $comentario = str_replace('Memo:', '', $comentario);
+
+                                    $pagos[$i]['tipo'] = 'Zelle Chase';
+                                    $pagos[$i]['enviado_por'] = $enviadoPor;
+                                    $pagos[$i]['monto'] = $monto;
+                                    $pagos[$i]['fecha'] = $fecha;
+                                    $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                    $pagos[$i]['comentario'] = $comentario;
+                                    $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                                    $pagos[$i]['referencia'] = $i;
+                                    $i++;
+                                }
+                            }
+                        }
                     }
+                }
 
-                    foreach ($overview as $item) {
+                // PNC/BANESCO US/ TRUIS
 
-                        // PNC
-                        if ($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you')) {
-                            $body = imap_fetchbody($conn, $email, 1);
+                $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die (imap_last_error());
 
-                            $array = explode(' sent you ', $item->subject);
-                            $enviadoPor = $array[0];
-                            $enviadoPor = strtoupper($array[0]);
+                $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-                            $monto = $array[1];
+                $search = imap_search($conn, 'SINCE "'.$fecha.'"');
+                $search = is_iterable($search) ? $search : [];
 
-                            $inicioMonto = strpos($body, 'Amount:');
-                            $finMonto = strpos($body, 'Note:');
-                            $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
-                            $monto = strip_tags($monto);
-                            $monto = str_replace('Amount:', '', $monto);
+                foreach ($search as $email) {
+                    $overview = imap_fetch_overview($conn, $email);
 
-                            $inicioComentario = strpos($body, 'Note:');
-                            $finComentario = strpos($body, 'Date:');
-                            $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                            $comentario = strip_tags($comentario);
-                            $comentario = str_replace('Note:', '', $comentario);
+                    $header = @imap_header($conn, $email);
+                    $filtroFecha=date('Y-m-d',strtotime($header->MailDate));
+                    if(request()->fecha==$filtroFecha){
+                        $fecha = new DateTime($header->MailDate);
+                        $fecha = $fecha->format('d/m/Y h:i A');
 
-                            $inicioReferencia = strpos($body, 'Transaction ID:');
-                            $finReferencia = strpos($body, 'The money will ');
-                            $referencia = substr($body, $inicioReferencia, $finReferencia-$inicioReferencia);
-                            $referencia = strip_tags($referencia);
-                            $referencia = str_replace('Transaction ID:', '', $referencia);
-                            $comentario = $comentario . ' Referencia: ' . $referencia;
+                        $fechaSinFormato = new DateTime($header->MailDate);
+                        $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
-                            $pagos[$i]['tipo'] = 'Zelle PNC';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = $comentario;
-                            $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
+                        $arrayFecha = explode(' ', $fecha);
 
-                            $i++;
-                        } 
-                        // BANESCO USA
-                        else if ($item->from == 'Banesco USA <customerservice@banescousa.com>' && strpos($item->subject, 'deposited your payment')) {
-                            $body = imap_fetchbody($conn, $email, 1);
+                        if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
+                            continue;
+                        }
 
-                            $inicioMonto = strpos($body, 'have successfully deposited the ');
-                            $finMonto = strpos($body, ' payment from ');
-                            $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
-                            $monto = strip_tags($monto);
-                            $monto = str_replace('have successfully deposited the ', '', $monto);
+                        foreach ($overview as $item) {
 
-                            $finEnviado = strpos($body, ' (confirmation number ');
-                            $enviadoPor = substr($body, $finMonto, $finEnviado - $finMonto);
-                            $enviadoPor = str_replace(' payment from ', '', $enviadoPor);
+                            // PNC
+                            if ($item->from == 'PNC Alerts <pncalerts@pnc.com>' && strpos($item->subject, 'sent you')) {
+                                $body = imap_fetchbody($conn, $email, 1);
 
-                            //$inicioComentario = strpos($body, 'Note:');
-                            //$finComentario = strpos($body, 'Date:');
-                            //$comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
-                            //$comentario = strip_tags($comentario);
-                            //$comentario = str_replace('Note:', '', $comentario);
+                                $array = explode(' sent you ', $item->subject);
+                                $enviadoPor = $array[0];
+                                $enviadoPor = strtoupper($array[0]);
 
-                            $finReferencia = strpos($body, ') into your account ');
-                            $referencia = substr($body, $finEnviado, $finReferencia-$finEnviado);
-                            $referencia = strip_tags($referencia);
-                            $referencia = str_replace(' (confirmation number ', '', $referencia);
+                                $monto = $array[1];
 
-                            $pagos[$i]['tipo'] = 'Zelle BANESCO USA';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
-                            $pagos[$i]['monto'] = $monto;
-                            $pagos[$i]['fecha'] = $fecha;
-                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                            $pagos[$i]['comentario'] = 'Referencia: '.$referencia;
-                            $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
-                            $pagos[$i]['referencia'] = $i;
+                                $inicioMonto = strpos($body, 'Amount:');
+                                $finMonto = strpos($body, 'Note:');
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace('Amount:', '', $monto);
 
-                            $i++;
+                                $inicioComentario = strpos($body, 'Note:');
+                                $finComentario = strpos($body, 'Date:');
+                                $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                $comentario = strip_tags($comentario);
+                                $comentario = str_replace('Note:', '', $comentario);
+
+                                $inicioReferencia = strpos($body, 'Transaction ID:');
+                                $finReferencia = strpos($body, 'The money will ');
+                                $referencia = substr($body, $inicioReferencia, $finReferencia-$inicioReferencia);
+                                $referencia = strip_tags($referencia);
+                                $referencia = str_replace('Transaction ID:', '', $referencia);
+                                $comentario = $comentario . ' Referencia: ' . $referencia;
+
+                                $pagos[$i]['tipo'] = 'Zelle PNC';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+                            } 
+                            // BANESCO USA
+                            if ($item->from == 'Banesco USA <customerservice@banescousa.com>' && strpos($item->subject, 'deposited your payment')) {
+                                $body = imap_fetchbody($conn, $email, 1);
+
+                                $inicioMonto = strpos($body, 'have successfully deposited the ');
+                                $finMonto = strpos($body, ' payment from ');
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace('have successfully deposited the ', '', $monto);
+
+                                $finEnviado = strpos($body, ' (confirmation number ');
+                                $enviadoPor = substr($body, $finMonto, $finEnviado - $finMonto);
+                                $enviadoPor = str_replace(' payment from ', '', $enviadoPor);
+
+                                //$inicioComentario = strpos($body, 'Note:');
+                                //$finComentario = strpos($body, 'Date:');
+                                //$comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                //$comentario = strip_tags($comentario);
+                                //$comentario = str_replace('Note:', '', $comentario);
+
+                                $finReferencia = strpos($body, ') into your account ');
+                                $referencia = substr($body, $finEnviado, $finReferencia-$finEnviado);
+                                $referencia = strip_tags($referencia);
+                                $referencia = str_replace(' (confirmation number ', '', $referencia);
+
+                                $pagos[$i]['tipo'] = 'Zelle BANESCO USA';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = 'Referencia: '.$referencia;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+                            }                      
+                            // TRUIST
+                            if ($item->subject == 'Money was sent to you with Zelle' && $item->from == 'Truist Alerts <alertnotifications@message.truist.com>') {
+
+                                $body = imap_fetchbody($conn, $email, 1);
+                                $body = imap_base64($body);
+
+                                $inicioEnviadoPor = strpos($body, 'Sent by:');
+                                $finEnviadoPor = strpos($body, 'Amount');
+                                $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
+                                $enviadoPor = strip_tags($enviadoPor);
+                                $enviadoPor = str_replace(['Sent by:', '&nbsp;'], '', $enviadoPor);
+                                $enviadoPor = trim($enviadoPor);
+
+                                $inicioMonto = strpos($body, 'Amount:');
+
+                                $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'The money will') : strpos($body, 'Memo:');
+
+                                if(!$finMonto) {
+                                    $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'This was de') : strpos($body, 'Memo:');
+                                }
+
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace(['Amount:', '&nbsp;'], '', $monto);
+                                $monto = trim($monto);
+
+                                if (strpos($body, 'Memo:') === false) {
+                                    $comentario = '';
+                                } else {
+                                    $inicioComentario = strpos($body, 'Memo:');
+                                    $finComentario = strpos($body, 'The money will');
+                                    
+                                    if(!$finComentario) {
+                                        $finComentario = strpos($body, 'This was de');
+                                    }
+
+                                    $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                    $comentario = strip_tags($comentario);
+                                    $comentario = str_replace(['Memo:', '&nbsp;'], '', $comentario);
+                                    $comentario = trim($comentario);
+                                }
+
+
+                                $decimales = explode('.', (string) $monto);
+                                $decimales = $decimales[1] ?? $monto;
+
+                                $pagos[$i]['tipo'] = 'Zelle Truist';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+                            }
+                        }
+                    }
+                }
+            } else {
+                $conn = @imap_open($mailbox, 'deldiapagos@hotmail.com', 'atorvastatin@.PAG') or die (@imap_last_error());
+
+                $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
+
+                $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
+                $search = is_iterable($search) ? $search : [];
+
+                foreach ($search as $email) {
+                    $overview = @imap_fetch_overview($conn, $email);
+
+                    $header = @imap_header($conn, $email);
+                    $filtroFecha=date('Y-m-d',strtotime($header->MailDate));
+
+                    if(request()->fecha==$filtroFecha){
+                        $fechaInstancia = new DateTime($header->MailDate);
+                        $fecha = $fechaInstancia->format('d/m/Y h:i A');
+                        $fechaSinFormato = $fechaInstancia->format('Y-m-d H:i:s');
+
+                        $arrayFecha = explode(' ', $fecha);
+
+                        if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
+                            continue;
+                        }
+
+                        foreach ($overview as $item) {
+                            // TRUIST
+                            if ($item->subject == 'Money was sent to you with Zelle' && $item->from == 'Truist Alerts <alertnotifications@message.truist.com>') {
+
+                                $body = imap_fetchbody($conn, $email, 1);
+                                $body = imap_base64($body);
+
+                                $inicioEnviadoPor = strpos($body, 'Sent by:');
+                                $finEnviadoPor = strpos($body, 'Amount');
+                                $enviadoPor = substr($body, $inicioEnviadoPor, $finEnviadoPor-$inicioEnviadoPor);
+                                $enviadoPor = strip_tags($enviadoPor);
+                                $enviadoPor = str_replace(['Sent by:', '&nbsp;'], '', $enviadoPor);
+                                $enviadoPor = trim($enviadoPor);
+
+                                $inicioMonto = strpos($body, 'Amount:');
+
+                                $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'The money will') : strpos($body, 'Memo:');
+
+                                if(!$finMonto) {
+                                    $finMonto = strpos($body, 'Memo:') === false ? strpos($body, 'This was de') : strpos($body, 'Memo:');
+                                }
+
+                                $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
+                                $monto = strip_tags($monto);
+                                $monto = str_replace(['Amount:', '&nbsp;'], '', $monto);
+                                $monto = trim($monto);
+
+                                if (strpos($body, 'Memo:') === false) {
+                                    $comentario = '';
+                                } else {
+                                    $inicioComentario = strpos($body, 'Memo:');
+                                    $finComentario = strpos($body, 'The money will');
+                                    
+                                    if(!$finComentario) {
+                                        $finComentario = strpos($body, 'This was de');
+                                    }
+
+                                    $comentario = substr($body, $inicioComentario, $finComentario-$inicioComentario);
+                                    $comentario = strip_tags($comentario);
+                                    $comentario = str_replace(['Memo:', '&nbsp;'], '', $comentario);
+                                    $comentario = trim($comentario);
+                                }
+
+
+                                $decimales = explode('.', (string) $monto);
+                                $decimales = $decimales[1] ?? $monto;
+
+                                $pagos[$i]['tipo'] = 'Zelle Truist';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                                $pagos[$i]['referencia'] = $i;
+
+                                $i++;
+                            }
                         }
                     }
                 }
