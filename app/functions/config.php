@@ -93,6 +93,13 @@ define ("passKD73" , "soporte123");
 define ("nameKD73" , "BD_KDEXPRESS");
 define ("nameKD73OFF" , "cpharmakd73");
 /**********************************************************************************/
+/************************* CONEXION ON LINE FLF **********************************/
+define ("serverFLF" , "10.100.0.58");
+define ("userFLF" , "admin");
+define ("passFLF" , "soporte123");
+define ("nameFLF" , "smartflf"); //TODO: por confirmar
+define ("nameFLFOFF" , "cpharmaflf");
+/**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
 define ("serverGP" , "TESTSERVER\TESTINGSERVER");
 define ("userGP" , "sa");
