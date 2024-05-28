@@ -26,6 +26,19 @@ class Surtido extends Model
             ->orderBy('descripcion')
             ->first();
 
-        return $detalle->descripcion;
+        if(isset($detalle->descripcion))
+            return $detalle->descripcion;
+        return null;
+    }
+
+    public function getUltimoAttribute()
+    {
+        $detalle = SurtidoDetalle::where('control', $this->control)
+            ->orderBy('descripcion', "DESC")
+            ->first();
+
+            if(isset($detalle->descripcion))
+            return $detalle->descripcion;
+        return null;
     }
 }
