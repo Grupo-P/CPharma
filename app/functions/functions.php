@@ -153,6 +153,11 @@
                 return 'FEC';
             break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE DE FLF
+            case '28':
+                return 'FLF';
+            break;
+        //FIN BLOQUE DE FLF
         //INICIO BLOQUE DE KD73
             case '60':
                 return 'KD73';
@@ -3577,6 +3582,10 @@
                 $dominio = 'http://cpharmafec.com/';
                 return $dominio;
             break;
+            case 'FLF':
+                $dominio = 'http://cpharmaflf.com/';
+                return $dominio;
+            break;
             case 'KD73':
                 $dominio = 'http://cpharmakd73.com/';
                 return $dominio;
@@ -5005,6 +5014,14 @@
 
     if ($sede == 'FSM') {
         return 4;
+    }
+
+    if ($sede == 'FEC') {
+        return 5;
+    }
+
+    if ($sede == 'FLF') {
+        return 6;
     }
   }
 
