@@ -38,6 +38,7 @@
                             <option value="FEC">FEC</option>
                             <option value="KD73">KD73</option>
                             <option value="PAG">PAG</option>
+                            <option value="FLF">FLF</option>
                         </select>
                     </div>
                 @endif
@@ -102,6 +103,12 @@
                 $username = 'deldiapagos@hotmail.com';
                 $password = 'atorvastatin@.PAG';
                 $remitente = 'pagomovilpag@gmail.com';
+            }
+
+            if ($sede == 'FLF' || $sede == 'FARMACIA LA FUSTA') {
+                $username = 'pagoslafusta@hotmail.com';
+                $password = 'atorvastati@.YA';
+                $remitente = 'pagomovilflf@gmail.com';
             }
 
             $mailbox = '{outlook.office365.com:993/imap/ssl}';
@@ -281,7 +288,7 @@
                                 $fechaConsulta = DateTime::createFromFormat('d/m/Y', $fechaConsulta);
 
                                 if($fechaMensaje != $fechaConsulta) continue;
-                                
+
                                 $comentario = "Referencia: $referencia";
 
                                 $decimales = explode('.', (string) $monto);
@@ -606,7 +613,7 @@
                                 } else {
                                     $inicioComentario = strpos($body, 'Memo:');
                                     $finComentario = strpos($body, 'The money will');
-                                    
+
                                     if(!$finComentario) {
                                         $finComentario = strpos($body, 'This was de');
                                     }
@@ -877,7 +884,7 @@
                                 $pagos[$i]['referencia'] = $i;
 
                                 $i++;
-                            } 
+                            }
                             // BANESCO USA
                             if ($item->from == 'Banesco USA <customerservice@banescousa.com>' && strpos($item->subject, 'deposited your payment')) {
                                 $body = imap_fetchbody($conn, $email, 1);
@@ -913,7 +920,7 @@
                                 $pagos[$i]['referencia'] = $i;
 
                                 $i++;
-                            }                      
+                            }
                             // TRUIST
                             if ($item->subject == 'Money was sent to you with Zelle' && $item->from == 'Truist Alerts <alertnotifications@message.truist.com>') {
 
@@ -945,7 +952,7 @@
                                 } else {
                                     $inicioComentario = strpos($body, 'Memo:');
                                     $finComentario = strpos($body, 'The money will');
-                                    
+
                                     if(!$finComentario) {
                                         $finComentario = strpos($body, 'This was de');
                                     }
@@ -1031,7 +1038,7 @@
                                 } else {
                                     $inicioComentario = strpos($body, 'Memo:');
                                     $finComentario = strpos($body, 'The money will');
-                                    
+
                                     if(!$finComentario) {
                                         $finComentario = strpos($body, 'This was de');
                                     }

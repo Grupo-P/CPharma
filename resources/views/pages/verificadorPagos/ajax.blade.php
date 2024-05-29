@@ -50,6 +50,13 @@
             $id = 6;
         }
 
+        if ($host == 'cpharmaflf.com') { //TODO
+            $username = 'pagoslafusta@hotmail.com';
+            $password = 'atorvastati@.YA';
+            $remitente = 'pagomovilflf@gmail.com';
+            $id = 7;
+        }
+
         if ($host == 'cpharmakdi.com' || $host == 'cpharmakd73.com') {
             $username = 'pagoskdi@hotmail.com';
             $password = 'GJpc2017.';
@@ -248,7 +255,7 @@
                         $fechaConsulta = DateTime::createFromFormat('d/m/Y', $fechaConsulta);
 
                         if($fechaMensaje != $fechaConsulta) continue;
-                        
+
                         $comentario = "Referencia: $referencia";
 
                         $decimales = explode('.', (string) $monto);
@@ -696,7 +703,7 @@
                     } else {
                         $inicioComentario = strpos($body, 'Memo:');
                         $finComentario = strpos($body, 'The money will');
-                        
+
                         if(!$finComentario) {
                             $finComentario = strpos($body, 'This was de');
                         }
@@ -863,7 +870,7 @@
                     $pagos[$i]['referencia'] = $i;
 
                         $i++;
-                } 
+                }
                 // BANESCO USA
                 if ($item->from == 'Banesco USA <customerservice@banescousa.com>' && strpos($item->subject, 'deposited your payment'))
                 {
@@ -900,7 +907,7 @@
                     $pagos[$i]['referencia'] = $i;
 
                     $i++;
-                } 
+                }
                  // TRUIST
                 if ($item->subject == 'Money was sent to you with Zelle' && $item->from == 'Truist Alerts <alertnotifications@message.truist.com>') {
                     $body = imap_fetchbody($conn, $email, 1);
@@ -931,7 +938,7 @@
                     } else {
                         $inicioComentario = strpos($body, 'Memo:');
                         $finComentario = strpos($body, 'The money will');
-                        
+
                         if(!$finComentario) {
                             $finComentario = strpos($body, 'This was de');
                         }
