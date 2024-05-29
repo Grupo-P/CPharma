@@ -1017,6 +1017,17 @@
             return $conn;
         break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE DE FLF
+        case 'FLF':
+            $connectionInfo = array(
+                "Database"=>"Mod_Atte_Cliente",
+                "UID"=>userFLF,
+                "PWD"=>passFLF
+            );
+            $conn = sqlsrv_connect(serverFLF,$connectionInfo);
+            return $conn;
+        break;
+        //FIN BLOQUE DE FLF
         //INICIO BLOQUE DE KD73
             case 'KD73':
                 $connectionInfo = array(
