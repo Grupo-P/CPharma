@@ -188,6 +188,10 @@
                 <th scope="row">{!! Form::label('sede6', 'Cantidad para PAG') !!}</th>
                 <td>{!! Form::number('sede6', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede6']) !!}</td>
               </tr>
+              <tr>
+                <th scope="row">{!! Form::label('sede7', 'Cantidad para FLF') !!}</th>
+                <td>{!! Form::number('sede7', null, [ 'class' => 'form-control', 'autofocus', 'required', 'onblur' =>'sumaTotal()', 'id' => 'sede7']) !!}</td>
+              </tr>
         <!-- FIN DE CASO FORMULARIO PARA CENTRO DE DISTRIBUCION -->
 
         <!-- INICIO DE CASO FORMULARIO PARA UNICA SEDE -->
@@ -201,6 +205,7 @@
               {!! Form::hidden('sede4',NULL) !!}
               {!! Form::hidden('sede5',NULL) !!}
               {!! Form::hidden('sede6',NULL) !!}
+              {!! Form::hidden('sede7',NULL) !!}
               <tr>
                 <th scope="row">{!! Form::label('total_unidades', 'Total de Unidades') !!}</th>
                 <td>{!! Form::text('totalUnidades', null, [ 'class' => 'form-control', 'autofocus', 'required', 'id' => 'totalUnidades']) !!}</td>
@@ -265,6 +270,7 @@
             document.getElementById('sede4').value = 0;
             document.getElementById('sede5').value = 0;
             document.getElementById('sede6').value = 0;
+            document.getElementById('sede7').value = 0;
 
             isCDD = document.getElementById('isCDD').value;
 
@@ -281,6 +287,7 @@
             sede4 = parseInt(document.getElementById('sede4').value);
             sede5 = parseInt(document.getElementById('sede5').value);
             sede6 = parseInt(document.getElementById('sede6').value);
+            sede7 = parseInt(document.getElementById('sede7').value);
 
             totalUnidades = document.getElementById('totalUnidades').value;
 
@@ -290,8 +297,9 @@
             var sub4 = isNaN(sede4) ? 0 : sede4;
             var sub5 = isNaN(sede5) ? 0 : sede5;
             var sub6 = isNaN(sede6) ? 0 : sede6;
+            var sub7 = isNaN(sede7) ? 0 : sede7;
 
-            total = sub1+sub2+sub3+sub4+sub5+sub6;
+            total = sub1+sub2+sub3+sub4+sub5+sub6+sub7;
 
             totalUnidades = totalUnidades-total;
             document.getElementById('unidadesDisponibles').value = totalUnidades;

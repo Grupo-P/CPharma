@@ -136,6 +136,7 @@
 		      	<th scope="col" class="CP-sticky">Cantidad FM</th>
 		      	<th scope="col" class="CP-sticky">Cantidad FEC</th>
                 <th scope="col" class="CP-sticky">Cantidad PAG</th>
+                <th scope="col" class="CP-sticky">Cantidad FLF</th>
 		      	<th scope="col" class="CP-sticky">Total Unidades</th>
 		      	<th scope="col" class="CP-sticky">Costo Unitario</th>
 		      	<th scope="col" class="CP-sticky">Costo Total</th>
@@ -161,6 +162,7 @@
 		      <td>{{$ordenCompraDetalle->sede4}}</td>
 		      <td>{{$ordenCompraDetalle->sede5}}</td>
               <td>{{$ordenCompraDetalle->sede6}}</td>
+              <td>{{$ordenCompraDetalle->sede7}}</td>
 		      <td>{{$ordenCompraDetalle->total_unidades}}</td>
 		      <td>{{number_format($ordenCompraDetalle->costo_unitario,2,"," ,"." )}}</td>
 		      <td>{{number_format($ordenCompraDetalle->costo_total,2,"," ,"." )}}</td>
