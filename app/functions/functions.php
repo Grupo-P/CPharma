@@ -4802,6 +4802,10 @@
         $nombre = 'FARMACIA EL CALLEJON, C.A.';
     }
 
+    if ($sede == 'FLF') {
+        $nombre = 'FARMACIA LA FUSTA';
+    }
+
     if ($sede == 'KD73') {
         return [];
     }
@@ -4922,6 +4926,23 @@
         ");
 
         $array = array_merge($array, $fec);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $flf = DB::connection('flf')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $flf);
     } catch (Exception $excepcion) {
 
     }
