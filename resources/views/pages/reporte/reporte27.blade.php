@@ -58,7 +58,7 @@
         return $('.' + elemento).hide();
     }
 
-    campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dias_restantes', 'dias_riesgo', 'ultima_compra', 'fecha_lote', 'fecha_vencimiento', 'vida_util', 'dias_vencer', 'existencia_total', 'existencia_lote', 'valor_lote', 'valor_lote_ds', 'numero_lote', 'lote_fabricante', 'tipo', 'dolarizado', 'gravado', 'clasificacion', 'ultima_venta', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'sede4'];
+    campos = ['codigo', 'codigo_barra', 'descripcion', 'precio', 'dias_restantes', 'dias_riesgo', 'ultima_compra', 'fecha_lote', 'fecha_vencimiento', 'vida_util', 'dias_vencer', 'existencia_total', 'existencia_lote', 'valor_lote', 'valor_lote_ds', 'numero_lote', 'lote_fabricante', 'tipo', 'dolarizado', 'gravado', 'clasificacion', 'ultima_venta', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'sede4', 'sede5'];
 
     function mostrar_todas(that) {
         if (that.checked) {
@@ -188,12 +188,14 @@
     $conectividad_fll = FG_Validar_Conectividad('FLL');
     $conectividad_fsm = FG_Validar_Conectividad('FSM');
     $conectividad_fec = FG_Validar_Conectividad('FEC');
+    $conectividad_flf = FG_Validar_Conectividad('FLF');
 
     $connFAU = FG_Conectar_Smartpharma('FAU');
     $connFTN = FG_Conectar_Smartpharma('FTN');
     $connFLL = FG_Conectar_Smartpharma('FLL');
     $connFSM = FG_Conectar_Smartpharma('FSM');
     $connFEC = FG_Conectar_Smartpharma('FEC');
+    $connFLF = FG_Conectar_Smartpharma('FLF');
 
     $TasaActual = FG_Tasa_Fecha($connCPharma,date('Y-m-d'));
 
@@ -388,6 +390,11 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede5\')" name="sede5" checked>
+                    Sede 5
+                </div>
+
+                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
                     Marcar todas
                 </div>
@@ -438,6 +445,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -450,6 +459,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -462,6 +473,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -474,6 +487,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FLL</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -486,6 +501,22 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FLL</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FSM</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
+                ';
+              }
+
+              if (isset($_GET['SEDE']) && $_GET['SEDE'] == 'FLF') {
+                echo '<th scope="col" class="bg-warning sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="bg-warning sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FLL</td>
+                    <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FSM</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FEC</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FEC</td>
                 ';
               }
 
@@ -703,6 +734,15 @@
                 $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                 $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
             }
+
+            if ($conectividad_flf == 1) {
+                $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                $result3 = sqlsrv_query($connFLF,$sql3);
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                $descripcion_flf = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_flf = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
       }
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
@@ -740,6 +780,15 @@
 
                 $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                 $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+
+            if ($conectividad_flf == 1) {
+                $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                $result3 = sqlsrv_query($connFLF,$sql3);
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                $descripcion_flf = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_flf = ($row3['existencia']) ? intval($row3['existencia']) : '-';
             }
       }
 
@@ -779,6 +828,15 @@
                 $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                 $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
             }
+
+            if ($conectividad_flf == 1) {
+                $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                $result3 = sqlsrv_query($connFLF,$sql3);
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                $descripcion_flf = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_flf = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
       }
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FEC') {
@@ -817,6 +875,62 @@
                 $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                 $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
             }
+
+            if ($conectividad_flf == 1) {
+                $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                $result3 = sqlsrv_query($connFLF,$sql3);
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                $descripcion_flf = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_flf = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+      }
+
+      if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLF') {
+         if ($conectividad_ftn == 1) {
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFTN,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_ftn = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_ftn = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+
+          if ($conectividad_fau == 1) {
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFAU,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fau = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fau = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+
+          if ($conectividad_fll == 1) {
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFLL,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_fll = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_fll = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+          }
+
+          if ($conectividad_fsm == 1) {
+                $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                $result3 = sqlsrv_query($connFSM,$sql3);
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                $descripcion_fsm = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fsm = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
+
+            if ($conectividad_fec == 1) {
+                $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                $result3 = sqlsrv_query($connFEC,$sql3);
+                $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+            }
       }
 
       if (isset($_GET['SEDE']) & ($_GET['SEDE'] == 'FAU' || $_GET['SEDE'] == 'DBs')) {
@@ -850,6 +964,14 @@
             } else {
                 echo '<td class="'.$new.' sede4">-</td>';
                 echo '<td class="'.$new.' sede4">-</td>';
+            }
+
+            if ($conectividad_flf == 1) {
+                echo '<td class="'.$new.' sede5" align="center">'.$descripcion_flf.'</td>
+                      <td class="'.$new.' sede5" align="center">'.$existencia_flf.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede5">-</td>';
+                echo '<td class="'.$new.' sede5">-</td>';
             }
         }
 
@@ -885,6 +1007,14 @@
                 echo '<td class="'.$new.' sede4">-</td>';
                 echo '<td class="'.$new.' sede4">-</td>';
             }
+
+            if ($conectividad_flf == 1) {
+                echo '<td class="'.$new.' sede5" align="center">'.$descripcion_flf.'</td>
+                      <td class="'.$new.' sede5" align="center">'.$existencia_flf.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede5">-</td>';
+                echo '<td class="'.$new.' sede5">-</td>';
+            }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLL') {
@@ -918,6 +1048,14 @@
             } else {
                 echo '<td class="'.$new.' sede4">-</td>';
                 echo '<td class="'.$new.' sede4">-</td>';
+            }
+
+            if ($conectividad_flf == 1) {
+                echo '<td class="'.$new.' sede5" align="center">'.$descripcion_flf.'</td>
+                      <td class="'.$new.' sede5" align="center">'.$existencia_flf.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede5">-</td>';
+                echo '<td class="'.$new.' sede5">-</td>';
             }
         }
 
@@ -953,6 +1091,14 @@
                 echo '<td class="'.$new.' sede4">-</td>';
                 echo '<td class="'.$new.' sede4">-</td>';
             }
+
+            if ($conectividad_flf == 1) {
+                echo '<td class="'.$new.' sede5" align="center">'.$descripcion_flf.'</td>
+                      <td class="'.$new.' sede5" align="center">'.$existencia_flf.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede5">-</td>';
+                echo '<td class="'.$new.' sede5">-</td>';
+            }
         }
 
         if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FEC') {
@@ -987,6 +1133,56 @@
                 echo '<td class="'.$new.' sede4">-</td>';
                 echo '<td class="'.$new.' sede4">-</td>';
             }
+
+            if ($conectividad_flf == 1) {
+                echo '<td class="'.$new.' sede5" align="center">'.$descripcion_flf.'</td>
+                      <td class="'.$new.' sede5" align="center">'.$existencia_flf.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede5">-</td>';
+                echo '<td class="'.$new.' sede5">-</td>';
+            }
+        }
+
+        if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLF') {
+            if ($conectividad_ftn == 1) {
+                echo '<td class="'.$new.' sede1" align="center">'.$descripcion_ftn.'</td>
+                      <td class="'.$new.' sede1" align="center">'.$existencia_ftn.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede1">-</td>';
+                echo '<td class="'.$new.' sede1">-</td>';
+            }
+
+            if ($conectividad_fau == 1) {
+                echo '<td class="'.$new.' sede2" align="center">'.$descripcion_fau.'</td>
+                      <td class="'.$new.' sede2" align="center">'.$existencia_fau.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede2">-</td>';
+                echo '<td class="'.$new.' sede2">-</td>';
+            }
+
+            if ($conectividad_fll == 1) {
+                echo '<td class="'.$new.' sede3" align="center">'.$descripcion_fll.'</td>
+                      <td class="'.$new.' sede3" align="center">'.$existencia_fll.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede3">-</td>';
+                echo '<td class="'.$new.' sede3">-</td>';
+            }
+
+            if ($conectividad_fsm == 1) {
+                echo '<td class="'.$new.' sede4" align="center">'.$descripcion_fsm.'</td>
+                      <td class="'.$new.' sede4" align="center">'.$existencia_fsm.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede4">-</td>';
+                echo '<td class="'.$new.' sede4">-</td>';
+            }
+
+            if ($conectividad_fec == 1) {
+                echo '<td class="'.$new.' sede5" align="center">'.$descripcion_fec.'</td>
+                      <td class="'.$new.' sede5" align="center">'.$existencia_fec.'</td>';
+            } else {
+                echo '<td class="'.$new.' sede5">-</td>';
+                echo '<td class="'.$new.' sede5">-</td>';
+            }
         }
 
       echo '</tr>';
@@ -1016,6 +1212,10 @@
 
     if (is_resource($connFEC)) {
         sqlsrv_close($connFEC);
+    }
+
+    if (is_resource($connFLF)) {
+        sqlsrv_close($connFLF);
     }
   }
   /**********************************************************************************/
@@ -1224,6 +1424,11 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="checkbox" onclick="mostrar_ocultar(this, \'sede5\')" name="sede5" checked>
+                    Sede 5
+                </div>
+
+                <div class="form-group">
                     <input type="checkbox" onclick="mostrar_todas(this)" name="Marcar todas" checked>
                     Marcar todas
                 </div>
@@ -1274,6 +1479,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -1286,6 +1493,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -1298,6 +1507,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FSM</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -1310,6 +1521,8 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FLL</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
                 ';
               }
 
@@ -1322,6 +1535,22 @@
                     <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FLL</td>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FSM</th>
                     <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FSM</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FLF</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FLF</td>
+                ';
+              }
+
+              if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FLF') {
+                echo '<th scope="col" class="bg-warning sede1 CP-sticky">Descripción FTN</th>
+                    <th scope="col" class="bg-warning sede1 CP-sticky">Existencia FTN</td>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Descripción FAU</th>
+                    <th scope="col" class="bg-warning sede2 CP-sticky">Existencia FAU</td>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Descripción FLL</th>
+                    <th scope="col" class="bg-warning sede3 CP-sticky">Existencia FLL</td>
+                    <th scope="col" class="bg-warning sede4 CP-sticky">Descripción FSM</th>
+                    <th scope="col" class="bg-warning sede4 CP-sticky">Existencia FSM</td>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Descripción FEC</th>
+                    <th scope="col" class="bg-warning sede5 CP-sticky">Existencia FEC</td>
                 ';
               }
 
