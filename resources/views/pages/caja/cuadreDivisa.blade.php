@@ -204,7 +204,7 @@
             document.body.removeChild(aux);
         }
 
-        $(document).ready(function () 
+        $(document).ready(function ()
         {
             // Verficar al seleccionar cerrar modal
             let botonesCerrar = document.querySelectorAll('.btn-cerrar');
@@ -381,7 +381,7 @@
                         if (response == 'exito') {
                             procesandoVuelto = true;
                             data = $('#vueltoVDC').serialize();
-                            
+
                             // Iniciar conteo
                             now = new Date().getTime();
                             targetTime = now + (MINUTOS_CUENTA_REGRESIVA * 60 * 1000);
@@ -1695,6 +1695,10 @@
             break;
             case 'KD73':
                 dominio = 'http://cpharmakd73.com/';
+                return dominio;
+            break;
+            case 'FLF':
+                dominio = 'http://cpharmaflf.com/';
                 return dominio;
             break;
         }
