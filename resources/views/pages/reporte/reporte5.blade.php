@@ -115,7 +115,7 @@
             return $('.' + elemento).hide();
         }
 
-        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'sede4', 'descripcion_sede1', 'descripcion_sede2', 'descripcion_sede3', 'descripcion_sede4' ,'traslado_transito'];
+        campos = ['codigo', 'codigo_barra', 'descripcion', 'tipo', 'existencia', 'dolarizado', 'gravado', 'clasificacion', 'unidades_vendidas', 'total_venta', 'ultima_venta', 'dias_falla', 'ultimo_lote', 'ultima_compra', 'ultimo_proveedor', 'sede1', 'sede2', 'sede3', 'sede4', 'sede5', 'descripcion_sede1', 'descripcion_sede2', 'descripcion_sede3', 'descripcion_sede4', 'descripcion_sede5' ,'traslado_transito'];
 
         function mostrar_todas(that) {
             if (that.checked) {
@@ -504,7 +504,7 @@
                 ';
               }
 
-              echo '<th scope="col" class="CP-sticky" colspan="4">Acciones traslado</th>';
+              echo '<th scope="col" class="CP-sticky" colspan="5">Acciones traslado</th>';
 
     echo '</tr>
       </thead>
