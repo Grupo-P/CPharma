@@ -308,7 +308,7 @@
 
                 <div class="form-group">
                     <input type="checkbox" onclick="mostrar_ocultar(this, \'descripcion5\')" name="descripcion5" checked>
-                    Descripción Sede %
+                    Descripción Sede 5
                 </div>
 
                 <div class="form-group">
