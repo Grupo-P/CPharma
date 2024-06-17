@@ -99,7 +99,7 @@ define ("nameKD73OFF" , "cpharmakd73");
 define ("serverFLF" , "10.100.0.58");
 define ("userFLF" , "admin");
 define ("passFLF" , "soporte123");
-define ("nameFLF" , "smartflf"); //TODO: por confirmar
+define ("nameFLF" , "BD_FLF"); //TODO: por confirmar
 define ("nameFLFOFF" , "cpharmaflf");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
