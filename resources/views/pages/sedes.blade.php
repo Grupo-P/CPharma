@@ -1124,11 +1124,7 @@
                     </h5>
                 </div>
                 <div class="card-footer bg-transparent border-dark text-right">
-                    <form action="/reporte/" style="display: inline;">
-                    @csrf
-                    <input id="SEDE" name="SEDE" type="hidden" value="FEC">
-                    <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Ver reportes</button>
-                    </form>
+                    <a href="http://cpharmafec.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
                 </div>
             </div>
             <div class="card border-danger mb-3" style="width: 14rem;">
