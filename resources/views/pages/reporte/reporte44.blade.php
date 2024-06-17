@@ -849,7 +849,7 @@
           FROM
               traslados_detalle
           WHERE
-              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA EL CALLEJON, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA FUSTA' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
           ORDER BY
               traslados_detalle.id DESC;
         ");
@@ -875,7 +875,7 @@
           FROM
               traslados_detalle
           WHERE
-              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA EL CALLEJON, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA FUSTA' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
           ORDER BY
               traslados_detalle.id DESC;
         ");
@@ -901,7 +901,7 @@
           FROM
               traslados_detalle
           WHERE
-              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA EL CALLEJON, C.A.' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA FUSTA' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
           ORDER BY
               traslados_detalle.id DESC;
         ");
@@ -927,7 +927,7 @@
           FROM
               traslados_detalle
           WHERE
-              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA MILLENNIUM 2000, C.A' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
+              (SELECT traslados.sede_destino FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = 'FARMACIA LA FUSTA' AND (SELECT traslados.estatus FROM traslados WHERE traslados.numero_ajuste = traslados_detalle.id_traslado) = '$estado'
           ORDER BY
               traslados_detalle.id DESC;
         ");
