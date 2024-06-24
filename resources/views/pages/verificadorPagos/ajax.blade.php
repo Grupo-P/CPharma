@@ -50,10 +50,10 @@
             $id = 6;
         }
 
-        if ($host == 'cpharmaflf.com') { //TODO
+        if ($host == 'cpharmaflf.com') {
             $username = 'pagoslafusta@hotmail.com';
-            $password = 'atorvastati@.YA';
-            $remitente = 'pagomovilflf@gmail.com';
+            $password = 'atorvastatin@.YA';
+            $remitente = 'pagoslafusta@gmail.com';
             $id = 7;
         }
 
