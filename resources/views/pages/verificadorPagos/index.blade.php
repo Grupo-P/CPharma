@@ -108,7 +108,7 @@
             if ($sede == 'FLF' || $sede == 'FARMACIA LA FUSTA') {
                 $username = 'pagoslafusta@hotmail.com';
                 $password = 'atorvastatin@.YA';
-                $remitente = 'pagoslafusta@gmail.com';
+                $remitente = 'pagomovilflf@gmail.com';
             }
 
             $mailbox = '{outlook.office365.com:993/imap/ssl}';

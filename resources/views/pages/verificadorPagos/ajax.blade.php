@@ -53,7 +53,7 @@
         if ($host == 'cpharmaflf.com') {
             $username = 'pagoslafusta@hotmail.com';
             $password = 'atorvastatin@.YA';
-            $remitente = 'pagoslafusta@gmail.com';
+            $remitente = 'pagomovilflf@gmail.com';
             $id = 7;
         }
 
