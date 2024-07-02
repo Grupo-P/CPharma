@@ -696,6 +696,15 @@
           $descripcion_fec = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
           $existencia_fec = ($row3['existencia']) ? intval($row3['existencia']) : '-';
         }
+
+        if ($conectividad_flf == 1) {
+            $sql3 = R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+            $result3 = sqlsrv_query($connFLF,$sql3);
+            $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+            $descripcion_flf = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+            $existencia_flf = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+        }
       }
 
       if (isset($_GET['SEDE']) & $_GET['SEDE'] == 'FTN') {
