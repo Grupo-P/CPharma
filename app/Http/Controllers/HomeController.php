@@ -410,7 +410,7 @@ class HomeController extends Controller
                     $sede = 'FEC';
                 }
 
-                if(Auth()->user()->sede == 'FARMACIA EL CALLEJON, C.A. - FLF') {
+                if(Auth()->user()->sede == 'FARMACIA EL CALLEJON, C.A.') {
                     $dolares = ContPagoEfectivoFLF::orderByDesc('id')->first();
                     $bolivares = ContPagoBolivaresFLF::orderByDesc('id')->first();
 
