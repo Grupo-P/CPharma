@@ -7,6 +7,7 @@ use compras\Http\Controllers\Controller;
 use compras\VueltoVDC;
 use compras\conexion\VueltosFEC;
 use compras\conexion\VueltosFLL;
+use compras\conexion\VueltosFLF;
 use compras\conexion\VueltosFM;
 use compras\conexion\VueltosFTN;
 use compras\conexion\VueltosKD73;
@@ -26,7 +27,7 @@ class VueltoController extends Controller
     {
         $this->middleware('auth');
     }
-   
+
    /**
      * Display a listing of the resource.
      *
@@ -36,7 +37,7 @@ class VueltoController extends Controller
     {
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
-        
+
         $sedeUsuario = Auth::user()->sede;
         switch($sedeUsuario){
             case "GRUPO P, C.A":
@@ -46,7 +47,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }                
+                }
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -55,7 +56,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -75,7 +76,9 @@ class VueltoController extends Controller
             case "FARMACIA EL CALLEJON, C.A.":
                 $RutaUrl = "FEC";
             break;
-
+            case "FARMACIA LA FUSTA":
+                $RutaUrl = "FLF";
+            break;
         }
         //$RutaUrl = 'FAU';
         //si se selecciono otra sede consultarla
@@ -95,14 +98,14 @@ class VueltoController extends Controller
                 }
             }
             else{
-                $RutaUrl=$RutaUrl;                
+                $RutaUrl=$RutaUrl;
             }
         }
         $SedeConnection = $RutaUrl;
         $conn = FG_Conectar_Smartpharma($SedeConnection);
-        
 
-        $registro=[];       
+
+        $registro=[];
         $historialvueltos=collect();
 
         if($request->fecha_ini>0){
@@ -112,9 +115,9 @@ class VueltoController extends Controller
         }
         else{
             $fini=date("Y-m-d");
-            $ffin=date("Y-m-d");            
+            $ffin=date("Y-m-d");
         }
-        
+
         if($request->sede!=null){
             if($request->sede=="Seleccione una sede"){
                 $sede=$RutaUrl;
@@ -128,11 +131,11 @@ class VueltoController extends Controller
                     else{
                         $sede=$request->sede;
                     }
-                }                
+                }
                 else{
                     $sede=$request->sede;
                 }
-                
+
             }
 
             switch($sede)
@@ -146,103 +149,6 @@ class VueltoController extends Controller
                         $vueltos=null;
                         $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
                     }
-                break;
-                case 'FAU':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
-                    }
-                break;
-                case 'GP':
-                    if(FG_Validar_Conectividad('FAU')==1){
-                        $vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con Grupo P (GP)";
-                    }
-                break;
-                case 'FTN':
-                    if(FG_Validar_Conectividad('FTN')==1){
-                        $vueltos =  VueltosFTN::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
-                    }
-                break;
-                case 'FLL':
-                    if(FG_Validar_Conectividad('FLL')==1){
-                        $vueltos =  VueltosFLL::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
-                    }
-                break;
-                case 'FSM':
-                    if(FG_Validar_Conectividad('FSM')==1){
-                        $vueltos =  VueltosFM::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
-                    }
-                break;
-                case 'KDI':
-                    if(FG_Validar_Conectividad('KDI')==1){
-                        $vueltos =  VueltosKDI::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
-                    }
-                break;
-                case 'FEC':                    
-                    if(FG_Validar_Conectividad('FEC')==1){
-                        $vueltos =  VueltosFEC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;                       
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
-                    }
-                break;
-                case 'KD73':
-                    if(FG_Validar_Conectividad('KD73')==1){
-                        $vueltos =  VueltosKD73::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;                        
-                    }
-                    else{
-                        $vueltos=null;
-                        $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
-                    }
-                break;
-            }
-            
-        }
-        else{
-            if($SedeConnection=="GP"){
-                $sede="FAU";
-            }
-            else{
-                $sede=$SedeConnection;
-            }
-            switch($sede)
-            {
-                case 'DBs':
-                    
-                        $vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
-                        $mensaje=null;                    
                 break;
                 case 'FAU':
                     if(FG_Validar_Conectividad('FAU')==1){
@@ -324,12 +230,129 @@ class VueltoController extends Controller
                         $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
                     }
                 break;
+                case 'FLF':
+                    if(FG_Validar_Conectividad('FLF')==1){
+                        $vueltos =  VueltosFLF::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                    }
+                break;
             }
-            
+
+        }
+        else{
+            if($SedeConnection=="GP"){
+                $sede="FAU";
+            }
+            else{
+                $sede=$SedeConnection;
+            }
+            switch($sede)
+            {
+                case 'DBs':
+
+                        $vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                break;
+                case 'FAU':
+                    if(FG_Validar_Conectividad('FAU')==1){
+                        $vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia Avenida Universidad (FAU)";
+                    }
+                break;
+                case 'GP':
+                    if(FG_Validar_Conectividad('FAU')==1){
+                        $vueltos =  VueltoVDC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Grupo P (GP)";
+                    }
+                break;
+                case 'FTN':
+                    if(FG_Validar_Conectividad('FTN')==1){
+                        $vueltos =  VueltosFTN::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia Tierra Negra (FTN)";
+                    }
+                break;
+                case 'FLL':
+                    if(FG_Validar_Conectividad('FLL')==1){
+                        $vueltos =  VueltosFLL::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia La Lago (FLL)";
+                    }
+                break;
+                case 'FSM':
+                    if(FG_Validar_Conectividad('FSM')==1){
+                        $vueltos =  VueltosFM::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia Millenium 2000 (FSM)";
+                    }
+                break;
+                case 'KDI':
+                    if(FG_Validar_Conectividad('KDI')==1){
+                        $vueltos =  VueltosKDI::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia KD Express (KDI)";
+                    }
+                break;
+                case 'FEC':
+                    if(FG_Validar_Conectividad('FEC')==1){
+                        $vueltos =  VueltosFEC::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia El Callejon (FEC)";
+                    }
+                break;
+                case 'KD73':
+                    if(FG_Validar_Conectividad('KD73')==1){
+                        $vueltos =  VueltosKD73::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
+                    }
+                break;
+                case 'FLF':
+                    if(FG_Validar_Conectividad('FLF')==1){
+                        $vueltos =  VueltosFLF::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                    }
+                break;
+            }
+
         }
         if($vueltos!=null){
             foreach($vueltos as $vuelto){
-                
+
                 $idFactura=$vuelto->id_factura;
                 $montoPagadoFacturaDolar=0;
                 $totalFacturaDolar=0;
@@ -398,7 +421,7 @@ class VueltoController extends Controller
                 }
 
                 if($vuelto->tasaVenta>0){
-                    
+
                     $totalFacturaDolar=number_format($row["totalFactura"]/$vuelto->tasaVenta,2);
                     $montoPagoMovilDolar=number_format($vuelto->monto/$vuelto->tasaVenta,2);
                     if($montoPagadoFactura>0){
@@ -407,7 +430,7 @@ class VueltoController extends Controller
                     else{
                         $montoPagadoFactura=0;
                     }
-                }   
+                }
                 else{
                     $totalFacturaDolar=0;
                     $montoPagoMovilDolar=0;
@@ -418,41 +441,41 @@ class VueltoController extends Controller
                     'sede'=>$vuelto->sede,
                     'cedula_cliente_factura' =>$row["CodigoCliente"],
                     'telefono_cliente_factura' =>$row["Telefono"],
-                    'fecha_hora_factura'=>$row['FechaDocumento']->format('Y-m-d H:i:s'),                                   
+                    'fecha_hora_factura'=>$row['FechaDocumento']->format('Y-m-d H:i:s'),
                     'numero_factura' => $row["NumeroFactura"] ,
                     'nombre_cliente'=>$row["nombre"] ,
                     'total_factura'=>$row["totalFactura"] ,
                     'total_factura_dolar' => $totalFacturaDolar ,
                     'monto_pagado_factura' => $montoPagadoFactura,
                     'monto_pagado_factura_dolar' => $montoPagadoFacturaDolar,
-                    'id'=>$vuelto->id,  
-                    'id_factura'=> $vuelto->id_factura,  
-                    'fecha_hora'=> $vuelto->fecha_hora,  
-                    'banco_cliente'=> $vuelto->banco_cliente,  
-                    'cedula_cliente'=> $vuelto->cedula_cliente,  
-                    'telefono_pago_movil'=> $vuelto->telefono_cliente,  
+                    'id'=>$vuelto->id,
+                    'id_factura'=> $vuelto->id_factura,
+                    'fecha_hora'=> $vuelto->fecha_hora,
+                    'banco_cliente'=> $vuelto->banco_cliente,
+                    'cedula_cliente'=> $vuelto->cedula_cliente,
+                    'telefono_pago_movil'=> $vuelto->telefono_cliente,
                     'monto' => $vuelto->monto,
                     'monto_dolar' => $montoPagoMovilDolar,
-                    'sede'=> $vuelto->sede,  
-                    'caja'=> $vuelto->caja,  
+                    'sede'=> $vuelto->sede,
+                    'caja'=> $vuelto->caja,
                     'cajero_venta'  => $vuelto->nombreCajeroFactura,
-                    'estatus'=> $vuelto->estatus,  
-                    'confirmacion_banco'=> $vuelto->confirmacion_banco,  
+                    'estatus'=> $vuelto->estatus,
+                    'confirmacion_banco'=> $vuelto->confirmacion_banco,
                     'motivo_error'=> $vuelto->motivo_error,
                     'nro_devolucion' =>$devolucion["ConsecutivoDevolucionSistema"],
                     'fecha_devolucion' => $fechaDevolucion,
                     'caja_devolucion' =>$devolucion["EstacionTrabajo"],
-                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]  
-                ];           
-                
+                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]
+                ];
+
                 $coleccion=collect($registro);
                 $historialvueltos->push($coleccion);
-            }    
-        } 
+            }
+        }
         else{
             $historialvueltos=null;
-            
-        }      
+
+        }
         return view('pages.vuelto.index', compact('mensaje','historialvueltos','fini','ffin','sedeUsuario','sede'));
     }
 
@@ -462,18 +485,18 @@ class VueltoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function clientesTransaccionales(Request $request)
-    {        
+    {
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
-            $ffin=$request->fecha_fin;            
+            $ffin=$request->fecha_fin;
         }
 
         else{
             $fini=date("Y-m-d");
-            $ffin=date("Y-m-d");            
+            $ffin=date("Y-m-d");
         }
 
         $sedeUsuario = Auth::user()->sede;
@@ -485,7 +508,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -494,7 +517,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -514,10 +537,12 @@ class VueltoController extends Controller
             case "FARMACIA EL CALLEJON, C.A.":
                 $RutaUrl = "FEC";
             break;
-
+            case "FARMACIA LA FUSTA":
+                $RutaUrl = "FLF";
+            break;
         }
-        
-        
+
+
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -537,31 +562,31 @@ class VueltoController extends Controller
                 $RutaUrl=$RutaUrl;
             }
         }
-        
-        $SedeConnection = $RutaUrl;        
+
+        $SedeConnection = $RutaUrl;
         $sede=$RutaUrl;
 
         switch($sede)
         {
-            case 'DBs':                                          
+            case 'DBs':
                 $clientes=VueltoVDC::where('sede','=','DBs')->fecha($fini, $ffin)
-                        ->where('estatus','=','Aprobado')                    
+                        ->where('estatus','=','Aprobado')
                         ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
                         ->groupBy('cedulaClienteFactura')
                         ->orderBy('vueltos', 'DESC')
                         ->get();
-                $mensaje=null;                 
+                $mensaje=null;
             break;
             case 'FAU':
-                if(FG_Validar_Conectividad('FAU')==1){                        
+                if(FG_Validar_Conectividad('FAU')==1){
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
+                            ->where('estatus','=','Aprobado')
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
                             ->get();
                     $mensaje=null;
-                    
+
                 }
                 else{
                     $clientes=null;
@@ -571,7 +596,7 @@ class VueltoController extends Controller
             case 'GP':
                 if(FG_Validar_Conectividad('FAU')==1){
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
+                            ->where('estatus','=','Aprobado')
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
@@ -586,7 +611,7 @@ class VueltoController extends Controller
             case 'FTN':
                 if(FG_Validar_Conectividad('FTN')==1){
                     $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
+                            ->where('estatus','=','Aprobado')
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('ftn')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
@@ -599,9 +624,9 @@ class VueltoController extends Controller
                 }
             break;
             case 'FLL':
-                if(FG_Validar_Conectividad('FLL')==1){                                               
+                if(FG_Validar_Conectividad('FLL')==1){
                     $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
+                            ->where('estatus','=','Aprobado')
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('fll')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
@@ -614,13 +639,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'FSM':
-                if(FG_Validar_Conectividad('FSM')==1){                        
+                if(FG_Validar_Conectividad('FSM')==1){
                     $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
+                            ->where('estatus','=','Aprobado')
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('fm')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -629,13 +654,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'KDI':
-                if(FG_Validar_Conectividad('KDI')==1){                                                
+                if(FG_Validar_Conectividad('KDI')==1){
                     $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
+                            ->where('estatus','=','Aprobado')
                             ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('kdi')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('cedulaClienteFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -644,13 +669,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'FEC':
-                if(FG_Validar_Conectividad('FEC')==1){   
+                if(FG_Validar_Conectividad('FEC')==1){
                     $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
+                                ->where('estatus','=','Aprobado')
                                 ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('fec')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                                 ->groupBy('cedulaClienteFactura')
                                 ->orderBy('vueltos', 'DESC')
-                                ->get();                             
+                                ->get();
                     $mensaje=null;
                 }
                 else{
@@ -659,13 +684,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'KD73':
-                if(FG_Validar_Conectividad('KD73')==1){   
+                if(FG_Validar_Conectividad('KD73')==1){
                     $clientes=VueltosKD73::where('sede','=',$sede)->fecha($fini, $ffin)
-                                ->where('estatus','=','Aprobado')                    
+                                ->where('estatus','=','Aprobado')
                                 ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('kd73')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                                 ->groupBy('cedulaClienteFactura')
                                 ->orderBy('vueltos', 'DESC')
-                                ->get();                             
+                                ->get();
                     $mensaje=null;
                 }
                 else{
@@ -673,25 +698,40 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con Farmacia KD Express - KD73";
                 }
             break;
-        }                   
-        
+            case 'FLF':
+                if(FG_Validar_Conectividad('FLF')==1){
+                    $clientes=VueltosFLF::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('flf')->raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('cedulaClienteFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
+        }
+
         $arreglo=[];
         $i=0;
-        
+
         foreach ($clientes as $cliente) {
             if($cliente->cedulaClienteFactura!=null){
-                
+
                 switch($sede)
                 {
-                    case 'DBs':                                          
+                    case 'DBs':
                             $total=VueltoVDC::where('sede','=','DBs')->fecha($fini, $ffin)
                                             ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                             ->where('estatus','=','Aprobado')
                                             ->get();
-                            $mensaje=null;                    
+                            $mensaje=null;
                     break;
                     case 'FAU':
-                        if(FG_Validar_Conectividad('FAU')==1){                        
+                        if(FG_Validar_Conectividad('FAU')==1){
                             $total=VueltoVDC::where('sede','=','FAU')->fecha($fini, $ffin)
                                             ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                             ->where('estatus','=','Aprobado')
@@ -705,7 +745,7 @@ class VueltoController extends Controller
                     break;
                     case 'GP':
                         if(FG_Validar_Conectividad('FAU')==1){
-                            
+
                             $total=VueltoVDC::where('sede','=','FAU')->fecha($fini, $ffin)
                                                 ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                                 ->where('estatus','=','Aprobado')
@@ -718,7 +758,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FTN':
-                        if(FG_Validar_Conectividad('FTN')==1){                        
+                        if(FG_Validar_Conectividad('FTN')==1){
                             $total=VueltosFTN::where('sede','=','FTN')->fecha($fini, $ffin)
                                             ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                             ->where('estatus','=','Aprobado')
@@ -731,7 +771,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FLL':
-                        if(FG_Validar_Conectividad('FLL')==1){                        
+                        if(FG_Validar_Conectividad('FLL')==1){
                             $total=VueltosFLL::where('sede','=','FLL')->fecha($fini, $ffin)
                                             ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                             ->where('estatus','=','Aprobado')
@@ -744,7 +784,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FSM':
-                        if(FG_Validar_Conectividad('FSM')==1){                        
+                        if(FG_Validar_Conectividad('FSM')==1){
                             $total=VueltosFM::where('sede','=','FSM')->fecha($fini, $ffin)
                                                 ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                                 ->where('estatus','=','Aprobado')
@@ -757,7 +797,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'KDI':
-                        if(FG_Validar_Conectividad('KDI')==1){                        
+                        if(FG_Validar_Conectividad('KDI')==1){
                             $total=VueltosKDI::where('sede','=','KDI')->fecha($fini, $ffin)
                                                 ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                                 ->where('estatus','=','Aprobado')
@@ -770,7 +810,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FEC':
-                        if(FG_Validar_Conectividad('FEC')==1){                        
+                        if(FG_Validar_Conectividad('FEC')==1){
                             $total=VueltosFEC::where('sede','=','FEC')->fecha($fini, $ffin)
                                             ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                             ->where('estatus','=','Aprobado')
@@ -783,7 +823,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'KD73':
-                        if(FG_Validar_Conectividad('KD73')==1){                        
+                        if(FG_Validar_Conectividad('KD73')==1){
                             $total=VueltosKD73::where('sede','=','KD73')->fecha($fini, $ffin)
                                             ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
                                             ->where('estatus','=','Aprobado')
@@ -795,16 +835,29 @@ class VueltoController extends Controller
                             $mensaje="No hay conexion con Farmacias KD Express - KD73";
                         }
                     break;
+                    case 'FLF':
+                        if(FG_Validar_Conectividad('FLF')==1){
+                            $total=VueltosFLF::where('sede','=','FLF')->fecha($fini, $ffin)
+                                            ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
+                                            ->where('estatus','=','Aprobado')
+                                            ->get();
+                            $mensaje=null;
+                        }
+                        else{
+                            $total=null;
+                            $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                        }
+                    break;
                 }
-                
-                                
+
+
                 $totalBsFactura=$total->sum('totalFacturaBs');
-                $totalDolarFactura=$total->sum('totalFacturaDolar'); 
+                $totalDolarFactura=$total->sum('totalFacturaDolar');
                 $totalPagadoBs=$total->sum('monto');
                 $totalPagadoDolar=0;
                 foreach ($total as $registro) {
                     $totalPagadoDolar=$totalPagadoDolar+($registro->monto/$registro->tasaVenta);
-                }               
+                }
                 $i++;
                 array_push( $arreglo,[
                     'registro' => $i,
@@ -815,11 +868,11 @@ class VueltoController extends Controller
                     'TotalAcumuladoDolar' => $totalDolarFactura,
                     'TotalPagadoBs' => number_format($totalPagadoBs,2),
                     'TotalPagadoDolar' => number_format($totalPagadoDolar,2),
-                    'cantidadPagoMovil' => $cliente->vueltos                    
+                    'cantidadPagoMovil' => $cliente->vueltos
                 ]);
             }
-        }    
-        
+        }
+
         return view('pages.vuelto.clientes', compact('arreglo','sedeUsuario','sede','mensaje','fini','ffin'));
     }
 
@@ -829,19 +882,19 @@ class VueltoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function cajerosTransaccionales(Request $request)
-    {       
+    {
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
             $ffin=$request->fecha_fin;
-            
+
         }
         else{
             $fini=date("Y-m-d");
-            $ffin=date("Y-m-d");            
-        }    
+            $ffin=date("Y-m-d");
+        }
 
         $sedeUsuario = Auth::user()->sede;
 
@@ -853,7 +906,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -862,7 +915,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -882,8 +935,11 @@ class VueltoController extends Controller
             case "FARMACIA EL CALLEJON, C.A.":
                 $RutaUrl = "FEC";
             break;
+            case "FARMACIA LA FUSTA":
+                $RutaUrl = "FLF";
+            break;
 
-        }        
+        }
 
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
@@ -907,21 +963,21 @@ class VueltoController extends Controller
 
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;
-        
-       
+
+
         switch($sede)
         {
-            case 'DBs':                                          
+            case 'DBs':
                 $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
                             ->get();
-                    $mensaje=null;                    
+                    $mensaje=null;
             break;
             case 'FAU':
-                if(FG_Validar_Conectividad('FAU')==1){                        
+                if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -937,7 +993,7 @@ class VueltoController extends Controller
             break;
             case 'GP':
                 if(FG_Validar_Conectividad('FAU')==1){
-                    
+
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -952,7 +1008,7 @@ class VueltoController extends Controller
                 }
             break;
             case 'FTN':
-                if(FG_Validar_Conectividad('FTN')==1){                        
+                if(FG_Validar_Conectividad('FTN')==1){
                     $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('ftn')->raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -967,7 +1023,7 @@ class VueltoController extends Controller
                 }
             break;
             case 'FLL':
-                if(FG_Validar_Conectividad('FLL')==1){                        
+                if(FG_Validar_Conectividad('FLL')==1){
                     $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('fll')->raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -982,13 +1038,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'FSM':
-                if(FG_Validar_Conectividad('FSM')==1){                        
+                if(FG_Validar_Conectividad('FSM')==1){
                     $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('fm')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -997,13 +1053,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'KDI':
-                if(FG_Validar_Conectividad('KDI')==1){                        
+                if(FG_Validar_Conectividad('KDI')==1){
                     $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('kdi')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1012,13 +1068,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'FEC':
-                if(FG_Validar_Conectividad('FEC')==1){                        
+                if(FG_Validar_Conectividad('FEC')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('fec')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1027,13 +1083,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'KD73':
-                if(FG_Validar_Conectividad('KD73')==1){   
+                if(FG_Validar_Conectividad('KD73')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Aprobado')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('kd73')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get();                                                
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1041,24 +1097,39 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con Farmacia KD Express - KD73";
                 }
             break;
+            case 'FLF':
+                if(FG_Validar_Conectividad('FLF')==1){
+                    $cajeros=VueltosFLF::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::connection('flf')->raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
         }
-               
+
         $arreglo=[];
         $i=0;
         foreach ($cajeros as $cajero) {
             if($cajero->nombreCajeroFactura!=null){
-                
+
                 switch($sede)
                 {
-                    case 'DBs':                                          
+                    case 'DBs':
                             $total=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                                 ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                 ->where('estatus','=','Aprobado')
                                 ->get();
-                            $mensaje=null;                    
+                            $mensaje=null;
                     break;
                     case 'FAU':
-                        if(FG_Validar_Conectividad('FAU')==1){                        
+                        if(FG_Validar_Conectividad('FAU')==1){
                             $total=VueltoVDC::where('sede','=','FAU')->fecha($fini, $ffin)
                                             ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                             ->where('estatus','=','Aprobado')
@@ -1072,7 +1143,7 @@ class VueltoController extends Controller
                     break;
                     case 'GP':
                         if(FG_Validar_Conectividad('FAU')==1){
-                            
+
                             $total=VueltoVDC::where('sede','=','FAU')->fecha($fini, $ffin)
                                             ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                             ->where('estatus','=','Aprobado')
@@ -1085,7 +1156,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FTN':
-                        if(FG_Validar_Conectividad('FTN')==1){                        
+                        if(FG_Validar_Conectividad('FTN')==1){
                             $total=VueltosFTN::where('sede','=','FTN')->fecha($fini, $ffin)
                                                 ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                                 ->where('estatus','=','Aprobado')
@@ -1098,7 +1169,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FLL':
-                        if(FG_Validar_Conectividad('FLL')==1){                        
+                        if(FG_Validar_Conectividad('FLL')==1){
                             $total=VueltosFLL::where('sede','=','FLL')->fecha($fini, $ffin)
                                             ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                             ->where('estatus','=','Aprobado')
@@ -1111,7 +1182,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FSM':
-                        if(FG_Validar_Conectividad('FSM')==1){                        
+                        if(FG_Validar_Conectividad('FSM')==1){
                             $total=VueltosFM::where('sede','=','FSM')->fecha($fini, $ffin)
                                     ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                     ->where('estatus','=','Aprobado')
@@ -1124,7 +1195,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'KDI':
-                        if(FG_Validar_Conectividad('KDI')==1){                        
+                        if(FG_Validar_Conectividad('KDI')==1){
                             $total=VueltosKDI::where('sede','=','KDI')->fecha($fini, $ffin)
                                     ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                     ->where('estatus','=','Aprobado')
@@ -1137,7 +1208,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FEC':
-                        if(FG_Validar_Conectividad('FEC')==1){                        
+                        if(FG_Validar_Conectividad('FEC')==1){
                             $total=VueltosFEC::where('sede','=','FEC')->fecha($fini, $ffin)
                                     ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                     ->where('estatus','=','Aprobado')
@@ -1150,11 +1221,11 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'KD73':
-                        if(FG_Validar_Conectividad('KD73')==1){   
+                        if(FG_Validar_Conectividad('KD73')==1){
                             $total=VueltosKD73::where('sede','=','KD73')->fecha($fini, $ffin)
                                             ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                             ->where('estatus','=','Aprobado')
-                                            ->get();                                       
+                                            ->get();
                             $mensaje=null;
                         }
                         else{
@@ -1162,29 +1233,42 @@ class VueltoController extends Controller
                             $mensaje="No hay conexion con Farmacia KD Express - KD73";
                         }
                     break;
-                }                
+                    case 'FLF':
+                        if(FG_Validar_Conectividad('FLF')==1){
+                            $total=VueltosFLF::where('sede','=','FLF')->fecha($fini, $ffin)
+                                            ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
+                                            ->where('estatus','=','Aprobado')
+                                            ->get();
+                            $mensaje=null;
+                        }
+                        else{
+                            $total=null;
+                            $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                        }
+                    break;
+                }
                 $totalBsFactura=$total->sum('totalFacturaBs');
-                $totalDolarFactura=$total->sum('totalFacturaDolar');                
+                $totalDolarFactura=$total->sum('totalFacturaDolar');
                 $totalPagadoBs=$total->sum('monto');
                 $totalPagadoDolar=0;
                 foreach ($total as $registro) {
                     $totalPagadoDolar=$totalPagadoDolar+($registro->monto/$registro->tasaVenta);
                 }
-               
+
                 $i++;
                 array_push( $arreglo,[
                     'registro' => $i,
-                    'Sede' => $cajero->sede,                    
+                    'Sede' => $cajero->sede,
                     'nombreCajeroFactura' => $cajero->nombreCajeroFactura,
                     'TotalAcumuladoBs' => $totalBsFactura,
                     'TotalAcumuladoDolar' => $totalDolarFactura,
                     'TotalPagadoBs' => number_format($totalPagadoBs,2),
                     'TotalPagadoDolar' => number_format($totalPagadoDolar,2),
-                    'cantidadPagoMovil' => $cajero->vueltos,                    
+                    'cantidadPagoMovil' => $cajero->vueltos,
                 ]);
             }
-        }    
-        
+        }
+
         return view('pages.vuelto.cajeros', compact('arreglo','sedeUsuario','sede','mensaje','fini','ffin'));
     }
 
@@ -1194,19 +1278,19 @@ class VueltoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function cajerosTransaccionalesError(Request $request)
-    {       
+    {
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
             $ffin=$request->fecha_fin;
-            
+
         }
         else{
             $fini=date("Y-m-d");
-            $ffin=date("Y-m-d");            
-        }    
+            $ffin=date("Y-m-d");
+        }
 
         $sedeUsuario = Auth::user()->sede;
 
@@ -1218,7 +1302,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -1227,7 +1311,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -1247,8 +1331,11 @@ class VueltoController extends Controller
             case "FARMACIA EL CALLEJON, C.A.":
                 $RutaUrl = "FEC";
             break;
+            case "FARMACIA LA FUSTA":
+                $RutaUrl = "FLF";
+            break;
 
-        }        
+        }
 
         if($request->sede!=null){
             if($request->sede!="Seleccione una sede"){
@@ -1272,21 +1359,21 @@ class VueltoController extends Controller
 
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;
-        
-       
+
+
         switch($sede)
         {
-            case 'DBs':                                          
+            case 'DBs':
                 $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
                             ->get();
-                    $mensaje=null;                    
+                    $mensaje=null;
             break;
             case 'FAU':
-                if(FG_Validar_Conectividad('FAU')==1){                        
+                if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -1302,7 +1389,7 @@ class VueltoController extends Controller
             break;
             case 'GP':
                 if(FG_Validar_Conectividad('FAU')==1){
-                    
+
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -1317,7 +1404,7 @@ class VueltoController extends Controller
                 }
             break;
             case 'FTN':
-                if(FG_Validar_Conectividad('FTN')==1){                        
+                if(FG_Validar_Conectividad('FTN')==1){
                     $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('ftn')->raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -1332,7 +1419,7 @@ class VueltoController extends Controller
                 }
             break;
             case 'FLL':
-                if(FG_Validar_Conectividad('FLL')==1){                        
+                if(FG_Validar_Conectividad('FLL')==1){
                     $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('fll')->raw('COUNT(vuelto_vdc.id) as vueltos'))
@@ -1347,13 +1434,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'FSM':
-                if(FG_Validar_Conectividad('FSM')==1){                        
+                if(FG_Validar_Conectividad('FSM')==1){
                     $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('fm')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1362,13 +1449,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'KDI':
-                if(FG_Validar_Conectividad('KDI')==1){                        
+                if(FG_Validar_Conectividad('KDI')==1){
                     $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('kdi')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1377,13 +1464,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'FEC':
-                if(FG_Validar_Conectividad('FEC')==1){                        
+                if(FG_Validar_Conectividad('FEC')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('fec')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1392,13 +1479,13 @@ class VueltoController extends Controller
                 }
             break;
             case 'KD73':
-                if(FG_Validar_Conectividad('KD73')==1){                        
+                if(FG_Validar_Conectividad('KD73')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
                             ->where('estatus','=','Error')
                             ->select('nombreCajeroFactura','sede','id',DB::connection('kd73')->raw('COUNT(vuelto_vdc.id) as vueltos'))
                             ->groupBy('nombreCajeroFactura')
                             ->orderBy('vueltos', 'DESC')
-                            ->get(); 
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1406,24 +1493,39 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
                 }
             break;
+            case 'FLF':
+                if(FG_Validar_Conectividad('FLF')==1){
+                    $cajeros=VueltosFLF::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Error')
+                            ->select('nombreCajeroFactura','sede','id',DB::connection('flf')->raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
         }
-               
+
         $arreglo=[];
         $i=0;
         foreach ($cajeros as $cajero) {
             if($cajero->nombreCajeroFactura!=null){
-                
+
                 switch($sede)
                 {
-                    case 'DBs':                                          
+                    case 'DBs':
                             $total=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
                                 ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                 ->where('estatus','=','Error')
                                 ->get();
-                            $mensaje=null;                    
+                            $mensaje=null;
                     break;
                     case 'FAU':
-                        if(FG_Validar_Conectividad('FAU')==1){                        
+                        if(FG_Validar_Conectividad('FAU')==1){
                             $total=VueltoVDC::where('sede','=','FAU')->fecha($fini, $ffin)
                                             ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                             ->where('estatus','=','Error')
@@ -1437,7 +1539,7 @@ class VueltoController extends Controller
                     break;
                     case 'GP':
                         if(FG_Validar_Conectividad('FAU')==1){
-                            
+
                             $total=VueltoVDC::where('sede','=','FAU')->fecha($fini, $ffin)
                                             ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                             ->where('estatus','=','Error')
@@ -1450,7 +1552,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FTN':
-                        if(FG_Validar_Conectividad('FTN')==1){                        
+                        if(FG_Validar_Conectividad('FTN')==1){
                             $total=VueltosFTN::where('sede','=','FTN')->fecha($fini, $ffin)
                                                 ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                                 ->where('estatus','=','Error')
@@ -1463,7 +1565,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FLL':
-                        if(FG_Validar_Conectividad('FLL')==1){                        
+                        if(FG_Validar_Conectividad('FLL')==1){
                             $total=VueltosFLL::where('sede','=','FLL')->fecha($fini, $ffin)
                                             ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                             ->where('estatus','=','Error')
@@ -1476,7 +1578,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FSM':
-                        if(FG_Validar_Conectividad('FSM')==1){                        
+                        if(FG_Validar_Conectividad('FSM')==1){
                             $total=VueltosFM::where('sede','=','FSM')->fecha($fini, $ffin)
                                     ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                     ->where('estatus','=','Error')
@@ -1489,7 +1591,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'KDI':
-                        if(FG_Validar_Conectividad('KDI')==1){                        
+                        if(FG_Validar_Conectividad('KDI')==1){
                             $total=VueltosKDI::where('sede','=','KDI')->fecha($fini, $ffin)
                                     ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                     ->where('estatus','=','Error')
@@ -1502,7 +1604,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'FEC':
-                        if(FG_Validar_Conectividad('FEC')==1){                        
+                        if(FG_Validar_Conectividad('FEC')==1){
                             $total=VueltosFEC::where('sede','=','FEC')->fecha($fini, $ffin)
                                     ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                     ->where('estatus','=','Error')
@@ -1515,7 +1617,7 @@ class VueltoController extends Controller
                         }
                     break;
                     case 'KD73':
-                        if(FG_Validar_Conectividad('KD73')==1){                        
+                        if(FG_Validar_Conectividad('KD73')==1){
                             $total=VueltosFEC::where('sede','=','FEC')->fecha($fini, $ffin)
                                     ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
                                     ->where('estatus','=','Error')
@@ -1527,29 +1629,42 @@ class VueltoController extends Controller
                             $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
                         }
                     break;
-                }                
+                    case 'FLF':
+                        if(FG_Validar_Conectividad('FLF')==1){
+                            $total=VueltosFLF::where('sede','=','FLF')->fecha($fini, $ffin)
+                                            ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
+                                            ->where('estatus','=','Error')
+                                            ->get();
+                            $mensaje=null;
+                        }
+                        else{
+                            $total=null;
+                            $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                        }
+                    break;
+                }
                 $totalBsFactura=$total->sum('totalFacturaBs');
-                $totalDolarFactura=$total->sum('totalFacturaDolar');                
+                $totalDolarFactura=$total->sum('totalFacturaDolar');
                 $totalPagadoBs=$total->sum('monto');
                 $totalPagadoDolar=0;
                 foreach ($total as $registro) {
                     $totalPagadoDolar=$totalPagadoDolar+($registro->monto/$registro->tasaVenta);
                 }
-               
+
                 $i++;
                 array_push( $arreglo,[
                     'registro' => $i,
-                    'Sede' => $cajero->sede,                    
+                    'Sede' => $cajero->sede,
                     'nombreCajeroFactura' => $cajero->nombreCajeroFactura,
                     'TotalAcumuladoBs' => $totalBsFactura,
                     'TotalAcumuladoDolar' => $totalDolarFactura,
                     'TotalPagadoBs' => number_format($totalPagadoBs,2),
                     'TotalPagadoDolar' => number_format($totalPagadoDolar,2),
-                    'cantidadPagoMovil' => $cajero->vueltos,                    
+                    'cantidadPagoMovil' => $cajero->vueltos,
                 ]);
             }
-        }    
-        
+        }
+
         return view('pages.vuelto.cajerosError', compact('arreglo','sedeUsuario','sede','mensaje','fini','ffin'));
     }
 
@@ -1566,17 +1681,17 @@ class VueltoController extends Controller
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
             $ffin=$request->fecha_fin;
-            
+
         }
         else{
             $fini=date("Y-m-d");
-            $ffin=date("Y-m-d");            
+            $ffin=date("Y-m-d");
         }
         //detectar la sede del usuario
         $sedeUsuario = Auth::user()->sede;
-        
+
         //switch para retornar las siglas de conexion en base a la sede del usuario
-        switch($sedeUsuario){                
+        switch($sedeUsuario){
             case "GRUPO P, C.A":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
                     $RutaUrl = "DBs";
@@ -1584,7 +1699,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -1593,7 +1708,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -1613,7 +1728,10 @@ class VueltoController extends Controller
             case "FARMACIA EL CALLEJON, C.A.":
                 $RutaUrl = "FEC";
             break;
-        }  
+            case "FARMACIA LA FUSTA":
+                $RutaUrl = "FLF";
+            break;
+        }
 
         //si se selecciono otra sede consultarla
         if($request->sede!=null){
@@ -1637,31 +1755,31 @@ class VueltoController extends Controller
         }
         //$RutaUrl = 'DBs';
         $SedeConnection = $RutaUrl;
-        $sede = $RutaUrl;       
-              
-        $conn = FG_Conectar_Smartpharma($SedeConnection);        
-        $registro=[];       
-        $historialvueltos=collect();        
-            
+        $sede = $RutaUrl;
+
+        $conn = FG_Conectar_Smartpharma($SedeConnection);
+        $registro=[];
+        $historialvueltos=collect();
+
         switch($sede)
         {
-            case 'DBs':                                          
+            case 'DBs':
                 $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                        ->where('estatus','=','Aprobado')                    
+                        ->where('estatus','=','Aprobado')
                         ->where('cedulaClienteFactura','=',$request->cliente)
-                        ->OrderBy("id",'desc')                                                                            
+                        ->OrderBy("id",'desc')
                         ->get();
-                $mensaje=null;                 
+                $mensaje=null;
             break;
             case 'FAU':
-                if(FG_Validar_Conectividad('FAU')==1){                        
+                if(FG_Validar_Conectividad('FAU')==1){
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente) 
-                                        ->OrderBy("id",'desc')                                                                           
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
                                         ->get();
                     $mensaje=null;
-                    
+
                 }
                 else{
                     $clientes=null;
@@ -1671,9 +1789,9 @@ class VueltoController extends Controller
             case 'GP':
                 if(FG_Validar_Conectividad('FAU')==1){
                     $clientes=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente) 
-                                        ->OrderBy("id",'desc')                                                                           
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
                                         ->get();
                     $mensaje=null;
                 }
@@ -1685,9 +1803,9 @@ class VueltoController extends Controller
             case 'FTN':
                 if(FG_Validar_Conectividad('FTN')==1){
                     $clientes=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)  
-                                        ->OrderBy("id",'desc')                                                                          
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
                                         ->get();
                     $mensaje=null;
                 }
@@ -1697,11 +1815,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'FLL':
-                if(FG_Validar_Conectividad('FLL')==1){                                               
+                if(FG_Validar_Conectividad('FLL')==1){
                     $clientes=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
+                                        ->where('estatus','=','Aprobado')
                                         ->where('cedulaClienteFactura','=',$request->cliente)
-                                        ->OrderBy("id",'desc')                                                                            
+                                        ->OrderBy("id",'desc')
                                         ->get();
                     $mensaje=null;
                 }
@@ -1711,11 +1829,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'FSM':
-                if(FG_Validar_Conectividad('FSM')==1){                        
+                if(FG_Validar_Conectividad('FSM')==1){
                     $clientes=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente)  
-                                        ->OrderBy("id",'desc')                                                                          
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
                                         ->get();
                     $mensaje=null;
                 }
@@ -1725,11 +1843,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'KDI':
-                if(FG_Validar_Conectividad('KDI')==1){                                                
+                if(FG_Validar_Conectividad('KDI')==1){
                     $clientes=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente) 
-                                        ->OrderBy("id",'desc')                                                                           
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
                                         ->get();
                     $mensaje=null;
                 }
@@ -1739,12 +1857,12 @@ class VueltoController extends Controller
                 }
             break;
             case 'FEC':
-                if(FG_Validar_Conectividad('FEC')==1){   
+                if(FG_Validar_Conectividad('FEC')==1){
                     $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente) 
-                                        ->OrderBy("id",'desc')                                                                           
-                                        ->get();                             
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
+                                        ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1753,12 +1871,12 @@ class VueltoController extends Controller
                 }
             break;
             case 'KD73':
-                if(FG_Validar_Conectividad('KD73')==1){   
+                if(FG_Validar_Conectividad('KD73')==1){
                     $clientes=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                                        ->where('estatus','=','Aprobado')                    
-                                        ->where('cedulaClienteFactura','=',$request->cliente) 
-                                        ->OrderBy("id",'desc')                                                                           
-                                        ->get();                             
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
+                                        ->get();
                     $mensaje=null;
                 }
                 else{
@@ -1766,11 +1884,25 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
                 }
             break;
-        }            
-        
+            case 'FLF':
+                if(FG_Validar_Conectividad('FLF')==1){
+                    $clientes=VueltosFLF::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
+                                        ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
+        }
+
         if($clientes!=null){
             foreach($clientes as $cliente){
-                
+
                 $idFactura=$cliente->id_factura;
 
                 //Consulta de la factura
@@ -1835,7 +1967,7 @@ class VueltoController extends Controller
                 }
 
                 if($cliente->tasaVenta>0){
-                    
+
                     $totalFacturaDolar=number_format($row["totalFactura"]/$cliente->tasaVenta,2);
                     $montoPagoMovilDolar=number_format($cliente->monto/$cliente->tasaVenta,2);
                     if($montoPagadoFactura>0){
@@ -1844,7 +1976,7 @@ class VueltoController extends Controller
                     else{
                         $montoPagadoFactura=0;
                     }
-                }   
+                }
                 else{
                     $totalFacturaDolar=0;
                     $montoPagoMovilDolar=0;
@@ -1856,42 +1988,42 @@ class VueltoController extends Controller
                     'cedula_cliente_factura' =>$row["CodigoCliente"],
                     'telefono_cliente_factura' =>$row["Telefono"],
                     'fecha_hora_factura'=>$row['FechaDocumento']->format('Y-m-d H:i:s'),
-                    'cajero_venta' =>$row["Auditoria_Usuario"],                
+                    'cajero_venta' =>$row["Auditoria_Usuario"],
                     'numero_factura' => $row["NumeroFactura"] ,
                     'nombre_cliente'=>$row["nombre"] ,
                     'total_factura'=>$row["totalFactura"] ,
                     'total_factura_dolar' => $totalFacturaDolar ,
                     'monto_pagado_factura' => $montoPagadoFactura,
                     'monto_pagado_factura_dolar' => $montoPagadoFacturaDolar,
-                    'id'=>$cliente->id,  
-                    'id_factura'=> $cliente->id_factura,  
-                    'fecha_hora'=> $cliente->fecha_hora,  
-                    'banco_cliente'=> $cliente->banco_cliente,  
-                    'cedula_cliente'=> $cliente->cedula_cliente,  
-                    'telefono_pago_movil'=> $cliente->telefono_cliente,  
+                    'id'=>$cliente->id,
+                    'id_factura'=> $cliente->id_factura,
+                    'fecha_hora'=> $cliente->fecha_hora,
+                    'banco_cliente'=> $cliente->banco_cliente,
+                    'cedula_cliente'=> $cliente->cedula_cliente,
+                    'telefono_pago_movil'=> $cliente->telefono_cliente,
                     'monto' => $cliente->monto,
                     'monto_dolar' => $montoPagoMovilDolar,
-                    'sede'=> $cliente->sede,  
-                    'caja'=> $cliente->caja,  
-                    'estatus'=> $cliente->estatus,  
-                    'confirmacion_banco'=> $cliente->confirmacion_banco,  
+                    'sede'=> $cliente->sede,
+                    'caja'=> $cliente->caja,
+                    'estatus'=> $cliente->estatus,
+                    'confirmacion_banco'=> $cliente->confirmacion_banco,
                     'motivo_error'=> $cliente->motivo_error,
                     'nro_devolucion' =>$devolucion["ConsecutivoDevolucionSistema"],
                     'fecha_devolucion' => $fechaDevolucion,
                     'caja_devolucion' =>$devolucion["EstacionTrabajo"],
-                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]  
-                ];           
-                
+                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]
+                ];
+
                 $coleccion=collect($registro);
                 $historialvueltos->push($coleccion);
-            }    
-        } 
+            }
+        }
         else{
             $historialvueltos=null;
-        }            
-                
+        }
+
         $cliente=$request->cliente;
-        
+
         return view('pages.vuelto.detalleCliente',compact('cliente','historialvueltos','mensaje','sedeUsuario','sede','fini','ffin'));
     }
 
@@ -1901,22 +2033,22 @@ class VueltoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function detalleCajeros(Request $request)
-    { 
+    {
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
-            $ffin=$request->fecha_fin;            
+            $ffin=$request->fecha_fin;
         }
         else{
             $fini=date("Y-m-d");
-            $ffin=date("Y-m-d");            
+            $ffin=date("Y-m-d");
         }
 
         //detectar la sede del usuario
         $sedeUsuario = Auth::user()->sede;
-        
+
         //switch para retornar las siglas de conexion en base a la sede del usuario
         switch($sedeUsuario){
             case "GRUPO P, C.A":
@@ -1926,7 +2058,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -1935,7 +2067,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -1955,8 +2087,11 @@ class VueltoController extends Controller
             case "FARMACIA EL CALLEJON, C.A.":
                 $RutaUrl = "FEC";
             break;
+            case "FARMACIA LA FUSTA":
+                $RutaUrl = "FLF";
+            break;
 
-        }  
+        }
 
         //si se selecciono otra sede consultarla
         if($request->sede!=null){
@@ -1982,30 +2117,30 @@ class VueltoController extends Controller
         //$RutaUrl = 'DBs';
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;
-                      
-        $conn = FG_Conectar_Smartpharma($SedeConnection);        
-        $registro=[];       
+
+        $conn = FG_Conectar_Smartpharma($SedeConnection);
+        $registro=[];
         $historialvueltos=collect();
-        
+
         switch($sede)
         {
-            case 'DBs':                                          
+            case 'DBs':
                 $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                        ->where('estatus','=','Aprobado')                    
-                        ->where('nombreCajeroFactura','=',$request->cajero)  
-                        ->OrderBy("id",'desc')                                                                          
+                        ->where('estatus','=','Aprobado')
+                        ->where('nombreCajeroFactura','=',$request->cajero)
+                        ->OrderBy("id",'desc')
                         ->get();
-                $mensaje=null;                 
+                $mensaje=null;
             break;
             case 'FAU':
-                if(FG_Validar_Conectividad('FAU')==1){                        
+                if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)   
-                            ->OrderBy("id",'desc')                                                                         
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
-                    
+
                 }
                 else{
                     $cajeros=null;
@@ -2015,9 +2150,9 @@ class VueltoController extends Controller
             case 'GP':
                 if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2029,9 +2164,9 @@ class VueltoController extends Controller
             case 'FTN':
                 if(FG_Validar_Conectividad('FTN')==1){
                     $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2041,11 +2176,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'FLL':
-                if(FG_Validar_Conectividad('FLL')==1){                                               
+                if(FG_Validar_Conectividad('FLL')==1){
                     $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2055,11 +2190,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'FSM':
-                if(FG_Validar_Conectividad('FSM')==1){                        
+                if(FG_Validar_Conectividad('FSM')==1){
                     $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2069,11 +2204,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'KDI':
-                if(FG_Validar_Conectividad('KDI')==1){                                                
+                if(FG_Validar_Conectividad('KDI')==1){
                     $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)    
-                            ->OrderBy("id",'desc')                                                                        
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2083,12 +2218,12 @@ class VueltoController extends Controller
                 }
             break;
             case 'FEC':
-                if(FG_Validar_Conectividad('FEC')==1){   
+                if(FG_Validar_Conectividad('FEC')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero) 
-                            ->OrderBy("id",'desc')                                                                           
-                            ->get();                            
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -2097,12 +2232,12 @@ class VueltoController extends Controller
                 }
             break;
             case 'KD73':
-                if(FG_Validar_Conectividad('KD73')==1){   
+                if(FG_Validar_Conectividad('KD73')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Aprobado')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero) 
-                            ->OrderBy("id",'desc')                                                                           
-                            ->get();                            
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -2110,11 +2245,25 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
                 }
             break;
-        } 
-            
+            case 'FLF':
+                if(FG_Validar_Conectividad('FLF')==1){
+                    $cajeros=VueltosFLF::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
+        }
+
         if($cajeros!=null){
             foreach($cajeros as $cajero){
-                
+
                 $idFactura=$cajero->id_factura;
 
                 //Consulta de la factura
@@ -2179,7 +2328,7 @@ class VueltoController extends Controller
                 }
 
                 if($cajero->tasaVenta>0){
-                    
+
                     $totalFacturaDolar=number_format($row["totalFactura"]/$cajero->tasaVenta,2);
                     $montoPagoMovilDolar=number_format($cajero->monto/$cajero->tasaVenta,2);
                     if($montoPagadoFactura>0){
@@ -2188,7 +2337,7 @@ class VueltoController extends Controller
                     else{
                         $montoPagadoFactura=0;
                     }
-                }   
+                }
                 else{
                     $totalFacturaDolar=0;
                     $montoPagoMovilDolar=0;
@@ -2200,42 +2349,42 @@ class VueltoController extends Controller
                     'cedula_cliente_factura' =>$row["CodigoCliente"],
                     'telefono_cliente_factura' =>$row["Telefono"],
                     'fecha_hora_factura'=>$row['FechaDocumento']->format('Y-m-d H:i:s'),
-                    'cajero_venta' =>$row["Auditoria_Usuario"],                
+                    'cajero_venta' =>$row["Auditoria_Usuario"],
                     'numero_factura' => $row["NumeroFactura"] ,
                     'nombre_cliente'=>$row["nombre"] ,
                     'total_factura'=>$row["totalFactura"] ,
                     'total_factura_dolar' => $totalFacturaDolar ,
                     'monto_pagado_factura' => $montoPagadoFactura,
                     'monto_pagado_factura_dolar' => $montoPagadoFacturaDolar,
-                    'id'=>$cajero->id,  
-                    'id_factura'=> $cajero->id_factura,  
-                    'fecha_hora'=> $cajero->fecha_hora,  
-                    'banco_cliente'=> $cajero->banco_cliente,  
-                    'cedula_cliente'=> $cajero->cedula_cliente,  
-                    'telefono_pago_movil'=> $cajero->telefono_cliente,  
+                    'id'=>$cajero->id,
+                    'id_factura'=> $cajero->id_factura,
+                    'fecha_hora'=> $cajero->fecha_hora,
+                    'banco_cliente'=> $cajero->banco_cliente,
+                    'cedula_cliente'=> $cajero->cedula_cliente,
+                    'telefono_pago_movil'=> $cajero->telefono_cliente,
                     'monto' => $cajero->monto,
                     'monto_dolar' => $montoPagoMovilDolar,
-                    'sede'=> $cajero->sede,  
-                    'caja'=> $cajero->caja,  
-                    'estatus'=> $cajero->estatus,  
-                    'confirmacion_banco'=> $cajero->confirmacion_banco,  
+                    'sede'=> $cajero->sede,
+                    'caja'=> $cajero->caja,
+                    'estatus'=> $cajero->estatus,
+                    'confirmacion_banco'=> $cajero->confirmacion_banco,
                     'motivo_error'=> $cajero->motivo_error,
                     'nro_devolucion' =>$devolucion["ConsecutivoDevolucionSistema"],
                     'fecha_devolucion' => $fechaDevolucion,
                     'caja_devolucion' =>$devolucion["EstacionTrabajo"],
-                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]  
-                ];           
-                
+                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]
+                ];
+
                 $coleccion=collect($registro);
                 $historialvueltos->push($coleccion);
-            }    
-        } 
+            }
+        }
         else{
             $historialvueltos=null;
-        }            
-                
+        }
+
         $cajero=$request->cajero;
-        
+
 
         return view('pages.vuelto.detalleCajero',compact('cajero','historialvueltos','mensaje','sedeUsuario','sede','fini','ffin'));
     }
@@ -2246,22 +2395,22 @@ class VueltoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function detalleCajerosErrores(Request $request)
-    { 
+    {
         include app_path() . '/functions/config.php';
         include app_path() . '/functions/functions.php';
 
         if($request->fecha_ini>0){
             $fini=$request->fecha_ini;
-            $ffin=$request->fecha_fin;            
+            $ffin=$request->fecha_fin;
         }
         else{
             $fini=date("Y-m-d");
-            $ffin=date("Y-m-d");            
+            $ffin=date("Y-m-d");
         }
 
         //detectar la sede del usuario
         $sedeUsuario = Auth::user()->sede;
-        
+
         //switch para retornar las siglas de conexion en base a la sede del usuario
         switch($sedeUsuario){
             case "GRUPO P, C.A":
@@ -2271,7 +2420,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA AVENIDA UNIVERSIDAD, C.A.":
                 if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' ) {
@@ -2280,7 +2429,7 @@ class VueltoController extends Controller
                 }
                 else{
                     $RutaUrl = "FAU";
-                }    
+                }
             break;
             case "FARMACIA TIERRA NEGRA, C.A.":
                 $RutaUrl = "FTN";
@@ -2300,8 +2449,10 @@ class VueltoController extends Controller
             case "FARMACIA EL CALLEJON, C.A.":
                 $RutaUrl = "FEC";
             break;
-
-        }  
+            case "FARMACIA LA FUSTA":
+                $RutaUrl = "FLF";
+            break;
+        }
 
         //si se selecciono otra sede consultarla
         if($request->sede!=null){
@@ -2327,29 +2478,29 @@ class VueltoController extends Controller
         //$RutaUrl = 'DBs';
         $SedeConnection = $RutaUrl;
         $sede = $RutaUrl;
-                      
-        $conn = FG_Conectar_Smartpharma($SedeConnection);        
-        $registro=[];       
+
+        $conn = FG_Conectar_Smartpharma($SedeConnection);
+        $registro=[];
         $historialvueltos=collect();
-        
+
         switch($sede)
         {
-            case 'DBs':                                          
+            case 'DBs':
                 $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                        ->where('estatus','=','Error')                    
-                        ->where('nombreCajeroFactura','=',$request->cajero)  
-                        ->OrderBy("id",'desc')                                                                          
+                        ->where('estatus','=','Error')
+                        ->where('nombreCajeroFactura','=',$request->cajero)
+                        ->OrderBy("id",'desc')
                         ->get();
-                $mensaje=null;                 
+                $mensaje=null;
             break;
             case 'FAU':
-                if(FG_Validar_Conectividad('FAU')==1){                        
+                if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)   
-                            ->OrderBy("id",'desc')                                                                         
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
-                    $mensaje=null;                    
+                    $mensaje=null;
                 }
                 else{
                     $cajeros=null;
@@ -2359,9 +2510,9 @@ class VueltoController extends Controller
             case 'GP':
                 if(FG_Validar_Conectividad('FAU')==1){
                     $cajeros=VueltoVDC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2373,9 +2524,9 @@ class VueltoController extends Controller
             case 'FTN':
                 if(FG_Validar_Conectividad('FTN')==1){
                     $cajeros=VueltosFTN::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2385,11 +2536,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'FLL':
-                if(FG_Validar_Conectividad('FLL')==1){                                               
+                if(FG_Validar_Conectividad('FLL')==1){
                     $cajeros=VueltosFLL::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2399,11 +2550,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'FSM':
-                if(FG_Validar_Conectividad('FSM')==1){                        
+                if(FG_Validar_Conectividad('FSM')==1){
                     $cajeros=VueltosFM::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)  
-                            ->OrderBy("id",'desc')                                                                          
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2413,11 +2564,11 @@ class VueltoController extends Controller
                 }
             break;
             case 'KDI':
-                if(FG_Validar_Conectividad('KDI')==1){                                                
+                if(FG_Validar_Conectividad('KDI')==1){
                     $cajeros=VueltosKDI::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero)    
-                            ->OrderBy("id",'desc')                                                                        
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
                             ->get();
                     $mensaje=null;
                 }
@@ -2427,12 +2578,12 @@ class VueltoController extends Controller
                 }
             break;
             case 'FEC':
-                if(FG_Validar_Conectividad('FEC')==1){   
+                if(FG_Validar_Conectividad('FEC')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero) 
-                            ->OrderBy("id",'desc')                                                                           
-                            ->get();                            
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -2441,12 +2592,12 @@ class VueltoController extends Controller
                 }
             break;
             case 'KD73':
-                if(FG_Validar_Conectividad('KD73')==1){   
+                if(FG_Validar_Conectividad('KD73')==1){
                     $cajeros=VueltosFEC::where('sede','=',$sede)->fecha($fini, $ffin)
-                            ->where('estatus','=','Error')                    
-                            ->where('nombreCajeroFactura','=',$request->cajero) 
-                            ->OrderBy("id",'desc')                                                                           
-                            ->get();                            
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
                     $mensaje=null;
                 }
                 else{
@@ -2454,11 +2605,25 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con FARMACIAS KD EXPRESS, C.A. - KD73";
                 }
             break;
-        } 
-            
+            case 'FLF':
+                if(FG_Validar_Conectividad('FLF')==1){
+                    $cajeros=VueltosFLF::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
+        }
+
         if($cajeros!=null){
             foreach($cajeros as $cajero){
-                
+
                 $idFactura=$cajero->id_factura;
 
                 //Consulta de la factura
@@ -2524,7 +2689,7 @@ class VueltoController extends Controller
                 }
 
                 if($cajero->tasaVenta>0){
-                    
+
                     $totalFacturaDolar=number_format($row["totalFactura"]/$cajero->tasaVenta,2);
                     $montoPagoMovilDolar=number_format($cajero->monto/$cajero->tasaVenta,2);
                     if($montoPagadoFactura>0){
@@ -2534,12 +2699,12 @@ class VueltoController extends Controller
                         $montoPagadoFactura=0;
                         $montoPagadoFacturaDolar=0;
                     }
-                }   
+                }
                 else{
                     $totalFacturaDolar=0;
                     $montoPagoMovilDolar=0;
                     $montoPagadoFactura=0;
-                    $montoPagadoFacturaDolar=0;                    
+                    $montoPagadoFacturaDolar=0;
                 }
 
                 $registro = [
@@ -2547,45 +2712,45 @@ class VueltoController extends Controller
                     'cedula_cliente_factura' =>$row["CodigoCliente"],
                     'telefono_cliente_factura' =>$row["Telefono"],
                     'fecha_hora_factura'=>$row['FechaDocumento']->format('Y-m-d H:i:s'),
-                    'cajero_venta' =>$row["Auditoria_Usuario"],                
+                    'cajero_venta' =>$row["Auditoria_Usuario"],
                     'numero_factura' => $row["NumeroFactura"] ,
                     'nombre_cliente'=>$row["nombre"] ,
                     'total_factura'=>$row["totalFactura"] ,
                     'total_factura_dolar' => $totalFacturaDolar ,
                     'monto_pagado_factura' => $montoPagadoFactura,
                     'monto_pagado_factura_dolar' => $montoPagadoFacturaDolar,
-                    'id'=>$cajero->id,  
-                    'id_factura'=> $cajero->id_factura,  
-                    'fecha_hora'=> $cajero->fecha_hora,  
-                    'banco_cliente'=> $cajero->banco_cliente,  
-                    'cedula_cliente'=> $cajero->cedula_cliente,  
-                    'telefono_pago_movil'=> $cajero->telefono_cliente,  
+                    'id'=>$cajero->id,
+                    'id_factura'=> $cajero->id_factura,
+                    'fecha_hora'=> $cajero->fecha_hora,
+                    'banco_cliente'=> $cajero->banco_cliente,
+                    'cedula_cliente'=> $cajero->cedula_cliente,
+                    'telefono_pago_movil'=> $cajero->telefono_cliente,
                     'monto' => $cajero->monto,
                     'monto_dolar' => $montoPagoMovilDolar,
-                    'sede'=> $cajero->sede,  
-                    'caja'=> $cajero->caja,  
-                    'estatus'=> $cajero->estatus,  
-                    'confirmacion_banco'=> $cajero->confirmacion_banco,  
+                    'sede'=> $cajero->sede,
+                    'caja'=> $cajero->caja,
+                    'estatus'=> $cajero->estatus,
+                    'confirmacion_banco'=> $cajero->confirmacion_banco,
                     'motivo_error'=> $cajero->motivo_error,
                     'nro_devolucion' =>$devolucion["ConsecutivoDevolucionSistema"],
                     'fecha_devolucion' => $fechaDevolucion,
                     'caja_devolucion' =>$devolucion["EstacionTrabajo"],
-                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]  
-                ];           
-                
+                    'cajero_devolucion' =>$devolucion["Auditoria_Usuario"]
+                ];
+
                 $coleccion=collect($registro);
                 $historialvueltos->push($coleccion);
-            }    
-        } 
+            }
+        }
         else{
             $historialvueltos=null;
-        }            
-                
+        }
+
         $cajero=$request->cajero;
-        
+
 
         return view('pages.vuelto.detalleCajeroError',compact('cajero','historialvueltos','mensaje','sedeUsuario','sede','fini','ffin'));
     }
 
-   
+
 }
