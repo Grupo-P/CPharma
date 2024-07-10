@@ -55,7 +55,6 @@
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmaflf.com') {
                         echo 'FARMACIA LA FUSTA';
-                        $sede = 'FLF';
                     }
                 @endphp
             </td>
