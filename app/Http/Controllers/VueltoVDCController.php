@@ -651,7 +651,7 @@ class VueltoVDCController extends Controller
                 vv.NumeroFactura AS numero_factura,
                 gp.IdentificacionFiscal AS cedula_cliente,
                 gp.Telefono AS telefono_cliente,
-                (vvp.MontoRecibido - vvp.MontoPagado) AS monto
+                (SUM(vvp.MontoRecibido) - SUM(vvp.MontoPagado)) AS monto
             FROM
                 VenFactura vf
                     LEFT JOIN VenCaja vca ON vf.VenCajaId =  vca.Id
@@ -661,6 +661,11 @@ class VueltoVDCController extends Controller
                     LEFT JOIN VenVentaPago vvp ON vvp.VenVentaId = vv.Id
             WHERE
                 vca.EstacionTrabajo = '$caja'
+            GROUP BY
+                vv.NumeroFactura,
+                gp.IdentificacionFiscal,
+                gp.Telefono,
+                vf.Id
             ORDER BY vf.Id DESC
         ";
 
@@ -696,20 +701,30 @@ class VueltoVDCController extends Controller
                 cl.CodigoCliente,
                 CONCAT(g.Nombre, ' ', g.Apellido) AS nombre,
                 g.Telefono,
-                f.M_MontoTotalFactura as totalFactura,
-                vvp.MontoPagado,
-                vvp.MontoRecibido
+                f.M_MontoTotalFactura AS totalFactura,
+                SUM(vvp.MontoPagado) AS monto_pagado,
+                SUM(vvp.MontoRecibido) AS monto_recibido
             FROM
                 VenFactura f
-                LEFT JOIN VenCaja vca ON f.VenCajaId =  vca.Id
+                LEFT JOIN VenCaja vca ON f.VenCajaId = vca.Id
                 LEFT JOIN VenCaja ca ON f.VenCajaId = ca.Id
                 LEFT JOIN VenCliente cl ON f.VenClienteId = cl.Id
                 LEFT JOIN GenPersona g ON g.Id = cl.GenPersonaId
                 LEFT JOIN VenVentaPago vvp ON vvp.VenVentaId = f.VenVentaId
             WHERE
                 vca.EstacionTrabajo = '$caja'
+            GROUP BY
+                vvp.VenVentaId,
+                f.NumeroFactura,
+                ca.EstacionTrabajo,
+                cl.CodigoCliente,
+                CONCAT(g.Nombre, ' ', g.Apellido),
+                g.Telefono,
+                f.M_MontoTotalFactura,
+                f.Id,
+                vca.EstacionTrabajo
             ORDER BY
-                f.Id DESC
+                f.Id DESC
         ";
 
         $result = sqlsrv_query($conn, $sql);
@@ -722,12 +737,12 @@ class VueltoVDCController extends Controller
         unset($array[0]);
         $cedula_cliente = implode($array, '');
         $telefono = $row['Telefono'];
-        $monto = $row['MontoRecibido'] - $row['MontoPagado'];
+        $monto = $row['monto_recibido'] - $row['monto_pagado'];
         $monto = number_format($monto, 2,'.','');        
 
         $cliente = mb_convert_encoding($row['nombre'], 'UTF-8', 'UTF-8');
         $total_factura = number_format($row['totalFactura'], 2,'.','');
-        $total_factura_pagado = number_format($row['MontoRecibido'], 2,'.','');
+        $total_factura_pagado = number_format($row['monto_recibido'], 2,'.','');
 
         // Paso #1
         auditoriaPM::create([
