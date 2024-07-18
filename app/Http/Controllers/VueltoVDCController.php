@@ -724,7 +724,7 @@ class VueltoVDCController extends Controller
                 f.Id,
                 vca.EstacionTrabajo
             ORDER BY
-                f.Id DESC
+                f.Id DESC
         ";
 
         $result = sqlsrv_query($conn, $sql);
