@@ -808,7 +808,6 @@
                     
                     $comentario = "Referencia: ".$referencia;
 
-                    dd($referencia, $amount, $enviadoPor);
                     $pagos[$i]['tipo'] = 'Zelle Chase';
                     $pagos[$i]['enviado_por'] = $enviadoPor;
                     $pagos[$i]['monto'] = $amount;
