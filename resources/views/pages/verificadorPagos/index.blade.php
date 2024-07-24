@@ -811,6 +811,28 @@
                                     $pagos[$i]['referencia'] = $i;
                                     $i++;
                                 }
+                            } else if ($item->from == 'Chase <no.reply.alerts@chase.com>') {
+                                $body = imap_fetchbody($conn, $email, 1);
+
+                                $array = explode('font-size:16px; font-weight:bold; color:#414042;" class=3D"font14">', $body);
+
+                                $amount = str_replace("=\r\n", '', substr($array[1], 0, strpos($array[1], '</td>')));
+                                $referencia =  str_replace("=\r\n", '', substr($array[3], 0, strpos($array[3], '</td>')));
+                                $enviadoPor =  explode(' sent you money</td', $body);
+                                $enviadoPor = str_replace("=\r\n", '', substr($enviadoPor[0], strrpos($enviadoPor[0], 'class=3D"moPad">')+16));
+                                
+                                $comentario = "Referencia: ".$referencia;
+
+                                dd($referencia, $amount, $enviadoPor);
+                                $pagos[$i]['tipo'] = 'Zelle Chase';
+                                $pagos[$i]['enviado_por'] = $enviadoPor;
+                                $pagos[$i]['monto'] = $amount;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) ;
+                                $pagos[$i]['referencia'] = $i;
+                                $i++;
                             }
                         }
                     }
