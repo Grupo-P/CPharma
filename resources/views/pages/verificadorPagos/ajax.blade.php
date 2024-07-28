@@ -70,7 +70,7 @@
         $fecha = date_modify($fecha, '-1day');
         $fecha = date_format($fecha, 'd-M-Y');
 
-        $conn = @imap_open($mailbox, $username, $password) or die (@imap_last_error());
+        $conn = @imap_open($mailbox, $username, $password) or die ('Error: '.@imap_last_error().' - En: '.$username);
 
         $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
 
@@ -170,55 +170,85 @@
                 // Mercantil
 
                 if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
+                    try {
+                        $body = @imap_fetchbody($conn, $email, 2);
+                        $otoFormato = false;
+                    
+                        if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
+                            
+                            $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
 
-                    $body = @imap_fetchbody($conn, $email, 2);
+                            if($inicioEnviadoPor == 7) {
+                                $inicioEnviadoPor = (strpos($body, ' del ')) + 5;
+                                $otoFormato = true;
+                            }
 
-                    if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
+                            $substr = substr($body, $inicioEnviadoPor);
+                            $finEnviadoPor = strpos($substr, '.');
 
-                        $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
-                        $substr = substr($body, $inicioEnviadoPor);
-                        $finEnviadoPor = strpos($substr, '.');
-                        $enviadoPor = substr($substr, 0, $finEnviadoPor);
-                        $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
+                            if($otoFormato) {
+                                $finEnviadoPor = strpos($substr, ' Ref ');
+                            }
 
-                        $inicioMonto = (strpos($body, 'Tpago por')) + 9;
-                        $substr = substr($body, $inicioMonto);
-                        $finMonto = strpos($substr, ' desde ');
-                        $monto = substr($substr, 0, $finMonto);
+                            $enviadoPor = substr($substr, 0, $finEnviadoPor);
+                            $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
 
-                        $inicioReferencia = (strpos($body, 'a:')) + 2;
-                        $substr = substr($body, $inicioReferencia);
-                        $finReferencia = strpos($substr, ',');
-                        $referencia = substr($substr, 0, $finReferencia);
 
-                        $inicioFechaMensaje = strpos($substr, ', el ');
-                        $inicioFechaMensaje = str_replace(", el ", "", substr($substr, $inicioFechaMensaje));
+                            $inicioMonto = (strpos($body, 'Tpago por')) + 9;
 
-                        $finFechaMensaje = strpos($inicioFechaMensaje, ' a las');
-                        $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+                            if($otoFormato) {
+                                $inicioMonto = (strpos($body, 'Tpago recibido')) + 14;
+                            }
 
-                        if($fechaMensaje != date("d/m/Y")) continue;
+                            $substr = substr($body, $inicioMonto);
+                            $finMonto = strpos($substr, ' desde ');
 
-                        $comentario = "Referencia: $referencia";
+                            if($otoFormato) {
+                                $finMonto = strpos($substr, ' del');
+                            }
 
-                        $decimales = explode('.', (string) $monto);
-                        $decimales = $decimales[1];
+                            $monto = trim(substr($substr, 0, $finMonto));
 
-                        $pagos[$i]['tipo'] = 'Pago móvil Mercantil';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
-                        $pagos[$i]['monto'] = $monto;
-                        $pagos[$i]['fecha'] = $fecha;
-                        $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
-                        $pagos[$i]['comentario'] = $comentario;
-                        $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
-                        $pagos[$i]['referencia'] = $referencia;
+                            $inicioReferencia = (strpos($body, 'a:')) + 2;
 
-                        $i++;
+                            if($otoFormato) {
+                                $inicioReferencia = (strpos($body, ' Ref ')) + 5;
+                            }
+
+                            $substr = substr($body, $inicioReferencia);
+                            $finReferencia = strpos($substr, ',');
+                            $referencia = substr($substr, 0, $finReferencia);
+
+                            $comentario = "Referencia: $referencia";
+
+                            $temporalMonto = explode(" ", $monto)[1] ?? $monto;
+
+                            $decimales = explode('.', (string) $temporalMonto);
+
+                            if(!isset($decimales[1])) {
+                                $romper = explode(",", (string) $temporalMonto);
+                                $decimales = $romper[1] ?? '';
+                            } else {
+                                $decimales = $decimales[1] ?? '';
+                            }
+
+                            $pagos[$i]['tipo'] = 'Pago móvil Mercantil';
+                            $pagos[$i]['enviado_por'] = $enviadoPor;
+                            $pagos[$i]['monto'] = $monto;
+                            $pagos[$i]['fecha'] = $fecha;
+                            $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                            $pagos[$i]['comentario'] = $comentario;
+                            $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                            $pagos[$i]['referencia'] = $referencia;
+
+                            $i++;
+                        }
                     }
-
+                    catch (Throwable  $error) {
+                     }
                 }
 
-                 // BNC
+                // BNC
 
                 if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
 
@@ -278,7 +308,7 @@
             }
         }
 
-        $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die (@imap_last_error());
+        $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die ('Error: '.@imap_last_error().' - En: '.$username);
 
         $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -742,7 +772,7 @@
 
         // Chase
 
-        $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die (imap_last_error());
+        $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die ('Error: '.@imap_last_error().' - En: '.$username);
 
         $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -766,8 +796,8 @@
 
             if ($arrayFecha[0] != date_format(date_create(request()->fecha), 'd/m/Y')) {
                 continue;
+            }
 
-}
             foreach ($overview as $item) {
 
                 if ($item->from == 'Chase QuickPay Team <no-reply@alertsp.chase.com>') {
@@ -823,7 +853,7 @@
 
         // PNC|BANESCO US
 
-        $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die (imap_last_error());
+        $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die ('Error: '.@imap_last_error().' - En: '.$username);
 
         $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -1012,7 +1042,7 @@
     }
 
     catch (Exception $excepcion) {
-        dd($excepcion);
+        dd($excepcion, "HOLA");
         $error = 1;
     }
 

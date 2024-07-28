@@ -115,7 +115,7 @@
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $conn = @imap_open($mailbox, $username, $password) or die (@imap_last_error());
+            $conn = @imap_open($mailbox, $username, $password) or die ('Error: '.@imap_last_error().' - En: '.$username);
 
             $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
 
@@ -210,29 +210,67 @@
                         if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
 
                             $body = @imap_fetchbody($conn, $email, 2);
+                            $otoFormato = false;
 
                             if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
 
                                 $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
+
+                                if($inicioEnviadoPor == 7) {
+                                    $inicioEnviadoPor = (strpos($body, ' del ')) + 5;
+                                    $otoFormato = true;
+                                }
+
                                 $substr = substr($body, $inicioEnviadoPor);
                                 $finEnviadoPor = strpos($substr, '.');
+
+                                if($otoFormato) {
+                                    $finEnviadoPor = strpos($substr, ' Ref ');
+                                }
+
                                 $enviadoPor = substr($substr, 0, $finEnviadoPor);
                                 $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
 
                                 $inicioMonto = (strpos($body, 'Tpago por')) + 9;
+
+                                if($otoFormato) {
+                                    $inicioMonto = (strpos($body, 'Tpago recibido')) + 14;
+                                }
+
                                 $substr = substr($body, $inicioMonto);
                                 $finMonto = strpos($substr, ' desde ');
+
+                                if($otoFormato) {
+                                    $finMonto = strpos($substr, ' del');
+                                }
+
                                 $monto = substr($substr, 0, $finMonto);
 
                                 $inicioReferencia = (strpos($body, 'a:')) + 2;
+
+                                if($otoFormato) {
+                                    $inicioReferencia = (strpos($body, ' Ref ')) + 5;
+                                }
+
                                 $substr = substr($body, $inicioReferencia);
                                 $finReferencia = strpos($substr, ',');
                                 $referencia = substr($substr, 0, $finReferencia);
 
                                 $inicioFechaMensaje = strpos($substr, ', el ');
-                                $inicioFechaMensaje = str_replace(", el ", "", substr($substr, $inicioFechaMensaje));
+
+                                if($otoFormato) {
+                                    $inicioFechaMensaje = strpos($substr, ', ');
+                                    $inicioFechaMensaje = preg_replace("/" . preg_quote(", ", "/") . "/", "", substr($substr, $inicioFechaMensaje), 1);
+                                } else {
+                                    $inicioFechaMensaje = str_replace(", el ", "", substr($substr, $inicioFechaMensaje));
+                                }
 
                                 $finFechaMensaje = strpos($inicioFechaMensaje, ' a las');
+
+                                if($otoFormato) {
+                                    $finFechaMensaje = strpos($inicioFechaMensaje, ', ');
+                                }
+
                                 $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
 
                                 if($fechaMensaje != date("d/m/Y", strtotime(request()->fecha))) continue;
@@ -315,7 +353,7 @@
 
             if($sede !== "PAG")
             {
-                $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die (@imap_last_error());
+                $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die ('Error: '.@imap_last_error().' - En: '.$username);
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -759,7 +797,7 @@
 
                 // Chase
 
-                $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die (imap_last_error());
+                $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die ('Error: '.@imap_last_error().' - En: '.$username);
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -839,7 +877,7 @@
 
                 // PNC/BANESCO US/ TRUIS
 
-                $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die (imap_last_error());
+                $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die ('Error: '.@imap_last_error().' - En: '.$username);
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -1003,7 +1041,7 @@
                     }
                 }
             } else {
-                $conn = @imap_open($mailbox, 'deldiapagos@hotmail.com', 'atorvastatin@.PAG') or die (@imap_last_error());
+                $conn = @imap_open($mailbox, 'deldiapagos@hotmail.com', 'atorvastatin@.PAG') or die ('Error: '.@imap_last_error().' - En: '.$username);
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
