@@ -70,7 +70,7 @@
         $fecha = date_modify($fecha, '-1day');
         $fecha = date_format($fecha, 'd-M-Y');
 
-        $conn = @imap_open($mailbox, $username, $password) or die ('Error: '.@imap_last_error().' - En: '.$username);
+        $conn = @imap_open($mailbox, $username, $password);
 
         $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
 
@@ -176,6 +176,8 @@
                     
                         if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
                             
+                            $body = str_replace(array("\n", "\r", "="), "", $body);
+
                             $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
 
                             if($inicioEnviadoPor == 7) {
@@ -308,7 +310,7 @@
             }
         }
 
-        $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die ('Error: '.@imap_last_error().' - En: '.$username);
+        $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.');
 
         $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -772,7 +774,7 @@
 
         // Chase
 
-        $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die ('Error: '.@imap_last_error().' - En: '.$username);
+        $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.');
 
         $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -853,7 +855,7 @@
 
         // PNC|BANESCO US
 
-        $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die ('Error: '.@imap_last_error().' - En: '.$username);
+        $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.');
 
         $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 

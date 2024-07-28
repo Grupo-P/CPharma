@@ -115,7 +115,7 @@
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $conn = @imap_open($mailbox, $username, $password) or die ('Error: '.@imap_last_error().' - En: '.$username);
+            $conn = @imap_open($mailbox, $username, $password);
 
             $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
 
@@ -212,7 +212,10 @@
                             $body = @imap_fetchbody($conn, $email, 2);
                             $otoFormato = false;
 
-                            if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
+                            if (strpos($body, 'Tpago') && strpos($body, '- 500'))
+                            {
+
+                                $body = str_replace(array("\n", "\r", "="), "", $body);
 
                                 $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
 
@@ -353,7 +356,7 @@
 
             if($sede !== "PAG")
             {
-                $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.') or die ('Error: '.@imap_last_error().' - En: '.$username);
+                $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.');
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -797,7 +800,7 @@
 
                 // Chase
 
-                $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.') or die ('Error: '.@imap_last_error().' - En: '.$username);
+                $conn = imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.');
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -877,7 +880,7 @@
 
                 // PNC/BANESCO US/ TRUIS
 
-                $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.') or die ('Error: '.@imap_last_error().' - En: '.$username);
+                $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.');
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -1041,7 +1044,7 @@
                     }
                 }
             } else {
-                $conn = @imap_open($mailbox, 'deldiapagos@hotmail.com', 'atorvastatin@.PAG') or die ('Error: '.@imap_last_error().' - En: '.$username);
+                $conn = @imap_open($mailbox, 'deldiapagos@hotmail.com', 'atorvastatin@.PAG');
 
                 $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
