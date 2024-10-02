@@ -23,57 +23,56 @@
         }
 
         if ($host == 'cpharmafau.com' || $host == 'cpharmade.com' || $host == 'cpharmagpde.com') {
-            $username = 'pagosuniversidad2@hotmail.com';
-            $password = 'pagosfarmaciaavenidauniversidad';
+            $username = 'pagosavuniversidad2@gmail.com';
+            $password = 'uydr xlow srqa odgv';
             $id = 2;
             $remitente = 'pagomovilgp@gmail.com';
         }
 
         if ($host == 'cpharmafsm.com') {
-            $username = 'pagosmillennium@hotmail.com';
-            $password = 'Glibenclamida*84';
+            $username = 'pagosmillennium@gmail.com';
+            $password = 'ogft pryn rtcu rbgh';
             $remitente = 'pagosfll677@gmail.com';
             $id = 4;
         }
 
         if ($host == 'cpharmafll.com') {
-            $username = 'pagoslalago@hotmail.com';
-            $password = 'Glibenclamida*84';
+            $username = 'pagoslalago@gmail.com';
+            $password = 'yred gyyu rzzp wcmg';
             $remitente = 'pagosfll677@gmail.com';
             $id = 3;
         }
 
         if ($host == 'cpharmafec.com') {
-            $username = 'pagoselcallejon@hotmail.com';
-            $password = 'atorvastati@.YA';
+            $username = 'pagoselcallejon@gmail.com';
+            $password = 'khxx zqax xxzn smgn';
             $remitente = 'pagomovilfec@gmail.com';
             $id = 6;
         }
 
         if ($host == 'cpharmaflf.com') {
-            $username = 'pagoslafusta@hotmail.com';
-            $password = 'atorvastatin@.YA';
+            $username = 'pagoslafusta@gmail.com';
+            $password = 'zssu dzzt dhmj xvwf';
             $remitente = 'pagomovilflf@gmail.com';
             $id = 7;
         }
 
         if ($host == 'cpharmakdi.com' || $host == 'cpharmakd73.com') {
-            $username = 'pagoskdi@hotmail.com';
-            $password = 'GJpc2017.';
+            $username = 'pagoskdi@gmail.com';
+            $password = 'ihra yddt ucgk sdrb';
             $remitente = 'pagomovilkd@gmail.com';
             $id = 5;
         }
 
-        $mailbox = '{outlook.office365.com:993/imap/ssl}INBOX';
+        $mailbox = '{imap.gmail.com:993/imap/ssl}INBOX';
 
         $fecha = date_create(request()->fecha);
-        $fecha = date_modify($fecha, '-1day');
         $fecha = date_format($fecha, 'd-M-Y');
 
         try {
             $conn = @imap_open($mailbox, $username, $password);
         } catch (\Throwable $th) {
-            echo 'No se pudo conectar @hotmail.com:';
+            echo 'No se pudo conectar @gmail.com:';
         }
 
         $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
@@ -96,16 +95,21 @@
         $i = 0;
 
         foreach ($search as $email) {
+            $overview = imap_fetchheader($conn, $email);
+
+            preg_match('/Date: (.*)/', $overview, $matches);
+            $fechaReal = isset($matches[1]) ? $matches[1] : null;
+
             $overview = @imap_fetch_overview($conn, $email);
 
             $header = @imap_header($conn, $email);
 
-            $fecha = new DateTime($header->date);
-            $fecha->modify('-4hour');
+            $fecha = new DateTime($fechaReal);
+            $fecha->setTimezone(new DateTimeZone('America/Caracas'));
             $fecha = $fecha->format('d/m/Y h:i A');
 
-            $fechaSinFormato = new DateTime($header->date);
-            $fechaSinFormato->modify('-4hour');
+            $fechaSinFormato = new DateTime($fechaReal);
+            $fechaSinFormato->setTimezone(new DateTimeZone('America/Caracas'));
             $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
             $arrayFecha = explode(' ', $fecha);
@@ -315,7 +319,7 @@
         }
 
         try {
-            $conn = @imap_open($mailbox, 'pagosgedaca@hotmail.com', 'Cpharma20.');
+            $conn = @imap_open($mailbox, 'pagosgedaca@gmail.com', 'nqzj lehy oupk xdnr');
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -323,16 +327,21 @@
             $search = is_iterable($search) ? $search : [];
 
             foreach ($search as $email) {
+                $overview = imap_fetchheader($conn, $email);
+
+                preg_match('/Date: (.*)/', $overview, $matches);
+                $fechaReal = isset($matches[1]) ? $matches[1] : null;
+
                 $overview = @imap_fetch_overview($conn, $email);
 
                 $header = @imap_header($conn, $email);
 
-                $fecha = new DateTime($header->date);
-                $fecha->modify('-4hour');
+                $fecha = new DateTime($fechaReal);
+                $fecha->setTimezone(new DateTimeZone('America/Caracas'));
                 $fecha = $fecha->format('d/m/Y h:i A');
 
-                $fechaSinFormato = new DateTime($header->date);
-                $fechaSinFormato->modify('-4hour');
+                $fechaSinFormato = new DateTime($fechaReal);
+                $fechaSinFormato->setTimezone(new DateTimeZone('America/Caracas'));
                 $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
                 $arrayFecha = explode(' ', $fecha);
@@ -778,12 +787,12 @@
             }
 
         } catch (\Throwable $th) {
-            echo 'No se pudo conectar pagosgedaca@hotmail.com:';
+            echo 'No se pudo conectar pagosgedaca@gmail.com:';
         }
 
         // Chase
         try {
-            $conn = @imap_open($mailbox, 'pagosfarmaya@hotmail.com', 'Laravel23.');
+            $conn = @imap_open($mailbox, 'pagosfarmaya@gmail.com', 'ozrz rujm dbqt qnhw');
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -795,12 +804,12 @@
 
                 $header = @imap_header($conn, $email);
 
-                $fecha = new DateTime($header->date);
-                $fecha->modify('-4hour');
+                $fecha = new DateTime($fechaReale);
+                $fecha->setTimezone(new DateTimeZone('America/Caracas'));
                 $fecha = $fecha->format('d/m/Y h:i A');
 
-                $fechaSinFormato = new DateTime($header->date);
-                $fechaSinFormato->modify('-4hour');
+                $fechaSinFormato = new DateTime($fechaReal);
+                $fechaSinFormato->setTimezone(new DateTimeZone('America/Caracas'));
                 $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
                 $arrayFecha = explode(' ', $fecha);
@@ -862,14 +871,14 @@
                 }
             }
         } catch (\Throwable $th) {
-            echo 'No se pudo conectar pagosfarmaya@hotmail.com:';
+            echo 'No se pudo conectar pagosfarmaya@gmail.com:';
         }
 
 
         // PNC|BANESCO US
 
         try {
-            $conn = imap_open($mailbox, 'farmayapagos@hotmail.com', 'EdwinArias24.');
+            $conn = imap_open($mailbox, 'farmayapagos@gmail.com', 'jvxn exjp wlkt hfvr');
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -881,12 +890,12 @@
 
                 $header = @imap_header($conn, $email);
 
-                $fecha = new DateTime($header->date);
-                $fecha->modify('-4hour');
+                $fecha = new DateTime($fechaReal);
+                $fecha->setTimezone(new DateTimeZone('America/Caracas'));
                 $fecha = $fecha->format('d/m/Y h:i A');
 
-                $fechaSinFormato = new DateTime($header->date);
-                $fechaSinFormato->modify('-4hour');
+                $fechaSinFormato = new DateTime($fechaReal);
+                $fechaSinFormato->setTimezone(new DateTimeZone('America/Caracas'));
                 $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
                 $arrayFecha = explode(' ', $fecha);
@@ -1035,7 +1044,7 @@
             }
 
         } catch (\Throwable $th) {
-            echo 'No se pudo conectar farmayapagos@hotmail.com:';
+            echo 'No se pudo conectar farmayapagos@gmail.com:';
         }
 
         $pagos = collect($pagos);
