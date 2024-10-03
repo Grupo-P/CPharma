@@ -16,8 +16,8 @@
         $host = $_SERVER['HTTP_HOST'];
 
         if ($host == 'cpharmaftn.com') {
-            $username = 'pagostierranegra2@hotmail.com';
-            $password = 'Glibenclamida*84';
+            $username = 'pagostierranegra@gmail.com';
+            $password = 'ahcl wywv zvcl vcfg';
             $id = 1;
             $remitente = 'pagomovilftn@gmail.com';
         }

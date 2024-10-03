@@ -63,8 +63,8 @@
             $sede = isset($_GET['sede']) ? $_GET['sede'] : Auth::user()->sede;
 
             if ($sede == 'FTN' || $sede == 'FARMACIA TIERRA NEGRA, C.A.') {
-                $username = 'pagostierranegra2@hotmail.com';
-                $password = 'Glibenclamida*84';
+                $username = 'pagostierranegra@gmail.com';
+                $password = 'ahcl wywv zvcl vcfg';
                 $remitente = 'pagomovilftn@gmail.com';
             }
 
