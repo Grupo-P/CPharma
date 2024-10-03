@@ -448,9 +448,8 @@
                                 $finEnviadoPor = strpos($substr, ' por ');
                                 $enviadoPor = substr($substr, 0, $finEnviadoPor);
 
-                                $inicioMonto = (strpos($body, ' por ')) + 5;
-                                $substr = substr($body, $inicioMonto);
-                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $substr = substr($substr, $finEnviadoPor + 5);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicac');
                                 $monto = substr($substr, 0, $finMonto);
 
                                 $comentario = '';
@@ -481,9 +480,8 @@
                                 $finEnviadoPor = strpos($substr, ' por ');
                                 $enviadoPor = substr($substr, 0, $finEnviadoPor);
 
-                                $inicioMonto = (strpos($body, ' por ')) + 5;
-                                $substr = substr($body, $inicioMonto);
-                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $substr = substr($substr, $finEnviadoPor + 5);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicac');
                                 $monto = substr($substr, 0, $finMonto);
 
                                 $comentario = '';
@@ -514,9 +512,8 @@
                                 $finEnviadoPor = strpos($substr, ' por ');
                                 $enviadoPor = substr($substr, 0, $finEnviadoPor);
 
-                                $inicioMonto = (strpos($body, ' por ')) + 5;
-                                $substr = substr($body, $inicioMonto);
-                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $substr = substr($substr, $finEnviadoPor + 5);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicac');
                                 $monto = substr($substr, 0, $finMonto);
 
                                 $comentario = '';
@@ -545,9 +542,8 @@
                                 $finEnviadoPor = strpos($substr, ' por ');
                                 $enviadoPor = substr($substr, 0, $finEnviadoPor);
 
-                                $inicioMonto = (strpos($body, ' por ')) + 5;
-                                $substr = substr($body, $inicioMonto);
-                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $substr = substr($substr, $finEnviadoPor + 5);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicac');
                                 $monto = substr($substr, 0, $finMonto);
 
                                 $comentario = '';
@@ -577,9 +573,8 @@
                                 $finEnviadoPor = strpos($substr, ' por ');
                                 $enviadoPor = substr($substr, 0, $finEnviadoPor);
 
-                                $inicioMonto = (strpos($body, ' por ')) + 5;
-                                $substr = substr($body, $inicioMonto);
-                                $finMonto = strpos($substr, '. Ve a la [Aplicaci');
+                                $substr = substr($substr, $finEnviadoPor + 5);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicac');
                                 $monto = substr($substr, 0, $finMonto);
 
                                 $comentario = '';
@@ -610,9 +605,8 @@
                                 $finEnviadoPor = strpos($substr, ' por ');
                                 $enviadoPor = substr($substr, 0, $finEnviadoPor);
 
-                                $inicioMonto = (strpos($body, ' por ')) + 5;
-                                $substr = substr($body, $inicioMonto);
-                                $finMonto = strpos($substr, '. Ve a la [Aplicación d');
+                                $substr = substr($substr, $finEnviadoPor + 5);
+                                $finMonto = strpos($substr, '. Ve a la [Aplicac');
                                 $monto = substr($substr, 0, $finMonto);
 
                                 $comentario = '';
@@ -708,7 +702,9 @@
                                 $finMonto = strpos($body, 'Note:');
                                 $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
                                 $monto = strip_tags($monto);
-                                $monto = str_replace('Amount:', '', $monto);
+
+                                preg_match('/\d+\.\d+/', $monto, $matches);
+                                $monto = $matches[0];
 
                                 $inicioComentario = strpos($body, 'Note:');
                                 $finComentario = strpos($body, 'Date:');
@@ -747,7 +743,8 @@
                                 $finMonto = strpos($body, 'Note:');
                                 $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
                                 $monto = strip_tags($monto);
-                                $monto = str_replace('Amount:', '', $monto);
+                                preg_match('/\d+\.\d+/', $monto, $matches);
+                                $monto = $matches[0];
 
                                 $inicioComentario = strpos($body, 'Note:');
                                 $finComentario = strpos($body, 'Date:');
@@ -784,7 +781,8 @@
                                 $finMonto = strpos($body, 'Note:');
                                 $monto = substr($body, $inicioMonto, $finMonto-$inicioMonto);
                                 $monto = strip_tags($monto);
-                                $monto = str_replace('Amount:', '', $monto);
+                                preg_match('/\d+\.\d+/', $monto, $matches);
+                                $monto = $matches[0];
 
                                 $inicioComentario = strpos($body, 'Note:');
                                 $finComentario = strpos($body, 'Date:');
@@ -828,10 +826,12 @@
                         $filtroFecha=date('Y-m-d',strtotime($fechaReal));
                         if(request()->fecha==$filtroFecha){
                             $fecha = new DateTime($fechaReal);
+                            $fecha->setTimezone(new DateTimeZone('America/Caracas'));
                             // $fecha->modify('-4hour');
                             $fecha = $fecha->format('d/m/Y h:i A');
 
                             $fechaSinFormato = new DateTime($fechaReal);
+                            $fechaSinFormato->setTimezone(new DateTimeZone('America/Caracas'));
                             // $fechaSinFormato->modify('-4hour');
                             $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
@@ -915,9 +915,11 @@
                         $filtroFecha=date('Y-m-d',strtotime($fechaReal));
                         if(request()->fecha==$filtroFecha){
                             $fecha = new DateTime($fechaReal);
+                            $fecha->setTimezone(new DateTimeZone('America/Caracas'));
                             $fecha = $fecha->format('d/m/Y h:i A');
 
                             $fechaSinFormato = new DateTime($fechaReal);
+                            $fechaSinFormato->setTimezone(new DateTimeZone('America/Caracas'));
                             $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
                             $arrayFecha = explode(' ', $fecha);
