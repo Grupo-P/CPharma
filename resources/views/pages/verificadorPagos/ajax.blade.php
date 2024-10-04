@@ -798,10 +798,13 @@
 
             foreach ($search as $email) {
                 $overview = imap_fetch_overview($conn, $email);
+                
+                preg_match('/Date: (.*)/', $overview, $matches);
+                $fechaReal = isset($matches[1]) ? $matches[1] : null;
 
                 $header = @imap_header($conn, $email);
 
-                $fecha = new DateTime($fechaReale);
+                $fecha = new DateTime($fechaReal);
                 $fecha->setTimezone(new DateTimeZone('America/Caracas'));
                 $fecha = $fecha->format('d/m/Y h:i A');
 
@@ -884,6 +887,9 @@
 
             foreach ($search as $email) {
                 $overview = imap_fetch_overview($conn, $email);
+
+                preg_match('/Date: (.*)/', $overview, $matches);
+                $fechaReal = isset($matches[1]) ? $matches[1] : null;
 
                 $header = @imap_header($conn, $email);
 
