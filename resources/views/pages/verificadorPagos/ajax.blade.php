@@ -7,6 +7,7 @@
     include(app_path().'\functions\functions.php');
     include(app_path().'\functions\querys_mysql.php');
     include(app_path().'\functions\querys_sqlserver.php');
+    date_default_timezone_set('America/Caracas');
 
     try {
         $error = 0;
@@ -138,7 +139,7 @@
                     $decimales = explode('.', (string) $arrayAsunto[1]);
                     $decimales = $decimales[1];
 
-                    $pagos[$i]['enviado_por'] = $arrayAsunto[0];
+                    $pagos[$i]['enviado_por'] = html_entity_decode($arrayAsunto[0]);
                     $pagos[$i]['monto'] = $arrayAsunto[1];
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -163,7 +164,7 @@
                     $decimales = explode('.', (string) $monto);
                     $decimales = $decimales[1];
 
-                    $pagos[$i]['enviado_por'] = $arrayAsunto[0];
+                    $pagos[$i]['enviado_por'] = html_entity_decode($arrayAsunto[0]);
                     $pagos[$i]['monto'] = $arrayAsunto[1];
                     $pagos[$i]['fecha'] = $fecha;
                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -243,7 +244,7 @@
                             }
 
                             $pagos[$i]['tipo'] = 'Pago móvil Mercantil';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
+                            $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                             $pagos[$i]['monto'] = $monto;
                             $pagos[$i]['fecha'] = $fecha;
                             $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -303,7 +304,7 @@
                         $decimales = $decimales[1];
 
                         $pagos[$i]['tipo'] = 'Pago móvil BNC';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -318,6 +319,7 @@
             }
         }
 
+        // Truist
         try {
             $conn = @imap_open($mailbox, 'pagosgedaca@gmail.com', 'nqzj lehy oupk xdnr');
 
@@ -383,7 +385,7 @@
 
 
                         $pagos[$i]['tipo'] = 'Paypal';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -424,7 +426,7 @@
                         $decimales = explode('.', (string) $monto);
 
                         $pagos[$i]['tipo'] = 'Binance';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -456,7 +458,7 @@
                         $decimales = explode('.', (string) $monto);
 
                         $pagos[$i]['tipo'] = 'Binances';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -488,7 +490,7 @@
                         $decimales = explode('.', (string) $monto);
 
                         $pagos[$i]['tipo'] = 'Binance';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -519,7 +521,7 @@
                         $decimales = explode('.', (string) $monto);
 
                         $pagos[$i]['tipo'] = 'Binance';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -549,7 +551,7 @@
                         $comentario = '';
 
                         $pagos[$i]['tipo'] = 'Binance';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -581,7 +583,7 @@
                         $decimales = explode('.', (string) $monto);
 
                         $pagos[$i]['tipo'] = 'Binance';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -628,7 +630,7 @@
                         $comentario = $comentario . ' Referencia: ' . $referencia;
 
                         $pagos[$i]['tipo'] = 'Zelle PNC';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -668,7 +670,7 @@
                         $comentario = $comentario . ' Referencia: ' . $referencia;
 
                         $pagos[$i]['tipo'] = 'Zelle PNC';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -702,7 +704,7 @@
                         $decimales = $decimales[1];
 
                         $pagos[$i]['tipo'] = 'Zelle PNC';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -768,7 +770,7 @@
                         $comentario = str_replace('Memo:', '', $comentario);
 
                         $pagos[$i]['tipo'] = 'Zelle Truist';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -836,7 +838,7 @@
                             $comentario = str_replace('Memo:', '', $comentario);
 
                             $pagos[$i]['tipo'] = 'Zelle Chase';
-                            $pagos[$i]['enviado_por'] = $enviadoPor;
+                            $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                             $pagos[$i]['monto'] = $monto;
                             $pagos[$i]['fecha'] = $fecha;
                             $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -859,7 +861,7 @@
                         $comentario = "Referencia: ".$referencia;
 
                         $pagos[$i]['tipo'] = 'Zelle Chase';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $amount;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -875,7 +877,7 @@
         }
 
 
-        // PNC|BANESCO US
+        // PNC|BANESCO US|TRUIST
 
         try {
             $conn = imap_open($mailbox, 'farmayapagos@gmail.com', 'jvxn exjp wlkt hfvr');
@@ -889,15 +891,16 @@
                 $overview = imap_fetch_overview($conn, $email);
 
                 preg_match('/Date: (.*)/', $overview, $matches);
-                $fechaReal = isset($matches[1]) ? $matches[1] : null;
+                $fechaReal = new DateTime($overview[0]->date);
+                $fechaReal->setTimezone(new DateTimeZone('America/Caracas'));
 
                 $header = @imap_header($conn, $email);
 
-                $fecha = new DateTime($fechaReal);
+                $fecha = $fechaReal;
                 $fecha->setTimezone(new DateTimeZone('America/Caracas'));
                 $fecha = $fecha->format('d/m/Y h:i A');
 
-                $fechaSinFormato = new DateTime($fechaReal);
+                $fechaSinFormato = $fechaReal;
                 $fechaSinFormato->setTimezone(new DateTimeZone('America/Caracas'));
                 $fechaSinFormato = $fechaSinFormato->format('Y-m-d H:i:s');
 
@@ -940,7 +943,7 @@
                         $comentario = $comentario . ' Referencia: ' . $referencia;
 
                         $pagos[$i]['tipo'] = 'Zelle PNC';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -977,7 +980,7 @@
                         $referencia = str_replace(' (confirmation number ', '', $referencia);
 
                         $pagos[$i]['tipo'] = 'Zelle BANESCO USA';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
@@ -1033,7 +1036,7 @@
                         $decimales = $decimales[1] ?? $monto;
 
                         $pagos[$i]['tipo'] = 'Zelle Truist';
-                        $pagos[$i]['enviado_por'] = $enviadoPor;
+                        $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
                         $pagos[$i]['monto'] = $monto;
                         $pagos[$i]['fecha'] = $fecha;
                         $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
