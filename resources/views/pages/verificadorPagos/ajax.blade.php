@@ -290,6 +290,8 @@
 
                         $finFechaMensaje = strpos($inicioFechaMensaje, ' ');
                         $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+                        $fechaMensaje = DateTime::createFromFormat('j/n/Y', $fechaMensaje);
+                        $fechaMensaje = $fechaMensaje->format('d/m/y');
                         $fechaConsulta = date("d/m/Y");
 
                         $fechaMensaje = DateTime::createFromFormat('d/m/y', $fechaMensaje);

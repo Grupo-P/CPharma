@@ -304,7 +304,6 @@
                             $body = @imap_fetchbody($conn, $email, 2);
 
                             if (strpos($body, 'Pago Movil') && strpos($body, '- 2620')) {
-
                                 $inicioEnviadoPor =(strpos($body, 'Telf.')) + 5;
                                 $substr = substr($body, $inicioEnviadoPor);
                                 $finEnviadoPor = strpos($substr, ' ');
@@ -329,6 +328,9 @@
                                 $finFechaMensaje = strpos($inicioFechaMensaje, ' ');
                                 $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
                                 $fechaConsulta = date("d/m/Y", strtotime(request()->fecha));
+
+                                $fechaMensaje = DateTime::createFromFormat('j/n/Y', $fechaMensaje);
+                                $fechaMensaje = $fechaMensaje->format('d/m/y');
 
                                 $fechaMensaje = DateTime::createFromFormat('d/m/y', $fechaMensaje);
                                 $fechaConsulta = DateTime::createFromFormat('d/m/Y', $fechaConsulta);
