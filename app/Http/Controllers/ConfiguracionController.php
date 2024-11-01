@@ -61,7 +61,7 @@ class ConfiguracionController extends Controller
             $configuraciones->user = auth()->user()->name;
             $configuraciones->estatus = 'ACTIVO';
 
-            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharma_old.test') {
                 $configuraciones->contabilidad = 1;
             }
 

@@ -17,7 +17,7 @@ class Configuracion extends Model
 
     public function scopeType($query)
     { 
-        if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+        if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharma_old.test') {
             return $query->where('contabilidad', 1);
         } else {
             return $query->where('contabilidad', null);

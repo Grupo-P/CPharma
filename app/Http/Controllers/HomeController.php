@@ -44,7 +44,7 @@ class HomeController extends Controller
     {
         error_reporting(0);
 
-        if ($_SERVER['SERVER_NAME'] == 'cpharmagptest.com' || $_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+        if ($_SERVER['SERVER_NAME'] == 'cpharmagptest.com' || $_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharma_old.test') {
             if (Auth::user()->departamento == 'OPERACIONES') {
                 $deuda = ContDeuda::orderBy('id', 'DESC')
                     ->where('sede', Auth::user()->sede)

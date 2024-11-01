@@ -49,7 +49,7 @@ class DolarController extends Controller
     public function store(Request $request)
     {
         try{
-            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharma_old.test') {
                 $dolar = new Dolar();
                 $dolar->setConnection('fll');
                 $dolar->tasa = $request->input('tasa');
@@ -136,7 +136,7 @@ class DolarController extends Controller
     public function update(Request $request, $id)
     {
         try{
-            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+            if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharma_old.test') {
                 $dolar = Dolar::find($id);
                 $dolar->setConnection('ftn');
                 $dolar->fill($request->all());

@@ -1,5 +1,5 @@
 @php
-    if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharmagp.com') {
+    if ($_SERVER['SERVER_NAME'] == 'cpharmagpde.com' || $_SERVER['SERVER_NAME'] == 'cpharma_old.test') {
         $layout = 'layouts.contabilidad';
     } else {
         $layout = 'layouts.model';
