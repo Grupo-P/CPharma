@@ -172,6 +172,7 @@
 		    		<th scope="row">FEC</th>
                     <th scope="row">PAG</th>
                     <th scope="row">FLF</th>
+                    <th scope="row">CDD</th>
 		    		<th scope="row">Reporte Origen</th>
 		    		<th scope="row">Existencia Origen</th>
 		    		<th scope="row">Existencia Actual</th>
@@ -227,6 +228,7 @@
 			$total_sede5 = 0;
             $total_sede6 = 0;
             $total_sede7 = 0;
+            $total_sede8 = 0;
 			$cont = 1;
 
 			while($row = $result->fetch_assoc()) {
@@ -256,6 +258,7 @@
 				echo '<td>'.$row['sede5'].'</td>';
                 echo '<td>'.$row['sede6'].'</td>';
                 echo '<td>'.$row['sede7'].'</td>';
+                echo '<td>'.$row['sede8'].'</td>';
 				echo '<td>'.$row['origen_rpt'].'</td>';
 				echo '<td>'.$row['existencia_rpt'].'</td>';
 				echo '<td>'.$Existencia.'</td>';
@@ -276,6 +279,7 @@
 				$total_sede5 += floatval($row['sede5']);
                 $total_sede6 += floatval($row['sede6']);
                 $total_sede7 += floatval($row['sede7']);
+                $total_sede8 += floatval($row['sede8']);
 				$cont++;
 	  	}
 
@@ -291,6 +295,7 @@
 	  	echo '<td><strong>'.$total_sede5.'</strong></td>';
         echo '<td><strong>'.$total_sede6.'</strong></td>';
         echo '<td><strong>'.$total_sede7.'</strong></td>';
+        echo '<td><strong>'.$total_sede8.'</strong></td>';
 	  	echo '</tr>';
 			mysqli_close($connCPharma);
 	}

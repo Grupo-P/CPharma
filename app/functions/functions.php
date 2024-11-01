@@ -158,6 +158,11 @@
                 return 'FLF';
             break;
         //FIN BLOQUE DE FLF
+        //INICIO BLOQUE DE CDD
+        case '10':
+            return 'CDD';
+        break;
+        //FIN BLOQUE DE CDD
         //INICIO BLOQUE DE KD73
             case '60':
                 return 'KD73';
@@ -326,6 +331,12 @@
                 return $sede;
             break;
         //FIN BLOQUE FLF
+        //INICIO BLOQUE CDD
+        case 'CDD':
+            $sede = SedeCDD;
+            return $sede;
+        break;
+        //FIN BLOQUE CDD
         //INICIO BLOQUE KD73
             case 'KD73':
                 $sede = SedeKD73;
@@ -666,6 +677,19 @@
                 return $conn;
             break;
         //FIN BLOQUE DE FLF
+
+        //INICIO BLOQUE CDD
+        case 'CDD':
+            $connectionInfo = array(
+                "Database"=>nameCDD,
+                "UID"=>userCDD,
+                "PWD"=>passCDD
+            );
+            $conn = sqlsrv_connect(serverCDD,$connectionInfo);
+            return $conn;
+        break;
+        //FIN BLOQUE DE CDD
+
         //INICIO BLOQUE KD73
             case 'KD73':
                 $connectionInfo = array(
@@ -1033,6 +1057,19 @@
             return $conn;
         break;
         //FIN BLOQUE DE FLF
+
+        //INICIO BLOQUE DE CDD
+        case 'CDD':
+            $connectionInfo = array(
+                "Database"=>"Mod_Atte_Cliente",
+                "UID"=>userCDD,
+                "PWD"=>passCDD
+            );
+            $conn = sqlsrv_connect(serverCDD,$connectionInfo);
+            return $conn;
+        break;
+        //FIN BLOQUE DE CDD
+
         //INICIO BLOQUE DE KD73
             case 'KD73':
                 $connectionInfo = array(
@@ -2130,6 +2167,9 @@
                 $Flag = TRUE;
             break;
             case 'FLF':
+                $Flag = TRUE;
+            break;
+            case 'CDD':
                 $Flag = TRUE;
             break;
             case 'KD73':
@@ -3586,6 +3626,12 @@
                 $dominio = 'http://cpharmaflf.com/';
                 return $dominio;
             break;
+
+            case 'CDD':
+                $dominio = 'http://cpharmacdd.com/';
+                return $dominio;
+            break;
+
             case 'KD73':
                 $dominio = 'http://cpharmakd73.com/';
                 return $dominio;
@@ -4829,6 +4875,10 @@
         $nombre = 'FARMACIA LA FUSTA';
     }
 
+    if ($sede == 'CDD') {
+        $nombre = 'CENTRO DE DISTRIBUCION GP';
+    }
+
     if ($sede == 'KD73') {
         return [];
     }
@@ -4971,6 +5021,23 @@
     }
 
     try {
+        $cdd = DB::connection('cdd')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $cdd);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
         $kd73 = DB::connection('kd73')->select("
             SELECT
                 traslados_detalle.codigo_barra
@@ -5022,6 +5089,10 @@
 
     if ($sede == 'FLF') {
         return 6;
+    }
+
+    if ($sede == 'CDD') {
+        return 7;
     }
   }
 

@@ -121,6 +121,7 @@
                       <option value="FEC" {{ ( $sede == "FEC") ? 'selected' : '' }}>FEC</option>
 					  <option value="KD73" {{ ( $sede == "KD73") ? 'selected' : '' }}>KD73</option>
                       <option value="FLF" {{ ( $sede == "FLF") ? 'selected' : '' }}>FLF</option>
+                      <option value="CDD" {{ ( $sede == "CDD") ? 'selected' : '' }}>CDD</option>
                     </select>
                   @endif
                 </div>

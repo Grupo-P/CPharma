@@ -32,6 +32,7 @@ define ("SedeFSM","FARMACIA MILLENNIUM 2000, C.A.");
 define ("SedeFEC","FARMACIA EL CALLEJON, C.A.");
 define ("SedeKD73","FARMACIAS KD EXPRESS, C.A. - KD73");
 define ("SedeFLF","FARMACIA LA FUSTA");
+define ("SedeCDD","CENTRO DE DISTRIBUCION GP");
 define ("SedeGP","Servidor de Testing");
 define ("SedeDBs","Servidor de Desarrollo");
 define ("SedeDBsa","Servidor de Desarrollo Sergio");
@@ -44,6 +45,7 @@ define ("SedeKDIOFF","FARMACIAS KD EXPRESS, C.A.<br>OFF-LINE");
 define ("SedeFSMOFF","FARMACIA MILLENNIUM 2000, C.A.<br>OFF-LINE");
 define ("SedeFECOFF","FARMACIA EL CALLEJON, C.A.<br>OFF-LINE");
 define ("SedeFLFOFF","FARMACIA LA FUSTA<br>OFF-LINE");
+define ("SedeCDDOFF","CENTRO DE DISTRIBUCION GP<br>OFF-LINE");
 define ("SedeKD73OFF","FARMACIAS KD EXPRESS, C.A. - KD73<br>OFF-LINE");
 /**********************************************************************************/
 /************************* CONEXION ON LINE FTN **********************************/
@@ -99,8 +101,15 @@ define ("nameKD73OFF" , "cpharmakd73");
 define ("serverFLF" , "10.100.0.58");
 define ("userFLF" , "admin");
 define ("passFLF" , "soporte123");
-define ("nameFLF" , "BD_FLF"); //TODO: por confirmar
+define ("nameFLF" , "BD_FLF");
 define ("nameFLFOFF" , "cpharmaflf");
+/**********************************************************************************/
+/************************* CONEXION ON LINE CDD **********************************/
+define ("serverCDD" , "192.168.10.35");
+define ("userCDD" , "admin");
+define ("passCDD" , "soporte123");
+define ("nameCDD" , "SERVER-CDD");
+define ("nameCDDOFF" , "cpharmaCDD");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
 define ("serverGP" , "TESTSERVER\TESTINGSERVER");

@@ -39,6 +39,7 @@
                             <option value="KD73">KD73</option>
                             <option value="PAG">PAG</option>
                             <option value="FLF">FLF</option>
+                            <option value="CDD">CDD</option>
                         </select>
                     </div>
                 @endif
@@ -111,11 +112,17 @@
                 $remitente = 'pagomovilflf@gmail.com';
             }
 
+            if ($sede == 'CDD' || $sede == 'CENTRO DE DISTRIBUCION GP') {
+                $username = 'pagoslafusta@gmail.com';
+                $password = 'zssu dzzt dhmj xvwf';
+                $remitente = 'pagomovilcdd@gmail.com';
+            }
+
             $mailbox = '{imap.gmail.com:993/imap/ssl}INBOX';
 
             $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
-            $conn = @imap_open($mailbox, $username, $password);            
+            $conn = @imap_open($mailbox, $username, $password);
             $search = @imap_search($conn, 'SINCE "'.$fecha.'"');
 
             $search = is_iterable($search) ? $search : [];
@@ -877,7 +884,7 @@
                                     $referencia =  str_replace("=\r\n", '', substr($array[3], 0, strpos($array[3], '</td>')));
                                     $enviadoPor =  explode(' sent you money</td', $body);
                                     $enviadoPor = str_replace("=\r\n", '', substr($enviadoPor[0], strrpos($enviadoPor[0], 'class=3D"moPad">')+16));
-                                    
+
                                     $comentario = "Referencia: ".$referencia;
 
                                     $pagos[$i]['tipo'] = 'Zelle Chase';

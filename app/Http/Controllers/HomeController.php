@@ -12,6 +12,7 @@ use compras\ContPagoBolivaresFTN;
 use compras\ContPagoBolivaresFM;
 use compras\ContPagoBolivaresFEC;
 use compras\ContPagoBolivaresFLF;
+use compras\ContPagoBolivaresCDD;
 use compras\ContPagoBolivaresPAG;
 use compras\ContPagoEfectivoFAU;
 use compras\ContPagoEfectivoFLL;
@@ -19,6 +20,7 @@ use compras\ContPagoEfectivoFTN;
 use compras\ContPagoEfectivoFM;
 use compras\ContPagoEfectivoFEC;
 use compras\ContPagoEfectivoFLF;
+use compras\ContPagoEfectivoCDD;
 use compras\ContPagoEfectivoPAG;
 use compras\ContReclamo;
 use Illuminate\Http\Request;
@@ -64,6 +66,7 @@ class HomeController extends Controller
                 $dolaresFM = ContPagoEfectivoFM::orderByDesc('id')->first();
                 $dolaresFEC = ContPagoEfectivoFEC::orderByDesc('id')->first();
                 $dolaresFLF = ContPagoEfectivoFLF::orderByDesc('id')->first();
+                $dolaresCDD = ContPagoEfectivoCDD::orderByDesc('id')->first();
                 $dolaresPAG = ContPagoEfectivoPAG::orderByDesc('id')->first();
 
                 $bolivaresFTN = ContPagoBolivaresFTN::orderByDesc('id')->first();
@@ -72,6 +75,7 @@ class HomeController extends Controller
                 $bolivaresFM = ContPagoBolivaresFM::orderByDesc('id')->first();
                 $bolivaresFEC = ContPagoBolivaresFEC::orderByDesc('id')->first();
                 $bolivaresFLF = ContPagoBolivaresFLF::orderByDesc('id')->first();
+                $bolivaresCDD = ContPagoBolivaresCDD::orderByDesc('id')->first();
                 $bolivaresPAG = ContPagoBolivaresPAG::orderByDesc('id')->first();
 
                 $diferidoDolaresFTN = ContPagoEfectivoFTN::whereNotNull('diferido')->orderByDesc('id')->first();
@@ -80,6 +84,7 @@ class HomeController extends Controller
                 $diferidoDolaresFM = ContPagoEfectivoFM::whereNotNull('diferido')->orderByDesc('id')->first();
                 $diferidoDolaresFEC = ContPagoEfectivoFEC::whereNotNull('diferido')->orderByDesc('id')->first();
                 $diferidoDolaresFLF = ContPagoEfectivoFLF::whereNotNull('diferido')->orderByDesc('id')->first();
+                $diferidoDolaresCDD = ContPagoEfectivoCDD::whereNotNull('diferido')->orderByDesc('id')->first();
                 $diferidoDolaresPAG = ContPagoEfectivoPAG::whereNotNull('diferido')->orderByDesc('id')->first();
 
                 $diferidoBolivaresFTN = ContPagoBolivaresFTN::whereNotNull('diferido')->orderByDesc('id')->first();
@@ -88,6 +93,7 @@ class HomeController extends Controller
                 $diferidoBolivaresFM = ContPagoBolivaresFM::whereNotNull('diferido')->orderByDesc('id')->first();
                 $diferidoBolivaresFEC = ContPagoBolivaresFEC::whereNotNull('diferido')->orderByDesc('id')->first();
                 $diferidoBolivaresFLF = ContPagoBolivaresFLF::whereNotNull('diferido')->orderByDesc('id')->first();
+                $diferidoBolivaresCDD = ContPagoBolivaresCDD::whereNotNull('diferido')->orderByDesc('id')->first();
                 $diferidoBolivaresPAG = ContPagoBolivaresPAG::whereNotNull('diferido')->orderByDesc('id')->first();
 
                 $ftnDs = ContPagoEfectivoFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
@@ -96,6 +102,7 @@ class HomeController extends Controller
                 $fmDs = ContPagoEfectivoFM::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fecDs = ContPagoEfectivoFEC::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $flfDs = ContPagoEfectivoFLF::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $cddDs = ContPagoEfectivoCDD::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $pagDs = ContPagoEfectivoPAG::orderBy('id', 'DESC')->whereNull('ingresos')->first();
 
                 $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
@@ -104,6 +111,7 @@ class HomeController extends Controller
                 $fmBs = ContPagoBolivaresFM::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fecBs = ContPagoBolivaresFEC::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $flfBs = ContPagoBolivaresFLF::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $cddBs = ContPagoBolivaresCDD::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $pagBs = ContPagoBolivaresPAG::orderBy('id', 'DESC')->whereNull('ingresos')->first();
 
                 $bancario = ContPagoBancario::orderBy('id', 'DESC')->whereNull('deleted_at')->first();
@@ -135,6 +143,10 @@ class HomeController extends Controller
                     $pago = $flfDs;
                 }
 
+                if (isset($cddDs->created_at) && $pago->created_at < $cddDs->created_at) {
+                    $pago = $cddDs;
+                }
+
                 if (isset($pagDs->created_at) && $pago->created_at < $pagDs->created_at) {
                     $pago = $pagDs;
                 }
@@ -164,6 +176,10 @@ class HomeController extends Controller
                     $pago = $flfBs;
                 }
 
+                if (isset($cddBs->created_at) && $pago->created_at < $cddBs->created_at) {
+                    $pago = $cddBs;
+                }
+
                 if (isset($pagBs->created_at) && $pago->created_at < $pagBs->created_at) {
                     $pago = $pagBs;
                 }
@@ -183,6 +199,7 @@ class HomeController extends Controller
                     'dolaresFM',
                     'dolaresFEC',
                     'dolaresFLF',
+                    'dolaresCDD',
                     'dolaresPAG',
                     'bolivaresFTN',
                     'bolivaresFAU',
@@ -190,6 +207,7 @@ class HomeController extends Controller
                     'bolivaresFM',
                     'bolivaresFEC',
                     'bolivaresFLF',
+                    'bolivaresCDD',
                     'bolivaresPAG',
                     'diferidoDolaresFTN',
                     'diferidoDolaresFAU',
@@ -197,6 +215,7 @@ class HomeController extends Controller
                     'diferidoDolaresFM',
                     'diferidoDolaresFEC',
                     'diferidoDolaresFLF',
+                    'diferidoDolaresCDD',
                     'diferidoDolaresPAG',
                     'diferidoBolivaresFTN',
                     'diferidoBolivaresFAU',
@@ -204,6 +223,7 @@ class HomeController extends Controller
                     'diferidoBolivaresFM',
                     'diferidoBolivaresFEC',
                     'diferidoBolivaresFLF',
+                    'diferidoBolivaresCDD',
                     'diferidoBolivaresPAG',
                     'pago',
                     'deuda'
@@ -217,6 +237,7 @@ class HomeController extends Controller
                 $fmDs = ContPagoEfectivoFM::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fecDs = ContPagoEfectivoFEC::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $flfDs = ContPagoEfectivoFLF::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $cddDs = ContPagoEfectivoCDD::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $pagDs = ContPagoEfectivoPAG::orderBy('id', 'DESC')->whereNull('ingresos')->first();
 
                 $ftnBs = ContPagoBolivaresFTN::orderBy('id', 'DESC')->whereNull('ingresos')->first();
@@ -225,6 +246,7 @@ class HomeController extends Controller
                 $fmBs = ContPagoBolivaresFM::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $fecBs = ContPagoBolivaresFEC::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $flfBs = ContPagoBolivaresFLF::orderBy('id', 'DESC')->whereNull('ingresos')->first();
+                $cddBs = ContPagoBolivaresCDD::orderBy('id', 'DESC')->whereNull('ingresos')->first();
                 $pagBs = ContPagoBolivaresPAG::orderBy('id', 'DESC')->whereNull('ingresos')->first();
 
                 $bancario = ContPagoBancario::orderBy('id', 'DESC')->whereNull('deleted_at')->first();
@@ -252,6 +274,10 @@ class HomeController extends Controller
                     $pago = $flfDs;
                 }
 
+                if (isset($cddDs->created_at) && $pago->created_at < $cddDs->created_at) {
+                    $pago = $cddDs;
+                }
+
                 if (isset($pagDs->created_at) && $pago->created_at < $pagDs->created_at) {
                     $pago = $pagDs;
                 }
@@ -281,6 +307,10 @@ class HomeController extends Controller
                     $pago = $flfBs;
                 }
 
+                if (isset($cddBs->created_at) && $pago->created_at < $cddBs->created_at) {
+                    $pago = $cddBs;
+                }
+
                 if (isset($pagBs->created_at) && $pago->created_at < $pagBs->created_at) {
                     $pago = $pagBs;
                 }
@@ -297,6 +327,7 @@ class HomeController extends Controller
                 $fmDs = ContPagoEfectivoFM::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
                 $fecDs = ContPagoEfectivoFEC::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
                 $flfDs = ContPagoEfectivoFLF::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+                $cddDs = ContPagoEfectivoCDD::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
                 $pagDs = ContPagoEfectivoPAG::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
 
                 $ftnBs = ContPagoBolivaresFTN::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
@@ -305,9 +336,10 @@ class HomeController extends Controller
                 $fmBs = ContPagoBolivaresFM::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
                 $fecBs = ContPagoBolivaresFEC::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
                 $flfBs = ContPagoBolivaresFLF::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
+                $cddBs = ContPagoBolivaresCDD::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
                 $pagBs = ContPagoBolivaresPAG::orderBy('fecha_conciliado', 'DESC')->whereNotNull('fecha_conciliado')->first();
 
-                $conciliacion = collect([$ftnDs, $fauDs, $fllDs, $fmDs, $fecDs, $flfDs, $pagDs, $ftnBs, $fauBs, $fllBs, $fmBs, $fecBs, $flfBs, $pagBs])
+                $conciliacion = collect([$ftnDs, $fauDs, $fllDs, $fmDs, $fecDs, $flfDs, $cddDs, $pagDs, $ftnBs, $fauBs, $fllBs, $fmBs, $fecBs, $flfBs, $cddBs, $pagBs])
                     ->sortByDesc('fecha_conciliado');
 
                 $conciliacion = $conciliacion[0];
@@ -426,6 +458,24 @@ class HomeController extends Controller
                     $diferidoBolivares = ContPagoBolivaresFLF::whereNotNull('diferido')->orderByDesc('id')->first();
 
                     $sede = 'FLF';
+                }
+
+                if(Auth()->user()->sede == 'CENTRO DE DISTRIBUCION GP') {
+                    $dolares = ContPagoEfectivoCDD::orderByDesc('id')->first();
+                    $bolivares = ContPagoBolivaresCDD::orderByDesc('id')->first();
+
+                    $movimiento = ($dolares) ? $dolares : null;
+
+                    if (isset($bolivares)) {
+                        if ($bolivares->created_at > $movimiento->created_at) {
+                            $movimiento = $bolivares;
+                        }
+                    }
+
+                    $diferidoDolares = ContPagoEfectivoCDD::whereNotNull('diferido')->orderByDesc('id')->first();
+                    $diferidoBolivares = ContPagoBolivaresCDD::whereNotNull('diferido')->orderByDesc('id')->first();
+
+                    $sede = 'CDD';
                 }
 
                 if(Auth()->user()->sede == 'OPERADORA PAG CANTA CLARO, C.A.') {

@@ -56,6 +56,10 @@
                     if ($_SERVER['HTTP_HOST'] == 'cpharmaflf.com') {
                         echo 'FARMACIA LA FUSTA';
                     }
+
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmacdd.com') {
+                        echo 'CENTRO DE DISTRIBUCION GP';
+                    }
                 @endphp
             </td>
         </tr>

@@ -274,6 +274,10 @@
                 $dominio = 'http://cpharmaflf.com/';
                 return $dominio;
             break;
+            case 'CDD':
+                dominio = 'http://cpharmacdd.com/';
+                return dominio;
+            break;
         }
     }
 

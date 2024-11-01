@@ -132,6 +132,11 @@
                             echo 'FARMACIA LA FUSTA';
                             $sede = 'FLF';
                         }
+
+                        if ($_SERVER['HTTP_HOST'] == 'cpharmacdd.com') {
+                            echo 'CENTRO DE DISTRIBUCION GP';
+                            $sede = 'CDD';
+                        }
                     @endphp
                 </td>
                 </tr>

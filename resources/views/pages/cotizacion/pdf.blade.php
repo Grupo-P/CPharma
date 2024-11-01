@@ -54,6 +54,10 @@
                     }
 
                     if ($_SERVER['HTTP_HOST'] == 'cpharmaflf.com') {
+                        echo 'CENTRO DE DISTRIBUCION GP';
+                    }
+
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmacdd.com') {
                         echo 'FARMACIA LA FUSTA';
                     }
 

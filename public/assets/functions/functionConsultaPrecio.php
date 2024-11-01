@@ -66,8 +66,12 @@
             $nombre_maquina == 'CONSULTOR-FSM-4' ||
 
             $nombre_maquina == 'CONSULTOR-FEC-1' ||
+
             $nombre_maquina == 'CONSULTOR-FLF-1' ||
-            $nombre_maquina == 'CONSULTOR-FLF-2'
+            $nombre_maquina == 'CONSULTOR-FLF-2' ||
+
+            $nombre_maquina == 'CONSULTOR-CDD-1' ||
+            $nombre_maquina == 'CONSULTOR-CDD-2'
 
         ) {
             $sqlCPharma = "INSERT INTO consultor(id_articulo, codigo_interno, codigo_barra, descripcion, precio, nombre_maquina, fecha_captura, created_at, updated_at) VALUES ('$id_articulo','$codigo_interno','$codigo_barra','$descripcion','$precio','$nombre_maquina','$fecha_captura','$fecha_completa','$fecha_completa')";

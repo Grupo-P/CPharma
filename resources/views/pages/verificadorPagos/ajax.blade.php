@@ -58,6 +58,13 @@
             $id = 7;
         }
 
+        if ($host == 'cpharmacdd.com') {
+            $username = 'pagoslafusta@gmail.com';
+            $password = 'zssu dzzt dhmj xvwf';
+            $remitente = 'pagomovilcdd@gmail.com';
+            $id = 8;
+        }
+
         if ($host == 'cpharmakdi.com' || $host == 'cpharmakd73.com') {
             $username = 'pagoskdi@gmail.com';
             $password = 'ihra yddt ucgk sdrb';
@@ -182,9 +189,9 @@
                     try {
                         $body = @imap_fetchbody($conn, $email, 2);
                         $otoFormato = false;
-                    
+
                         if (strpos($body, 'Tpago') && strpos($body, '- 500')) {
-                            
+
                             $body = str_replace(array("\n", "\r", "="), "", $body);
 
                             $inicioEnviadoPor = (strpos($body, 'celular')) + 7;
@@ -802,7 +809,7 @@
 
             foreach ($search as $email) {
                 $overview = imap_fetch_overview($conn, $email);
-                
+
                 preg_match('/Date: (.*)/', $overview, $matches);
                 $fechaReal = isset($matches[1]) ? $matches[1] : null;
 
@@ -859,7 +866,7 @@
                         $referencia =  str_replace("=\r\n", '', substr($array[3], 0, strpos($array[3], '</td>')));
                         $enviadoPor =  explode(' sent you money</td', $body);
                         $enviadoPor = str_replace("=\r\n", '', substr($enviadoPor[0], strrpos($enviadoPor[0], 'class=3D"moPad">')+16));
-                        
+
                         $comentario = "Referencia: ".$referencia;
 
                         $pagos[$i]['tipo'] = 'Zelle Chase';

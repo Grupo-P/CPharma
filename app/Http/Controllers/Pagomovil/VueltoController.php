@@ -8,6 +8,7 @@ use compras\VueltoVDC;
 use compras\conexion\VueltosFEC;
 use compras\conexion\VueltosFLL;
 use compras\conexion\VueltosFLF;
+use compras\conexion\VueltosCDD;
 use compras\conexion\VueltosFM;
 use compras\conexion\VueltosFTN;
 use compras\conexion\VueltosKD73;
@@ -78,6 +79,9 @@ class VueltoController extends Controller
             break;
             case "FARMACIA LA FUSTA":
                 $RutaUrl = "FLF";
+            break;
+            case "CENTRO DE DISTRIBUCION GP":
+                $RutaUrl = "CDD";
             break;
         }
         //$RutaUrl = 'FAU';
@@ -240,6 +244,16 @@ class VueltoController extends Controller
                         $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
                     }
                 break;
+                case 'CDD':
+                    if(FG_Validar_Conectividad('CDD')==1){
+                        $vueltos =  VueltosCDD::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
+                    }
+                break;
             }
 
         }
@@ -345,6 +359,16 @@ class VueltoController extends Controller
                     else{
                         $vueltos=null;
                         $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                    }
+                break;
+                case 'CDD':
+                    if(FG_Validar_Conectividad('CDD')==1){
+                        $vueltos =  VueltosCDD::fecha($fini, $ffin)->OrderBy("id",'desc')->get();
+                        $mensaje=null;
+                    }
+                    else{
+                        $vueltos=null;
+                        $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
                     }
                 break;
             }
@@ -540,6 +564,9 @@ class VueltoController extends Controller
             case "FARMACIA LA FUSTA":
                 $RutaUrl = "FLF";
             break;
+            case "CENTRO DE DISTRIBUCION GP":
+                $RutaUrl = "CDD";
+            break;
         }
 
 
@@ -713,6 +740,21 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
                 }
             break;
+            case 'CDD':
+                if(FG_Validar_Conectividad('CDD')==1){
+                    $clientes=VueltosCDD::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('cedulaClienteFactura','sede','nombreClienteFactura','id',DB::connection('cdd')->raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('cedulaClienteFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
+                }
+            break;
         }
 
         $arreglo=[];
@@ -848,6 +890,19 @@ class VueltoController extends Controller
                             $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
                         }
                     break;
+                    case 'CDD':
+                        if(FG_Validar_Conectividad('CDD')==1){
+                            $total=VueltosCDD::where('sede','=','CDD')->fecha($fini, $ffin)
+                                            ->where('cedulaClienteFactura','=',$cliente->cedulaClienteFactura)
+                                            ->where('estatus','=','Aprobado')
+                                            ->get();
+                            $mensaje=null;
+                        }
+                        else{
+                            $total=null;
+                            $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
+                        }
+                    break;
                 }
 
 
@@ -937,6 +992,9 @@ class VueltoController extends Controller
             break;
             case "FARMACIA LA FUSTA":
                 $RutaUrl = "FLF";
+            break;
+            case "CENTRO DE DISTRIBUCION GP":
+                $RutaUrl = "CDD";
             break;
 
         }
@@ -1112,6 +1170,21 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
                 }
             break;
+            case 'CDD':
+                if(FG_Validar_Conectividad('CDD')==1){
+                    $cajeros=VueltosCDD::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->select('nombreCajeroFactura','sede','id',DB::connection('cdd')->raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
+                }
+            break;
         }
 
         $arreglo=[];
@@ -1246,6 +1319,19 @@ class VueltoController extends Controller
                             $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
                         }
                     break;
+                    case 'CDD':
+                        if(FG_Validar_Conectividad('CDD')==1){
+                            $total=VueltosCDD::where('sede','=','CDD')->fecha($fini, $ffin)
+                                            ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
+                                            ->where('estatus','=','Aprobado')
+                                            ->get();
+                            $mensaje=null;
+                        }
+                        else{
+                            $total=null;
+                            $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
+                        }
+                    break;
                 }
                 $totalBsFactura=$total->sum('totalFacturaBs');
                 $totalDolarFactura=$total->sum('totalFacturaDolar');
@@ -1333,6 +1419,9 @@ class VueltoController extends Controller
             break;
             case "FARMACIA LA FUSTA":
                 $RutaUrl = "FLF";
+            break;
+            case "CENTRO DE DISTRIBUCION GP":
+                $RutaUrl = "CDD";
             break;
 
         }
@@ -1508,6 +1597,21 @@ class VueltoController extends Controller
                     $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
                 }
             break;
+            case 'CDD':
+                if(FG_Validar_Conectividad('CDD')==1){
+                    $cajeros=VueltosCDD::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Error')
+                            ->select('nombreCajeroFactura','sede','id',DB::connection('cdd')->raw('COUNT(vuelto_vdc.id) as vueltos'))
+                            ->groupBy('nombreCajeroFactura')
+                            ->orderBy('vueltos', 'DESC')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
+                }
+            break;
         }
 
         $arreglo=[];
@@ -1642,6 +1746,19 @@ class VueltoController extends Controller
                             $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
                         }
                     break;
+                    case 'CDD':
+                        if(FG_Validar_Conectividad('CDD')==1){
+                            $total=VueltosCDD::where('sede','=','CDD')->fecha($fini, $ffin)
+                                            ->where('nombreCajeroFactura','=',$cajero->nombreCajeroFactura)
+                                            ->where('estatus','=','Error')
+                                            ->get();
+                            $mensaje=null;
+                        }
+                        else{
+                            $total=null;
+                            $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
+                        }
+                    break;
                 }
                 $totalBsFactura=$total->sum('totalFacturaBs');
                 $totalDolarFactura=$total->sum('totalFacturaDolar');
@@ -1730,6 +1847,9 @@ class VueltoController extends Controller
             break;
             case "FARMACIA LA FUSTA":
                 $RutaUrl = "FLF";
+            break;
+            case "CENTRO DE DISTRIBUCION GP":
+                $RutaUrl = "CDD";
             break;
         }
 
@@ -1896,6 +2016,20 @@ class VueltoController extends Controller
                 else{
                     $clientes=null;
                     $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
+            case 'CDD':
+                if(FG_Validar_Conectividad('CDD')==1){
+                    $clientes=VueltosCDD::where('sede','=',$sede)->fecha($fini, $ffin)
+                                        ->where('estatus','=','Aprobado')
+                                        ->where('cedulaClienteFactura','=',$request->cliente)
+                                        ->OrderBy("id",'desc')
+                                        ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $clientes=null;
+                    $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
                 }
             break;
         }
@@ -2090,6 +2224,9 @@ class VueltoController extends Controller
             case "FARMACIA LA FUSTA":
                 $RutaUrl = "FLF";
             break;
+            case "CENTRO DE DISTRIBUCION GP":
+                $RutaUrl = "CDD";
+            break;
 
         }
 
@@ -2257,6 +2394,20 @@ class VueltoController extends Controller
                 else{
                     $cajeros=null;
                     $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
+            case 'CDD':
+                if(FG_Validar_Conectividad('CDD')==1){
+                    $cajeros=VueltosCDD::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Aprobado')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
                 }
             break;
         }
@@ -2452,6 +2603,9 @@ class VueltoController extends Controller
             case "FARMACIA LA FUSTA":
                 $RutaUrl = "FLF";
             break;
+            case "CENTRO DE DISTRIBUCION GP":
+                $RutaUrl = "CDD";
+            break;
         }
 
         //si se selecciono otra sede consultarla
@@ -2617,6 +2771,20 @@ class VueltoController extends Controller
                 else{
                     $cajeros=null;
                     $mensaje="No hay conexion con Farmacia La Fusta (FLF)";
+                }
+            break;
+            case 'CDD':
+                if(FG_Validar_Conectividad('CDD')==1){
+                    $cajeros=VueltosCDD::where('sede','=',$sede)->fecha($fini, $ffin)
+                            ->where('estatus','=','Error')
+                            ->where('nombreCajeroFactura','=',$request->cajero)
+                            ->OrderBy("id",'desc')
+                            ->get();
+                    $mensaje=null;
+                }
+                else{
+                    $cajeros=null;
+                    $mensaje="No hay conexion con CENTRO DE DISTRIBUCION GP (CDD)";
                 }
             break;
         }

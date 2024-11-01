@@ -166,6 +166,15 @@
         echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('FLF').'</h6>';
       }
 
+      if(FG_Validar_Conectividad('CDD')==1){
+        echo'</br></br><h6 align="center">La informacion a continuacion proviene de: '.FG_Nombre_Sede('CDD').'</h6>';
+        R20_Catalogo_Proveedor_C2($_GET['SEDE'],'CDD',$_GET['Id'],$_GET['Nombre'],$_GET['fechaInicio'],$_GET['fechaFin'],$_GET['pedido']);
+        FG_Guardar_Auditoria('CONSULTAR','REPORTE','Tri Tienda Por Proveedor');
+      }
+      else{
+        echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('CDD').'</h6>';
+      }
+
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
