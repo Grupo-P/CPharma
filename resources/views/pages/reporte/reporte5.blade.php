@@ -523,6 +523,8 @@
                     <th scope="col" class="sede4 CP-sticky">Existencia FSM</td>
                     <th scope="col" class="descripcion_sede5 sede5 CP-sticky">Descripción FEC</th>
                     <th scope="col" class="sede5 CP-sticky">Existencia FEC</td>
+                    <th scope="col" class="descripcion_sede6 sede6 CP-sticky">Descripción CDD</th>
+                    <th scope="col" class="sede6 CP-sticky">Existencia CDD</td>
                 ';
               }
 
