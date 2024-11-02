@@ -108,7 +108,7 @@ define ("nameFLFOFF" , "cpharmaflf");
 define ("serverCDD" , "192.168.10.35");
 define ("userCDD" , "admin");
 define ("passCDD" , "soporte123");
-define ("nameCDD" , "SERVER-CDD");
+define ("nameCDD" , "BD_CDF_YA");
 define ("nameCDDOFF" , "cpharmaCDD");
 /**********************************************************************************/
 /********************* CONEXION SERVER DESARROLLO GRUPO P **********************/
