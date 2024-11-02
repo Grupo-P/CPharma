@@ -1239,6 +1239,276 @@
     ?>
 <!-- CASO FLF -->
 <!-------------------------------------------------------------------------------->
+
+<!-------------------------------------------------------------------------------->
+<!-- CASO CDD-->
+<?php
+}
+    if($SedeConnection == 'CDD'){
+?>
+    <?php
+        if(Auth::user()->sede == 'FARMACIA TIERRA NEGRA, C.A.'){
+    ?>
+    <div class="card-deck">
+        <div class="card border-danger mb-3" style="width: 14rem;">
+        <div class="card-body text-left bg-danger">
+            <h5 class="card-title">
+                <span class="card-text text-white">
+                    <?php echo "".SedeFTN; ?>
+                </span>
+            </h5>
+        </div>
+        <div class="card-footer bg-transparent border-danger text-right">
+            <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+        </div>
+        </div>
+    </div>
+    <?php
+    }
+        if(Auth::user()->sede == 'FARMACIA LA LAGO,C.A.'){
+    ?>
+    <div class="card-deck">
+        <div class="card border-success mb-3" style="width: 14rem;">
+        <div class="card-body text-left bg-success">
+            <h5 class="card-title">
+                <span class="card-text text-white">
+                    <?php echo "".SedeFLL; ?>
+                </span>
+            </h5>
+        </div>
+        <div class="card-footer bg-transparent border-success text-right">
+              <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+        </div>
+        </div>
+    </div>
+    <?php
+    }
+        if(Auth::user()->sede == 'FARMACIA AVENIDA UNIVERSIDAD, C.A.'){
+    ?>
+    <div class="card-deck">
+        <div class="card border-info mb-3" style="width: 14rem;">
+        <div class="card-body text-left bg-info">
+            <h5 class="card-title">
+                <span class="card-text text-white">
+                    <?php echo "".SedeFAU; ?>
+                </span>
+            </h5>
+        </div>
+        <div class="card-footer bg-transparent border-info text-right">
+            <a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
+        </div>
+    </div>
+  </div>
+  <?php
+    }
+        if(Auth::user()->sede == 'GRUPO P, C.A'){
+    ?>
+        <div class="card-deck">
+            <div class="card border-danger mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-danger">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFTN; ?>
+                    </span>
+                </h5>
+                </div>
+            <div class="card-footer bg-transparent border-danger text-right">
+                <a href="http://cpharmaftn.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+            </div>
+            <div class="card border-success mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-success">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFLL; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-success text-right">
+                <a href="http://cpharmafll.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+            </div>
+            <div class="card border-info mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-info">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFAU; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-info text-right">
+                <a href="http://cpharmafau.com/" role="button" class="btn btn-outline-info btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+      </div>
+      <div class="card-deck">
+            <div class="card border-warning mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-warning">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeKDI; ?>
+                    </span>
+                </h5>
+                </div>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-warning btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+            </div>
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFSM; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-right">
+                <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-secondary btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+            </div>
+            <div class="card border-dark mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-dark">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeFEC; ?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-dark text-right">
+                    <a href="http://cpharmafec.com/" role="button" class="btn btn-outline-dark btn-sm" target="_blank"></i>Ver reportes</a>
+                </div>
+            </div>
+            <div class="card border-danger mb-3" style="width: 14rem;">
+                <div class="card-body text-left bg-danger">
+                    <h5 class="card-title">
+                        <span class="card-text text-white">
+                            <?php echo "".SedeKD73; ?>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-footer bg-transparent border-danger text-right">
+                      <a href="http://cpharmakd73.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+                </div>
+            </div>
+        </div>
+      <?php
+    }
+        if(Auth::user()->sede == 'FARMACIAS KD EXPRESS, C.A.'){
+    ?>
+        <div class="card-deck">
+            <div class="card border-warning mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-warning">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeKDI; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-warning text-right">
+                <a href="http://cpharmakdi.com/" role="button" class="btn btn-outline-warning btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
+    <?php
+    }
+        if(Auth::user()->sede == 'FARMACIA MILLENNIUM 2000, C.A'){
+    ?>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFSM; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-success text-right">
+                <a href="http://cpharmafsm.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+          </div>
+        </div>
+    </div>
+    <?php
+    }
+        if(Auth::user()->sede == 'FARMACIA EL CALLEJON, C.A.'){
+    ?>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFEC; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-success text-right">
+                <a href="http://cpharmafec.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+          </div>
+        </div>
+    </div>
+    <?php
+    }
+        if(Auth::user()->sede == 'FARMACIA LA FUSTA'){
+    ?>
+        <div class="card-deck">
+            <div class="card border-secondary mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-secondary">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeFLF; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-success text-right">
+                <a href="http://cpharmaflf.com/" role="button" class="btn btn-outline-success btn-sm" target="_blank"></i>Ver reportes</a>
+          </div>
+        </div>
+    </div>
+    <?php
+    }
+        if(Auth::user()->sede == 'CENTRO DE DISTRIBUCION GP'){
+    ?>
+        <div class="card-deck">
+            <div class="card border-dark mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-dark">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeCDD; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-dark text-right">
+                <form action="/reporte/" style="display: inline;">
+                @csrf
+                <input id="SEDE" name="SEDE" type="hidden" value="CDD">
+                <button type="submit" name="Reporte" role="button" class="btn btn-outline-dark btn-sm"></i>Ver reportes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+    }
+        if(Auth::user()->sede == 'FARMACIAS KD EXPRESS, C.A. - KD73'){
+    ?>
+        <div class="card-deck">
+            <div class="card border-danger mb-3" style="width: 14rem;">
+            <div class="card-body text-left bg-danger">
+                <h5 class="card-title">
+                    <span class="card-text text-white">
+                        <?php echo "".SedeKD73; ?>
+                    </span>
+                </h5>
+            </div>
+            <div class="card-footer bg-transparent border-danger text-right">
+                <a href="http://cpharmakd73.com/" role="button" class="btn btn-outline-danger btn-sm" target="_blank"></i>Ver reportes</a>
+            </div>
+        </div>
+    </div>
+    <?php
+    }
+    ?>
+<!-- CASO CDD -->
+<!-------------------------------------------------------------------------------->
+
 <!-- CASO FEC-->
 <?php
 }
