@@ -497,6 +497,7 @@
                                 (   $item->from == 'Binance <do-not-reply@ses.binance.com>'
                                     || $item->from == 'Binance <do-not-reply@directmail2.binance.com>'
                                     || $item->from == 'Binance <donotreply@directmail.binance.com>'
+                                    || $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>'
                                 )
                             ) {
 
