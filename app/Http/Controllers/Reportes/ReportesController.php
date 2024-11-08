@@ -155,6 +155,20 @@ class ReportesController extends Controller
                         VenFactura.Auditoria_Usuario, InvArticulo.CodigoArticulo, InvCodigoBarra.CodigoBarra, InvArticulo.Descripcion, VenFactura.Id
                 ";
 
+                $sqlDevoluciones = "SELECT
+                        InvArticulo.CodigoArticulo AS ARTICULO,
+                        VenDevolucion.Auditoria_Usuario AS USUARIO,
+                        CAST(SUM(VenDevoluciondetalle.cantidad) AS DECIMAL(18,0)) AS CANTIDAD
+                    from VenDevolucion, VenDevolucionDetalle
+                    INNER JOIN InvCodigoBarra ON VenDevolucionDetalle.InvArticuloId = InvCodigoBarra.InvArticuloId
+                    INNER JOIN InvArticulo ON InvCodigoBarra.InvArticuloId = InvArticulo.Id
+                    where
+                    VenDevolucion.id = VenDevolucionDetalle.VenDevolucionId
+                    AND VenDevolucion.FechaDocumento>= '".$fechaInicio."' AND VenDevolucion.FechaDocumento<= '".$fechaFinal."'
+                    AND InvCodigoBarra.CodigoBarra = '".$codigoBarra."'
+                    GROUP BY VenDevolucion.Auditoria_Usuario,  InvArticulo.CodigoArticulo
+                ";
+
                 $result = sqlsrv_query($conn,$sqlFacturas,[],['QueryTimeout'=>7200]);
                 while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
                     $usuario = trim($row['USUARIO']);
@@ -165,6 +179,15 @@ class ReportesController extends Controller
 
                     if(array_search($row['CODIGO_BARRA'], $codigosConVenta) === false) {
                         array_push($codigosConVenta,$row['CODIGO_BARRA']);
+                    }
+                }
+
+                $result = sqlsrv_query($conn,$sqlDevoluciones,[],['QueryTimeout'=>7200]);
+                while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
+                    $usuario = trim($row['USUARIO']);
+
+                    if(isset($registrosCajeros[$usuario])) {
+                        $registrosCajeros[$usuario] = $this->analizarDevolucion($row, $registrosCajeros[$usuario] );
                     }
                 }
             }
@@ -247,7 +270,22 @@ class ReportesController extends Controller
             )
         ];
     }
-    
+
+    private function analizarDevolucion($row, array $registro) {
+        $articuloBuscar = $row['ARTICULO'];
+        $cantidadDev = $row['CANTIDAD'];
+        $articulos = $registro['articulos'] ?? [];
+        $nuevoRegistro = $registro;
+
+        foreach ($articulos as $key => $articulo) {
+            if($articulo['codigo'] == $articuloBuscar) {
+                $nuevoRegistro['articulos'][$key]['cantidad'] -= $cantidadDev;
+            }
+        }
+
+        return $nuevoRegistro;
+    }
+
     private function obtener_arrayCodigos($file)
     {
         // Leer Excel
