@@ -1140,7 +1140,7 @@
         DESARROLLADO POR: SERGIO COVA
     */
     function FG_Producto_Gravado($IsIVA){
-        if($IsIVA == 1) {
+        if($IsIVA == FG_ID_Impuesto_Sede()) {
             $EsGravado = 'SI';
         }
         else {
@@ -1148,6 +1148,17 @@
         }
         return $EsGravado;
     }
+
+    function FG_ID_Impuesto_Sede(){
+        $sede = FG_Mi_Ubicacion();
+
+        if($sede == 'CDD'){
+            return 3; //Este es el ID FinConceptoImpto para CDD
+        }else{
+            return 1; //Este es el ID FinConceptoImpto para el resto de sedes
+        }
+    }
+
     /**********************************************************************************/
     /*
         TITULO: FG_Tipo_Producto
@@ -1691,7 +1702,7 @@
         DESARROLLADO POR: SERGIO COVA
      */
     function FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto){
-            if($IsIVA==1){
+            if($IsIVA==FG_ID_Impuesto_Sede()){
                 /*Caso 1: Aplica Impuesto*/
                 if($UtilidadArticulo!=1) {
                     $PrecioCalculado = ($PrecioCompraBruto/$UtilidadArticulo)*Impuesto;
