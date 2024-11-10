@@ -1,4 +1,4 @@
-<?php 
+<?php
   include('C:\xampp\htdocs\CPharma\app\functions\config.php');
   include('C:\xampp\htdocs\CPharma\app\functions\functions.php');
   include('C:\xampp\htdocs\CPharma\app\functions\querys_mysql.php');
@@ -91,7 +91,7 @@
               .$Descripcion
           .'</a>
         </td>';
-        $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>'; 
+        $tableResponse = $tableResponse. '<td align="center">'.number_format($Precio,2,"," ,"." ).'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$PrecioDolares.'</td>';
 	      $tableResponse = $tableResponse. '<td align="center">'.$Dolarizado.'</td>';
         $tableResponse = $tableResponse. '<td align="center">'.$Gravado.'</td>';
@@ -101,7 +101,7 @@
           $tableResponse = $tableResponse. '<td>-</td>';
         }
         else if($Dolarizado=='SI'){
-          if($IsIVA==1){
+          if($IsIVA==FG_ID_Impuesto_Sede()){
             $Costo = ($TasaMercado)?(($Precio/Impuesto) * $Utilidad) / $TasaMercado:"0";
             $tableResponse = $tableResponse. '<td>-</td>';
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
@@ -112,14 +112,14 @@
             $tableResponse = $tableResponse. '<td align="center">'.number_format($Costo,2,"," ,"." ).'</td>';
           }
         }
-        
+
         $tableResponse = $tableResponse.
         '<td align="center" class="CP-barrido">
         <a href="/reporte6?pedido=15&fechaInicio='.$UltimoLote.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&flag=BsqDescrip&Descrip='.$Descripcion.'&IdD='.$IdArticulo.'&CodBar=&IdCB=" style="text-decoration: none; color: black;" target="_blank">'
           .intval($Existencia).
         '</a>
         </td>';
-        
+
         $tableResponse = $tableResponse.
         '<td align="center" class="CP-barrido">
         <a href="/reporte12?fechaInicio='.$UltimoLote.'&fechaFin='.$fechaActual.'&SEDE='.$SedeConnection.'&Descrip='.$Descripcion.'&Id='.$IdArticulo.'&CodBar=&IdCB=&SEDE='.$SedeConnection.'" style="text-decoration: none; color: black;" target="_blank">'
@@ -130,16 +130,16 @@
         $tableResponse = $tableResponse. '<td>'.$Componente.'</td>';
         $tableResponse = $tableResponse. '<td>'.$Aplicacion.'</td>';
         $tableResponse = $tableResponse. '<td>'.$UltimaVenta.'</td>';
-	      $tableResponse = $tableResponse. 
+	      $tableResponse = $tableResponse.
         '<td align="left" class="CP-barrido">
           <a href="/reporte7?Nombre='.$NombreProveedor.'&Id='.$IdProveedor.'&SEDE='.$SedeConnection.'" target="_blank" style="text-decoration: none; color: black;">'
             .$NombreProveedor.
           '</a>
-        </td>'; 
+        </td>';
         $tableResponse = $tableResponse. '</tr>';
     	}
     }
-    
+
     mysqli_close($connCPharma);
     sqlsrv_close($conn);
     return $tableResponse;
@@ -171,7 +171,7 @@
         InvArticulo.Id AS IdArticulo
         FROM InvArticulo
         WHERE InvArticulo.Descripcion LIKE '%$DescripLike%'
-      ";   
+      ";
     }
     return $sql;
   }
