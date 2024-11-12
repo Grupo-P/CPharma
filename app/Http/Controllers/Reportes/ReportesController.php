@@ -147,11 +147,11 @@ class ReportesController extends Controller
                     INNER JOIN VenCajero ON VenFactura.Auditoria_Usuario = VenCajero.CodigoUsuarioCaja
                     INNER JOIN GenPersona ON VenCajero.GenPersonaId = GenPersona.Id
                     LEFT JOIN VenDevolucion ON VenDevolucion.VenFacturaId = VenFactura.Id
-                    WHERE 
+                    WHERE
                         InvCodigoBarra.CodigoBarra = '".$codigoBarra."' AND
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
-                        VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
-                    GROUP BY 
+                        VenFactura.estadoFactura = 2
+                    GROUP BY
                         VenFactura.Auditoria_Usuario, InvArticulo.CodigoArticulo, InvCodigoBarra.CodigoBarra, InvArticulo.Descripcion, VenFactura.Id
                 ";
 
@@ -279,7 +279,9 @@ class ReportesController extends Controller
 
         foreach ($articulos as $key => $articulo) {
             if($articulo['codigo'] == $articuloBuscar) {
+				$monto = $articulo['monto'] / $articulo['cantidad'];
                 $nuevoRegistro['articulos'][$key]['cantidad'] -= $cantidadDev;
+				$nuevoRegistro['articulos'][$key]['monto'] -= $monto * $cantidadDev;
             }
         }
 
