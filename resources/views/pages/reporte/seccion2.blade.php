@@ -87,7 +87,13 @@
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos'],$_GET['Modalidad'],$_GET['troquelesanteriores']);
+    $conn = FG_Conectar_Smartpharma($_GET['SEDE']);
+    $sql = SC2Q_Lista_Devolucion_Detalle($_GET['IdDevolucion']);
+    $result = sqlsrv_query($conn,$sql);
+    $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+    $NumeroDevolucion = $row['ConsecutivoDevolucionSistema'];
+
+    SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'], $NumeroDevolucion,$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos'],$_GET['Modalidad'],$_GET['troquelesanteriores']);
 
     FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL DEVOLUCION',$_GET['IdDevolucion']);
 
@@ -139,11 +145,23 @@
 <?php
 /**********************************************************************************/
   /*
-    TITULO: SC2Q_Lista_Devolucion
+    TITULO: SC2Q_Lista_Devolucion_Detalle
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
   */
+  function SC2Q_Lista_Devolucion_Detalle($idDevolucion) {
+    $sql = "
+        SELECT
+        VenDevolucion.ConsecutivoDevolucionSistema,
+        VenDevolucion.Id
+        FROM VenDevolucion
+        WHERE VenDevolucion.Id = '$idDevolucion'
+        ORDER BY VenDevolucion.ConsecutivoDevolucionSistema ASC
+    ";
+    return $sql;
+  }
+
   function SC2Q_Lista_Devolucion() {
     $sql = "
         SELECT
@@ -463,7 +481,7 @@
     TITULO: SC2_Actualizar_Troquel
     DESAROLLADO POR: SERGIO COVA
   */
-  function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles,$Modalidad,$Arra_Troqueles_Anteriores){
+  function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion, $NumeroDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles,$Modalidad,$Arra_Troqueles_Anteriores){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -503,7 +521,7 @@
     }
 
     echo($msn);
-    SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,false);
+    SC2_Devolucion_detalle($SedeConnection,$NumeroDevolucion,false);
   }
   /**********************************************************************************/
   /*
