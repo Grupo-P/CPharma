@@ -305,7 +305,6 @@
 
                         }
                         // BNC
-
                         if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
 
                             $body = @imap_fetchbody($conn, $email, 2);
@@ -362,6 +361,64 @@
                                 $i++;
                             }
 
+                        }
+
+                        // Venezuela
+                        if (strpos($asunto, 'SMS') && $header->fromaddress == $remitente) {
+                            $body = @imap_fetchbody($conn, $email, 2);
+
+                            if (strpos($body, 'PagomovilB') && (strpos($body, '- 2661') || strpos($body, '- 2662'))) {
+                                $inicioEnviadoPor =(strpos($body, 'del ')) + 4;
+                                $substr = substr($body, $inicioEnviadoPor);
+                                $finEnviadoPor = strpos($substr, ' ');
+                                $enviadoPor = substr($substr, 0, $finEnviadoPor);
+                                $enviadoPor = str_replace(['=', ' '], ['', ''], $enviadoPor);
+
+
+                                $inicioMonto = (strpos($body, 'comercio por ')) + 13;
+                                $substr = substr($body, $inicioMonto);
+                                $finMonto = strpos($substr, ' del ');
+                                $monto = str_replace(["=","\n","\r"," "], "",substr($substr, 0, $finMonto));
+
+                                $inicioReferencia = (strpos($body, ' Ref: ')) + 6;
+                                $substr = substr($body, $inicioReferencia);
+
+                                $finReferencia = strpos($substr, ' comis');
+                                $referencia = substr($substr, 0, $finReferencia);
+
+                                $inicioFechaMensaje = strpos($substr, ' fecha: ');
+                                $inicioFechaMensaje = str_replace(" fecha: ", "", substr($substr, $inicioFechaMensaje));
+
+                                $finFechaMensaje = strpos($inicioFechaMensaje, ' ');
+                                $fechaMensaje = substr($inicioFechaMensaje, 0, $finFechaMensaje);
+                                $fechaConsulta = date("d/m/Y", strtotime(request()->fecha));
+
+                                $fechaMensaje = DateTime::createFromFormat('d-m-y', $fechaMensaje);
+                                $fechaMensaje = $fechaMensaje->format('d/m/y');
+
+                                $fechaMensaje = DateTime::createFromFormat('d/m/y', $fechaMensaje);
+                                $fechaConsulta = DateTime::createFromFormat('d/m/Y', $fechaConsulta);
+
+
+                                if($fechaMensaje != $fechaConsulta) continue;
+
+                                $comentario = "Referencia: $referencia";
+
+                                $decimales = explode('.', (string) $monto);
+
+                                $decimales = $decimales[1];
+
+                                $pagos[$i]['tipo'] = 'Pago móvil Venezuela';
+                                $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
+                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['fecha'] = $fecha;
+                                $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
+                                $pagos[$i]['comentario'] = $comentario;
+                                $pagos[$i]['hash'] = rand(100, 999) . substr($enviadoPor[0], 0, 1) . rand(100, 999) . $decimales;
+                                $pagos[$i]['referencia'] = $referencia;
+
+                                $i++;
+                            }
                         }
                     }
                 }
@@ -446,6 +503,8 @@
                                 &&
                                 (   $item->from == 'Binance <do-not-reply@ses.binance.com>'
                                     || $item->from == 'Binance <do-not-reply@directmail2.binance.com>'
+                                    || $item->from == 'Binance <donotreply@directmail.binance.com>'
+                                    || $item->from == 'Binance <do_not_reply@mgdirectmail.binance.com>'
                                 )
                             ) {
 
@@ -730,7 +789,7 @@
 
                                 $pagos[$i]['tipo'] = 'Zelle PNC';
                                 $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
-                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['monto'] = '$'.$monto;
                                 $pagos[$i]['fecha'] = $fecha;
                                 $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                                 $pagos[$i]['comentario'] = $comentario;
@@ -770,7 +829,7 @@
 
                                 $pagos[$i]['tipo'] = 'Zelle PNC';
                                 $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
-                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['monto'] =  '$'.$monto;
                                 $pagos[$i]['fecha'] = $fecha;
                                 $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                                 $pagos[$i]['comentario'] = $comentario;
@@ -802,7 +861,7 @@
 
                                 $pagos[$i]['tipo'] = 'Zelle PNC';
                                 $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
-                                $pagos[$i]['monto'] = $monto;
+                                $pagos[$i]['monto'] =  '$'.$monto;
                                 $pagos[$i]['fecha'] = $fecha;
                                 $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                                 $pagos[$i]['comentario'] = $comentario;
@@ -817,7 +876,7 @@
 
                 // Chase
                 try {
-                    $conn = @imap_open($mailbox, 'pagosfarmaya@gmail.com', 'ozrz rujm dbqt qnhw');
+                    $conn = imap_open($mailbox, 'pagosfarmaya@gmail.com', 'ozrz rujm dbqt qnhw');
 
                     $fecha = date_format(date_create(request()->fecha), 'd-M-Y');
 
@@ -970,7 +1029,7 @@
 
                                     $pagos[$i]['tipo'] = 'Zelle PNC';
                                     $pagos[$i]['enviado_por'] = html_entity_decode($enviadoPor);
-                                    $pagos[$i]['monto'] = $monto;
+                                    $pagos[$i]['monto'] =  '$'.$monto;
                                     $pagos[$i]['fecha'] = $fecha;
                                     $pagos[$i]['fechaSinFormato'] = $fechaSinFormato;
                                     $pagos[$i]['comentario'] = $comentario;
