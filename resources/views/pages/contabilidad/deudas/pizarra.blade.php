@@ -123,6 +123,25 @@
                 $pago = $flf;
             }
 
+            // CDD
+            $cdd = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_CDD
+                WHERE
+                    id_proveedor = '{$id_proveedor}' AND deleted_at IS NULL
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $cdd = isset($cdd[0]->created_at) ? $cdd[0]->created_at : null;
+
+            if ($pago <= $cdd) {
+                $pago = $cdd;
+            }
+
             // PAG
             $pag = DB::select("
                 SELECT
@@ -293,6 +312,25 @@
 
             if ($pago <= $flf) {
                 $pago = $flf;
+            }
+
+            // CDD
+            $cdd = DB::select("
+                SELECT
+                    DATE(created_at) AS created_at
+                FROM
+                    {$tabla}_CDD
+                WHERE
+                    id_proveedor = '{$id_proveedor}'
+                ORDER BY
+                    created_at DESC
+                LIMIT 1
+            ");
+
+            $cdd = isset($cdd[0]->created_at) ? $cdd[0]->created_at : null;
+
+            if ($pago <= $cdd) {
+                $pago = $cdd;
             }
 
             // PAG

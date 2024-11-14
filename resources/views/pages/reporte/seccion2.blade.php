@@ -64,7 +64,7 @@
   include(app_path().'\functions\querys_sqlserver.php');
   $_GET['SEDE'] = FG_Mi_Ubicacion();
 
-  $ArtJson = "";
+  //$ArtJson = "";
 
   if (isset($_GET['SEDE'])){
     echo '<h1 class="h5 text-success"  align="left"> <i class="fas fa-prescription"></i> '.FG_Nombre_Sede($_GET['SEDE']).'</h1>';
@@ -87,7 +87,13 @@
   //se pasa a la seleccion del articulo
     $InicioCarga = new DateTime("now");
 
-    SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'],$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos'],$_GET['Modalidad'],$_GET['troquelesanteriores']);
+    $conn = FG_Conectar_Smartpharma($_GET['SEDE']);
+    $sql = SC2Q_Lista_Devolucion_Detalle($_GET['IdDevolucion']);
+    $result = sqlsrv_query($conn,$sql);
+    $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+    $NumeroDevolucion = $row['ConsecutivoDevolucionSistema'];
+
+    SC2_Actualizar_Troquel($_GET['SEDE'],$_GET['IdDevolucion'], $NumeroDevolucion,$_GET['IdArticulos'],$_GET['IdLotes'],$_GET['troquelesnuevos'],$_GET['Modalidad'],$_GET['troquelesanteriores']);
 
     FG_Guardar_Auditoria('ACTUALIZAR','TROQUEL DEVOLUCION',$_GET['IdDevolucion']);
 
@@ -95,12 +101,12 @@
     $IntervalCarga = $InicioCarga->diff($FinCarga);
     echo'Tiempo de carga: '.$IntervalCarga->format("%Y-%M-%D %H:%I:%S");
   }
-  else if(isset($_GET['IdDevolucion'])){
+  else if(isset($_GET['NumeroDevolucion'])){
   //CASO 3: CARGA AL HABER SELECCIONADO UNA DEVOLUCION
   //se pasa a mostrar los articulos de la devolucion
     $InicioCarga = new DateTime("now");
 
-    SC2_Devolucion_detalle($_GET['SEDE'],$_GET['IdDevolucion'],true);
+    SC2_Devolucion_detalle($_GET['SEDE'],$_GET['NumeroDevolucion'],true);
 
     $FinCarga = new DateTime("now");
     $IntervalCarga = $InicioCarga->diff($FinCarga);
@@ -111,13 +117,13 @@
   //Se pasa a la seleccion de la devolucion
     $InicioCarga = new DateTime("now");
 
-    $sql = SC2Q_Lista_Devolucion();
-    $ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
+    //$sql = SC2Q_Lista_Devolucion();
+    //$ArtJson = FG_Armar_Json($sql,$_GET['SEDE']);
 
     echo '
     <form autocomplete="off" action="">
       <div class="autocomplete" style="width:90%;">
-        <input id="myInput" type="text" name="NumeroDevolucion" placeholder="Ingrese el numero de la devolucion" onkeyup="conteo()" required>
+        <input id="myInput" type="text" name="NumeroDevolucion" placeholder="Ingrese el numero de la devolucion" required>
         <input id="myId" name="Id" type="hidden">
         <td>
         <input id="SEDE" name="SEDE" type="hidden" value="';
@@ -136,27 +142,26 @@
 ?>
 @endsection
 
-@section('scriptsFoot')
-<?php
-  if($ArtJson!=""){
-?>
-    <script type="text/javascript">
-      ArrJs = eval(<?php echo $ArtJson ?>);
-      autocompletadoGenerico(document.getElementById("myInput"),document.getElementById("myId"), ArrJs, 2);
-    </script>
-<?php
-  }
-?>
-@endsection
-
 <?php
 /**********************************************************************************/
   /*
-    TITULO: SC2Q_Lista_Devolucion
+    TITULO: SC2Q_Lista_Devolucion_Detalle
     FUNCION: Armar una lista de articulos con descripcion e id
     RETORNO: Lista de articulos con descripcion e id
     DESAROLLADO POR: SERGIO COVA
   */
+  function SC2Q_Lista_Devolucion_Detalle($idDevolucion) {
+    $sql = "
+        SELECT
+        VenDevolucion.ConsecutivoDevolucionSistema,
+        VenDevolucion.Id
+        FROM VenDevolucion
+        WHERE VenDevolucion.Id = '$idDevolucion'
+        ORDER BY VenDevolucion.ConsecutivoDevolucionSistema ASC
+    ";
+    return $sql;
+  }
+
   function SC2Q_Lista_Devolucion() {
     $sql = "
         SELECT
@@ -175,7 +180,7 @@
   function SC2_Devolucion_info($SedeConnection,$IdDevolucion,$NumeroDevolucion){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql = SC2Q_Devolucion_info($IdDevolucion);
+    $sql = SC2Q_Devolucion_info($NumeroDevolucion);
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
 
@@ -240,9 +245,10 @@
     TITULO: SC2Q_Devolucion_info
     DESAROLLADO POR: SERGIO COVA
   */
-  function SC2Q_Devolucion_info($IdDevolucion) {
+  function SC2Q_Devolucion_info($NumeroDevolucion) {
     $sql = "
         SELECT
+        VenDevolucion.Id,
         VenDevolucion.ConsecutivoDevolucionSistema as NumeroDevolucion,
         CONCAT(GenPersona.Nombre,' ', GenPersona.Apellido) as Cliente,
         VenDevolucion.FechaDocumento as Fecha,
@@ -255,7 +261,7 @@
         left join VenCliente on VenFactura.VenClienteId = VenCliente.Id
         left join GenPersona on VenCliente.GenPersonaId =  GenPersona.Id
         left join VenCaja on VenDevolucion.VenCajaId = VenCaja.Id
-        where VenDevolucion.Id = '$IdDevolucion'
+        where VenDevolucion.ConsecutivoDevolucionSistema = '$NumeroDevolucion'
     ";
     return $sql;
   }
@@ -264,12 +270,14 @@
     TITULO: SC2_Devolucion_detalle
     DESAROLLADO POR: SERGIO COVA
   */
-  function SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,$flagTroquelNuevo){
+  function SC2_Devolucion_detalle($SedeConnection,$NumeroDevolucion,$flagTroquelNuevo){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
-    $sql = SC2Q_Devolucion_info($IdDevolucion);
+    $sql = SC2Q_Devolucion_info($NumeroDevolucion);
     $result = sqlsrv_query($conn,$sql);
     $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
+    $IdDevolucion = $row['Id'];
+    $_GET['IdDevolucion'] = $IdDevolucion;
 
     echo '
     <div class="input-group md-form form-sm form-1 pl-0 CP-stickyBar">
@@ -473,7 +481,7 @@
     TITULO: SC2_Actualizar_Troquel
     DESAROLLADO POR: SERGIO COVA
   */
-  function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles,$Modalidad,$Arra_Troqueles_Anteriores){
+  function SC2_Actualizar_Troquel($SedeConnection,$IdDevolucion, $NumeroDevolucion,$Arr_Articulos,$Arr_Lotes,$Arra_Troqueles,$Modalidad,$Arra_Troqueles_Anteriores){
 
     $conn = FG_Conectar_Smartpharma($SedeConnection);
 
@@ -513,7 +521,7 @@
     }
 
     echo($msn);
-    SC2_Devolucion_detalle($SedeConnection,$IdDevolucion,false);
+    SC2_Devolucion_detalle($SedeConnection,$NumeroDevolucion,false);
   }
   /**********************************************************************************/
   /*

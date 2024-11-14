@@ -6,7 +6,7 @@
 
 @section('content')
     @php
-        
+
     @endphp
 	<!-- Modal Guardar -->
 	@if (session('Saved'))
@@ -82,7 +82,7 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
-	        <td style="width:10%;" align="center">				
+	        <td style="width:10%;" align="center">
 	        </td>
 	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
@@ -96,7 +96,7 @@
 	    </tr>
 	</table>
 	<br/>
-    <div class="col-12">                        
+    <div class="col-12">
         <form action="{{route("cajerosTransaccionales2")}}" method="POST">
             @csrf
             <div class="row">
@@ -112,7 +112,7 @@
                   @if($sedeUsuario=="GRUPO P, C.A")
                     <label for="">Sede: </label>
                     <select class="form-control my-0 py-1" name="sede" id="sede">
-                      <option  >Seleccione una sede</option>					  
+                      <option  >Seleccione una sede</option>
                       <option value="FTN" {{ ( $sede == "FTN") ? 'selected' : '' }}>FTN</option>
                       <option value="FAU" {{ ( $sede == "FAU") ? 'selected' : '' }}>FAU</option>
                       <option value="FLL" {{ ( $sede == "FLL") ? 'selected' : '' }}>FLL</option>
@@ -120,6 +120,8 @@
                       <option value="KDI" {{ ( $sede == "KDI") ? 'selected' : '' }}>KDI</option>
                       <option value="FEC" {{ ( $sede == "FEC") ? 'selected' : '' }}>FEC</option>
 					  <option value="KD73" {{ ( $sede == "KD73") ? 'selected' : '' }}>KD73</option>
+                      <option value="FLF" {{ ( $sede == "FLF") ? 'selected' : '' }}>FLF</option>
+                      <option value="CDD" {{ ( $sede == "CDD") ? 'selected' : '' }}>CDD</option>
                     </select>
                   @endif
                 </div>
@@ -130,35 +132,35 @@
                 </div>
             </div>
         </form>
-    </div>  
+    </div>
     <br>
-    <div class="row">    
+    <div class="row">
       @if(isset($mensaje))
         <div class="col-12">
           <div class="alert alert-danger">{{$mensaje}} </div>
         </div>
       @endif
     </div>
-    
+
 	<table class="table table-striped table-borderless col-12 sortable" id="myTable">
 	  	<thead class="thead-dark">
 		    <tr>
 		      	<th scope="col" class="CP-sticky">Numero</th>
-                <th scope="col" class="CP-sticky">Sede</th>                
-                <th scope="col" class="CP-sticky">Cajero</th>                
+                <th scope="col" class="CP-sticky">Sede</th>
+                <th scope="col" class="CP-sticky">Cajero</th>
                 <th scope="col" class="CP-sticky">Total Factura (Bs)</th>
                 <th scope="col" class="CP-sticky">Total Factura ($)</th>
                 <th scope="col" class="CP-sticky">Total Pagado (Bs)</th>
                 <th scope="col" class="CP-sticky">Total Pagado ($)</th>
                 <th scope="col" class="CP-sticky">Cantidad Errores</th>
-                
+
 		    </tr>
 	  	</thead>
-	  	<tbody>       
-        
+	  	<tbody>
+
         @if(isset($arreglo))
-          @foreach($arreglo as $vuelto)                  
-              <tr>                
+          @foreach($arreglo as $vuelto)
+              <tr>
                     <td class="text-center">{{$vuelto["registro"] }}</td>
                     <td class="text-center">{{$vuelto["Sede"] }}</td>
                     <td class="text-center">
@@ -168,15 +170,15 @@
 							<input name="fecha_ini" type="hidden" value="{{$fini}}">
 							<input name="fecha_fin" type="hidden" value="{{$ffin}}">
 							<input name="sede" type="hidden" value="{{$sede}}">
-			
+
 							<button class="btn btn-link" type="submit" >{{$vuelto["nombreCajeroFactura"] }}</button>
-						</form>                        
-                    </td>                      
-                    <td class="text-center">{{$vuelto["TotalAcumuladoBs"] }} Bs.</td>                                
-                    <td class="text-center">$. {{$vuelto["TotalAcumuladoDolar"] }}</td> 
-                    <td class="text-center">{{$vuelto["TotalPagadoBs"] }} Bs.</td> 
-                    <td class="text-center">$. {{$vuelto["TotalPagadoDolar"] }}</td>                                    
-                    <td class="text-center">{{$vuelto["cantidadPagoMovil"] }}</td>                                      
+						</form>
+                    </td>
+                    <td class="text-center">{{$vuelto["TotalAcumuladoBs"] }} Bs.</td>
+                    <td class="text-center">$. {{$vuelto["TotalAcumuladoDolar"] }}</td>
+                    <td class="text-center">{{$vuelto["TotalPagadoBs"] }} Bs.</td>
+                    <td class="text-center">$. {{$vuelto["TotalPagadoDolar"] }}</td>
+                    <td class="text-center">{{$vuelto["cantidadPagoMovil"] }}</td>
               </tr>
           @endforeach
         @endif

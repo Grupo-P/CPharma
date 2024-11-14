@@ -147,12 +147,26 @@ class ReportesController extends Controller
                     INNER JOIN VenCajero ON VenFactura.Auditoria_Usuario = VenCajero.CodigoUsuarioCaja
                     INNER JOIN GenPersona ON VenCajero.GenPersonaId = GenPersona.Id
                     LEFT JOIN VenDevolucion ON VenDevolucion.VenFacturaId = VenFactura.Id
-                    WHERE 
+                    WHERE
                         InvCodigoBarra.CodigoBarra = '".$codigoBarra."' AND
                         (VenFactura.FechaDocumento >= '".$fechaInicio."' AND VenFactura.FechaDocumento < '".$fechaFinal."') AND
-                        VenFactura.estadoFactura = 2 AND VenDevolucion.Id IS NULL
-                    GROUP BY 
+                        VenFactura.estadoFactura = 2
+                    GROUP BY
                         VenFactura.Auditoria_Usuario, InvArticulo.CodigoArticulo, InvCodigoBarra.CodigoBarra, InvArticulo.Descripcion, VenFactura.Id
+                ";
+
+                $sqlDevoluciones = "SELECT
+                        InvArticulo.CodigoArticulo AS ARTICULO,
+                        VenDevolucion.Auditoria_Usuario AS USUARIO,
+                        CAST(SUM(VenDevoluciondetalle.cantidad) AS DECIMAL(18,0)) AS CANTIDAD
+                    from VenDevolucion, VenDevolucionDetalle
+                    INNER JOIN InvCodigoBarra ON VenDevolucionDetalle.InvArticuloId = InvCodigoBarra.InvArticuloId
+                    INNER JOIN InvArticulo ON InvCodigoBarra.InvArticuloId = InvArticulo.Id
+                    where
+                    VenDevolucion.id = VenDevolucionDetalle.VenDevolucionId
+                    AND VenDevolucion.FechaDocumento>= '".$fechaInicio."' AND VenDevolucion.FechaDocumento<= '".$fechaFinal."'
+                    AND InvCodigoBarra.CodigoBarra = '".$codigoBarra."'
+                    GROUP BY VenDevolucion.Auditoria_Usuario,  InvArticulo.CodigoArticulo
                 ";
 
                 $result = sqlsrv_query($conn,$sqlFacturas,[],['QueryTimeout'=>7200]);
@@ -165,6 +179,15 @@ class ReportesController extends Controller
 
                     if(array_search($row['CODIGO_BARRA'], $codigosConVenta) === false) {
                         array_push($codigosConVenta,$row['CODIGO_BARRA']);
+                    }
+                }
+
+                $result = sqlsrv_query($conn,$sqlDevoluciones,[],['QueryTimeout'=>7200]);
+                while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
+                    $usuario = trim($row['USUARIO']);
+
+                    if(isset($registrosCajeros[$usuario])) {
+                        $registrosCajeros[$usuario] = $this->analizarDevolucion($row, $registrosCajeros[$usuario] );
                     }
                 }
             }
@@ -247,7 +270,24 @@ class ReportesController extends Controller
             )
         ];
     }
-    
+
+    private function analizarDevolucion($row, array $registro) {
+        $articuloBuscar = $row['ARTICULO'];
+        $cantidadDev = $row['CANTIDAD'];
+        $articulos = $registro['articulos'] ?? [];
+        $nuevoRegistro = $registro;
+
+        foreach ($articulos as $key => $articulo) {
+            if($articulo['codigo'] == $articuloBuscar) {
+				$monto = $articulo['monto'] / $articulo['cantidad'];
+                $nuevoRegistro['articulos'][$key]['cantidad'] -= $cantidadDev;
+				$nuevoRegistro['articulos'][$key]['monto'] -= $monto * $cantidadDev;
+            }
+        }
+
+        return $nuevoRegistro;
+    }
+
     private function obtener_arrayCodigos($file)
     {
         // Leer Excel

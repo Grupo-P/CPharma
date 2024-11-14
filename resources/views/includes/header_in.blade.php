@@ -465,6 +465,14 @@
       </li>
 
       <li class="nav-item">
+        <a class="nav-link CP-Links-Menu" href="{{ url('/seccion1/') }}">
+          <span data-feather="home"></span>
+          <i class="fas fa-stamp"></i>
+          Troquel (Cliente)<span class="sr-only">(current)</span>
+        </a>
+      </li>
+      
+      <li class="nav-item">
         <a class="nav-link CP-Links-Menu" href="{{ url('/seccion2/') }}">
           <span data-feather="home"></span>
           <i class="fas fa-stamp"></i>

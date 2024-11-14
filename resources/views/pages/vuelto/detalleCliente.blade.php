@@ -6,7 +6,7 @@
 
 @section('content')
     @php
-        
+
     @endphp
 	<!-- Modal Guardar -->
 	@if (session('Saved'))
@@ -82,7 +82,7 @@
 	<hr class="row align-items-start col-12">
 	<table style="width:100%;" class="CP-stickyBar">
 	    <tr>
-	        <td style="width:10%;" align="center">				
+	        <td style="width:10%;" align="center">
 	        </td>
 	        <td style="width:90%;">
 	        	<div class="input-group md-form form-sm form-1 pl-0">
@@ -101,7 +101,7 @@
             <div class="alert alert-info" style="font-weight:bold;">
                 <div class="row">
                     <div class="col-6 text-center">
-                        Desde: {{date("d-m-Y",strtotime($fini))}} 
+                        Desde: {{date("d-m-Y",strtotime($fini))}}
                     </div>
                     <div class="col-6 text-center">
                         Hasta: {{date("d-m-Y",strtotime($ffin))}}
@@ -113,7 +113,7 @@
                Día: {{date("d-m-Y")}}
             </div>
         @endif
-                        
+
         <form action="{{route("detalleClientesTransaccionales2")}}" method="POST">
             @csrf
             <input type="hidden" name="cliente" value="{{$cliente}}">
@@ -130,7 +130,7 @@
                   @if($sedeUsuario=="GRUPO P, C.A")
                     <label for="">Sede: </label>
                     <select class="form-control my-0 py-1" name="sede" id="sede">
-                      <option  >Seleccione una sede</option>                      
+                      <option  >Seleccione una sede</option>
                       <option value="FTN" {{ ( $sede == "FTN") ? 'selected' : '' }}>FTN</option>
                       <option value="FAU" {{ ( $sede == "FAU") ? 'selected' : '' }}>FAU</option>
                       <option value="FLL" {{ ( $sede == "FLL") ? 'selected' : '' }}>FLL</option>
@@ -138,6 +138,8 @@
                       <option value="KDI" {{ ( $sede == "KDI") ? 'selected' : '' }}>KDI</option>
                       <option value="FEC" {{ ( $sede == "FEC") ? 'selected' : '' }}>FEC</option>
                       <option value="KD73" {{ ( $sede == "KD73") ? 'selected' : '' }}>KD73</option>
+                      <option value="FLF" {{ ( $sede == "FLF") ? 'selected' : '' }}>FLF</option>
+                      <option value="CDD" {{ ( $sede == "CDD") ? 'selected' : '' }}>CDD</option>
                     </select>
                   @endif
                 </div>
@@ -148,9 +150,9 @@
                 </div>
             </div>
         </form>
-    </div>  
+    </div>
     <br>
-    <div class="row">    
+    <div class="row">
       @if(isset($mensaje))
         <div class="col-12">
           <div class="alert alert-danger">{{$mensaje}} </div>
@@ -170,7 +172,7 @@
                 <th scope="col" class="CP-sticky">Total Factura (Bs)</th>
                 <th scope="col" class="CP-sticky">Total Factura ($)</th>
                 <th scope="col" class="CP-sticky">Monto Pagado Factura (Bs)</th>
-                <th scope="col" class="CP-sticky">Monto Pagado Factura ($)</th>	      	
+                <th scope="col" class="CP-sticky">Monto Pagado Factura ($)</th>
                 <th scope="col" class="CP-sticky">Caja Venta</th>
                 <th scope="col" class="CP-sticky">Cajero Venta</th>
                 <th scope="col" class="CP-sticky">Fecha / Hora Pago Movil</th>
@@ -188,8 +190,8 @@
                 <th scope="col" class="CP-sticky">Cajero devolucion</th>
 		    </tr>
 	  	</thead>
-	  	<tbody>       
-        
+	  	<tbody>
+
         @if(isset($historialvueltos))
           @foreach($historialvueltos as $vuelto)
                   @php
@@ -209,41 +211,41 @@
                   }
                   @endphp
               <tr style="{{$color}}">
-                      
+
                       <td>{{$vuelto->get("id")}}</td>
                       <td>{{$vuelto->get("sede")}}</td>
                       <td>{{$vuelto->get("fecha_hora_factura")}}</td>
                       <td>{{$vuelto->get("numero_factura")}}</td>
-                      <td>{{$vuelto->get("cedula_cliente_factura")}}</td>                                
-                      <td>{{$vuelto->get("nombre_cliente")}}</td>                
-                      <td>{{$vuelto->get("telefono_cliente_factura")}}</td>                
+                      <td>{{$vuelto->get("cedula_cliente_factura")}}</td>
+                      <td>{{$vuelto->get("nombre_cliente")}}</td>
+                      <td>{{$vuelto->get("telefono_cliente_factura")}}</td>
                       <td>{{number_format($vuelto->get("total_factura"), 2, ',', '.')}}</td>
                       <td>{{number_format($vuelto->get("total_factura_dolar"), 2, ',', '.')}}</td>
                       <td>{{number_format($vuelto->get("monto_pagado_factura"), 2, ',', '.')}}</td>
                       <td>{{number_format($vuelto->get("monto_pagado_factura_dolar"), 2, ',', '.')}}</td>
-                      <td>{{$vuelto->get("caja")}}</td>                
+                      <td>{{$vuelto->get("caja")}}</td>
                       <td>{{$vuelto->get("cajero_venta")}}</td>
                       <td>{{$vuelto->get("fecha_hora")}}</td>
                       <td>{{$vuelto->get("banco_cliente")}}</td>
                       <td>{{number_format($vuelto->get("monto"), 2, ',', '.')}}</td>
                       <td>{{number_format($vuelto->get("monto_dolar"), 2, ',', '.')}}</td>
                       <td>{{$vuelto->get("cedula_cliente")}}</td>
-                      <td>{{$vuelto->get("telefono_pago_movil")}}</td>                
+                      <td>{{$vuelto->get("telefono_pago_movil")}}</td>
                       <td style="{{$font}}">{{$vuelto->get("estatus")}}</td>
                       <td>
                           @if($vuelto->get("estatus")=="Error")
-                              N/A                
+                              N/A
                           @else
-                              {{$vuelto->get("confirmacion_banco")}}                        
+                              {{$vuelto->get("confirmacion_banco")}}
                           @endif
-                          
+
                       </td>
                       <td style="{{$font}}">
                           @if($vuelto->get("estatus")=="Error")
                               {{$vuelto->get("motivo_error")}}
                           @else
                               Aprobado
-                          @endif                    
+                          @endif
                       </td>
                       <td>{{$vuelto->get("nro_devolucion")}}</td>
                       <td>{{$vuelto->get("fecha_devolucion")}}</td>

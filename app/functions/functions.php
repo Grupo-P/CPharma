@@ -153,6 +153,16 @@
                 return 'FEC';
             break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE DE FLF
+            case '28':
+                return 'FLF';
+            break;
+        //FIN BLOQUE DE FLF
+        //INICIO BLOQUE DE CDD
+        case '10':
+            return 'CDD';
+        break;
+        //FIN BLOQUE DE CDD
         //INICIO BLOQUE DE KD73
             case '60':
                 return 'KD73';
@@ -315,6 +325,18 @@
                 return $sede;
             break;
         //FIN BLOQUE FEC
+        //INICIO BLOQUE FLF
+            case 'FLF':
+                $sede = SedeFLF;
+                return $sede;
+            break;
+        //FIN BLOQUE FLF
+        //INICIO BLOQUE CDD
+        case 'CDD':
+            $sede = SedeCDD;
+            return $sede;
+        break;
+        //FIN BLOQUE CDD
         //INICIO BLOQUE KD73
             case 'KD73':
                 $sede = SedeKD73;
@@ -644,6 +666,30 @@
                 return $conn;
             break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE FLF
+            case 'FLF':
+                $connectionInfo = array(
+                    "Database"=>nameFLF,
+                    "UID"=>userFLF,
+                    "PWD"=>passFLF
+                );
+                $conn = sqlsrv_connect(serverFLF,$connectionInfo);
+                return $conn;
+            break;
+        //FIN BLOQUE DE FLF
+
+        //INICIO BLOQUE CDD
+        case 'CDD':
+            $connectionInfo = array(
+                "Database"=>nameCDD,
+                "UID"=>userCDD,
+                "PWD"=>passCDD
+            );
+            $conn = sqlsrv_connect(serverCDD,$connectionInfo);
+            return $conn;
+        break;
+        //FIN BLOQUE DE CDD
+
         //INICIO BLOQUE KD73
             case 'KD73':
                 $connectionInfo = array(
@@ -1000,6 +1046,30 @@
             return $conn;
         break;
         //FIN BLOQUE DE FEC
+        //INICIO BLOQUE DE FLF
+        case 'FLF':
+            $connectionInfo = array(
+                "Database"=>"Mod_Atte_Cliente",
+                "UID"=>userFLF,
+                "PWD"=>passFLF
+            );
+            $conn = sqlsrv_connect(serverFLF,$connectionInfo);
+            return $conn;
+        break;
+        //FIN BLOQUE DE FLF
+
+        //INICIO BLOQUE DE CDD
+        case 'CDD':
+            $connectionInfo = array(
+                "Database"=>"Mod_Atte_Cliente",
+                "UID"=>userCDD,
+                "PWD"=>passCDD
+            );
+            $conn = sqlsrv_connect(serverCDD,$connectionInfo);
+            return $conn;
+        break;
+        //FIN BLOQUE DE CDD
+
         //INICIO BLOQUE DE KD73
             case 'KD73':
                 $connectionInfo = array(
@@ -1070,7 +1140,7 @@
         DESARROLLADO POR: SERGIO COVA
     */
     function FG_Producto_Gravado($IsIVA){
-        if($IsIVA == 1) {
+        if($IsIVA == FG_ID_Impuesto_Sede()) {
             $EsGravado = 'SI';
         }
         else {
@@ -1078,6 +1148,17 @@
         }
         return $EsGravado;
     }
+
+    function FG_ID_Impuesto_Sede(){
+        $sede = FG_Mi_Ubicacion();
+
+        if($sede == 'CDD'){
+            return 3; //Este es el ID FinConceptoImpto para CDD
+        }else{
+            return 1; //Este es el ID FinConceptoImpto para el resto de sedes
+        }
+    }
+
     /**********************************************************************************/
     /*
         TITULO: FG_Tipo_Producto
@@ -1621,7 +1702,7 @@
         DESARROLLADO POR: SERGIO COVA
      */
     function FG_Precio_Calculado_Alfa($UtilidadArticulo,$UtilidadCategoria,$IsIVA,$PrecioCompraBruto){
-            if($IsIVA==1){
+            if($IsIVA==FG_ID_Impuesto_Sede()){
                 /*Caso 1: Aplica Impuesto*/
                 if($UtilidadArticulo!=1) {
                     $PrecioCalculado = ($PrecioCompraBruto/$UtilidadArticulo)*Impuesto;
@@ -2094,6 +2175,12 @@
                 $Flag = TRUE;
             break;
             case 'FEC':
+                $Flag = TRUE;
+            break;
+            case 'FLF':
+                $Flag = TRUE;
+            break;
+            case 'CDD':
                 $Flag = TRUE;
             break;
             case 'KD73':
@@ -3546,6 +3633,16 @@
                 $dominio = 'http://cpharmafec.com/';
                 return $dominio;
             break;
+            case 'FLF':
+                $dominio = 'http://cpharmaflf.com/';
+                return $dominio;
+            break;
+
+            case 'CDD':
+                $dominio = 'http://cpharmacdd.com/';
+                return $dominio;
+            break;
+
             case 'KD73':
                 $dominio = 'http://cpharmakd73.com/';
                 return $dominio;
@@ -4785,6 +4882,14 @@
         $nombre = 'FARMACIA EL CALLEJON, C.A.';
     }
 
+    if ($sede == 'FLF') {
+        $nombre = 'FARMACIA LA FUSTA';
+    }
+
+    if ($sede == 'CDD') {
+        $nombre = 'CENTRO DE DISTRIBUCION GP';
+    }
+
     if ($sede == 'KD73') {
         return [];
     }
@@ -4910,6 +5015,40 @@
     }
 
     try {
+        $flf = DB::connection('flf')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $flf);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
+        $cdd = DB::connection('cdd')->select("
+            SELECT
+                traslados_detalle.codigo_barra
+            FROM
+                traslados_detalle
+            WHERE
+                $where
+            GROUP BY
+                traslados_detalle.codigo_barra;
+        ");
+
+        $array = array_merge($array, $cdd);
+    } catch (Exception $excepcion) {
+
+    }
+
+    try {
         $kd73 = DB::connection('kd73')->select("
             SELECT
                 traslados_detalle.codigo_barra
@@ -4953,6 +5092,18 @@
 
     if ($sede == 'FSM') {
         return 4;
+    }
+
+    if ($sede == 'FEC') {
+        return 5;
+    }
+
+    if ($sede == 'FLF') {
+        return 6;
+    }
+
+    if ($sede == 'CDD') {
+        return 7;
     }
   }
 

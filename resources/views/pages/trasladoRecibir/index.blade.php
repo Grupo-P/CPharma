@@ -127,6 +127,16 @@
                             echo 'FARMACIA EL CALLEJON, C.A.';
                             $sede = 'FEC';
                         }
+
+                        if ($_SERVER['HTTP_HOST'] == 'cpharmaflf.com') {
+                            echo 'FARMACIA LA FUSTA';
+                            $sede = 'FLF';
+                        }
+
+                        if ($_SERVER['HTTP_HOST'] == 'cpharmacdd.com') {
+                            echo 'CENTRO DE DISTRIBUCION GP';
+                            $sede = 'CDD';
+                        }
                     @endphp
                 </td>
                 </tr>
@@ -152,6 +162,10 @@
 
                         if ($clave == 'FEC') {
                             echo 'FARMACIA EL CALLEJON, C.A.';
+                        }
+
+                        if ($clave == 'FLF') {
+                            echo 'FARMACIA LA FUSTA';
                         }
                     @endphp
                 </td>

@@ -575,6 +575,12 @@ Route::resource('efectivoFLF', 'ContPagoEfectivoFLFController');
 Route::get('/efectivoFLF/soporte/{id}', 'ContPagoEfectivoFLFController@soporte');
 Route::get('/contabilidad/diferidosFLF', 'ContPagoEfectivoFLFController@diferidos')->name('contabilidad.diferidosFLF');
 
+// CDD
+Route::post('/efectivoCDD/validar', 'ContPagoEfectivoCDDController@validar');
+Route::resource('efectivoCDD', 'ContPagoEfectivoCDDController');
+Route::get('/efectivoCDD/soporte/{id}', 'ContPagoEfectivoCDDController@soporte');
+Route::get('/contabilidad/diferidosCDD', 'ContPagoEfectivoCDDController@diferidos')->name('contabilidad.diferidosCDD');
+
 // PAG
 Route::post('/efectivoPAG/validar', 'ContPagoEfectivoPAGController@validar');
 Route::resource('efectivoPAG', 'ContPagoEfectivoPAGController');
@@ -617,6 +623,12 @@ Route::post('/bolivaresFLF/validar', 'ContPagoBolivaresFLFController@validar');
 Route::resource('bolivaresFLF', 'ContPagoBolivaresFLFController');
 Route::get('/bolivaresFLF/soporte/{id}', 'ContPagoBolivaresFLFController@soporte');
 Route::get('/contabilidad/diferidosBolivaresFLF', 'ContPagoBolivaresFLFController@diferidos')->name('contabilidad.diferidosBolivaresFLF');
+
+// CDD
+Route::post('/bolivaresCDD/validar', 'ContPagoBolivaresCDDController@validar');
+Route::resource('bolivaresCDD', 'ContPagoBolivaresCDDController');
+Route::get('/bolivaresCDD/soporte/{id}', 'ContPagoBolivaresCDDController@soporte');
+Route::get('/contabilidad/diferidosBolivaresCDD', 'ContPagoBolivaresCDDController@diferidos')->name('contabilidad.diferidosBolivaresCDD');
 
 // PAG
 Route::post('/bolivaresPAG/validar', 'ContPagoBolivaresPAGController@validar');
