@@ -518,6 +518,81 @@
         </div>
     </div>
 
+    {{-- CDD --}}
+    <div class="card-deck">
+        <div class="card border-primary mb-3">
+            <div class="card-body text-left bg-primary">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Saldo disponible CDD: ${{ number_format($dolaresCDD->saldo_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($dolaresCDD) ? $dolaresCDD->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-primary text-right">
+                <a href="/efectivoCDD" class="btn btn-outline-primary btn-sm">Visualizar</a>
+            </div>
+        </div>
+
+        <div class="card border-primary mb-3">
+            <div class="card-body text-left bg-primary">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Saldo disponible CDD: Bs.S. {{ number_format($bolivaresCDD->saldo_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($bolivaresCDD) ? $bolivaresCDD->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-primary text-right">
+                <a href="/bolivaresCDD" class="btn btn-outline-primary btn-sm">Visualizar</a>
+            </div>
+        </div>
+
+        <div class="card border-primary mb-3">
+            <div class="card-body text-left bg-primary">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Diferido en $ CDD: {{ number_format($diferidoDolaresCDD->diferido_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoDolaresCDD) ? $diferidoDolaresCDD->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-primary text-right">
+                <a href="/contabilidad/diferidosCDD" class="btn btn-outline-primary btn-sm">Visualizar</a>
+            </div>
+        </div>
+
+        <div class="card border-primary mb-3">
+            <div class="card-body text-left bg-primary">
+                <h2 class="card-title">
+                    <span class="card-text text-white">
+                        <i class="fas fa-balance-scale"></i>
+                        Diferido en Bs.S. CDD: {{ number_format($diferidoBolivaresCDD->diferido_actual, 2, ',', '.') }}
+                    </span>
+                </h2>
+                <p class="card-text text-white">
+                    Hora y fecha actual: {{ date_create()->format('d/m/Y h:i A') }} <br>
+                    Último movimiento registrado: {{ ($diferidoBolivaresCDD) ? $diferidoBolivaresCDD->created_at->format('d/m/Y h:i A') : 'No hay movimientos' }}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent border-primary text-right">
+                <a href="/contabilidad/diferidosBolivaresCDD" class="btn btn-outline-primary btn-sm">Visualizar</a>
+            </div>
+        </div>
+    </div>
+
     {{-- PAG --}}
     <div class="card-deck">
         <div class="card border-danger mb-3">
@@ -663,6 +738,10 @@
                                     Pago dólares efectivo FLF
                                 @endif
 
+                                @if(get_class($pago) == 'compras\ContPagoEfectivoCDD')
+                                    Pago dólares efectivo CDD
+                                @endif
+
                                 @if(get_class($pago) == 'compras\ContPagoEfectivoPAG')
                                     Pago dólares efectivo PAG
                                 @endif
@@ -690,6 +769,10 @@
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFLF')
                                     Pago efectivo bolívares FLF
+                                @endif
+
+                                @if(get_class($pago) == 'compras\ContPagoBolivaresCDD')
+                                    Pago efectivo bolívares CDD
                                 @endif
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresPAG')
@@ -805,6 +888,10 @@
                                     Pago dólares efectivo FLF
                                 @endif
 
+                                @if(get_class($pago) == 'compras\ContPagoEfectivoCDD')
+                                    Pago dólares efectivo CDD
+                                @endif
+
                                 @if(get_class($pago) == 'compras\ContPagoEfectivoPAG')
                                     Pago dólares efectivo PAG
                                 @endif
@@ -832,6 +919,10 @@
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresFLF')
                                     Pago bolívares efectivo FLF
+                                @endif
+
+                                @if(get_class($pago) == 'compras\ContPagoBolivaresCDD')
+                                    Pago bolívares efectivo CDD
                                 @endif
 
                                 @if(get_class($pago) == 'compras\ContPagoBolivaresPAG')
@@ -908,6 +999,10 @@
                                 Pago dólares efectivo FLF
                             @endif
 
+                            @if(get_class($conciliacion) == 'compras\ContPagoEfectivoCDD')
+                                Pago dólares efectivo CDD
+                            @endif
+
                             @if(get_class($conciliacion) == 'compras\ContPagoEfectivoPAG')
                                 Pago dólares efectivo PAG
                             @endif
@@ -935,6 +1030,10 @@
 
                             @if(get_class($conciliacion) == 'compras\ContPagoBolivaresFLF')
                                 Pago bolívares efectivo FLF
+                            @endif
+
+                            @if(get_class($conciliacion) == 'compras\ContPagoBolivaresCDD')
+                                Pago bolívares efectivo CDD
                             @endif
 
                             @if(get_class($conciliacion) == 'compras\ContPagoBolivaresPAG')
@@ -1126,6 +1225,10 @@
                                     Ingreso dólares efectivo FLF
                                 @endif
 
+                                @if(get_class($movimiento) == 'compras\ContPagoEfectivoCDD')
+                                    Ingreso dólares efectivo CDD
+                                @endif
+
                                 @if(get_class($movimiento) == 'compras\ContPagoEfectivoPAG')
                                     Ingreso dólares efectivo PAG
                                 @endif
@@ -1153,6 +1256,10 @@
 
                                 @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLF')
                                     Ingreso efectivo bolívares FLF
+                                @endif
+
+                                @if(get_class($movimiento) == 'compras\ContPagoBolivaresCDD')
+                                    Ingreso efectivo bolívares CDD
                                 @endif
 
                                 @if(get_class($movimiento) == 'compras\ContPagoBolivaresPAG')
@@ -1187,6 +1294,10 @@
                                         Pago dólares efectivo FLF
                                     @endif
 
+                                    @if(get_class($movimiento) == 'compras\ContPagoEfectivoCDD')
+                                        Pago dólares efectivo CDD
+                                    @endif
+
                                     @if(get_class($movimiento) == 'compras\ContPagoEfectivoPAG')
                                         Pago dólares efectivo PAG
                                     @endif
@@ -1214,6 +1325,10 @@
 
                                     @if(get_class($movimiento) == 'compras\ContPagoBolivaresFLF')
                                         Pago efectivo bolívares FLF
+                                    @endif
+
+                                    @if(get_class($movimiento) == 'compras\ContPagoBolivaresCDD')
+                                        Pago efectivo bolívares CDD
                                     @endif
 
                                     @if(get_class($movimiento) == 'compras\ContPagoBolivaresPAG')

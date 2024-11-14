@@ -285,12 +285,16 @@ class ArticulosVencer extends Command
         $conectividad_fll = FG_Validar_Conectividad('FLL');
         $conectividad_fsm = FG_Validar_Conectividad('FSM');
         $conectividad_fec = FG_Validar_Conectividad('FEC');
+        $conectividad_flf = FG_Validar_Conectividad('FLF');
+        $conectividad_cdd = FG_Validar_Conectividad('CDD');
 
         $connFAU = FG_Conectar_Smartpharma('FAU');
         $connFTN = FG_Conectar_Smartpharma('FTN');
         $connFLL = FG_Conectar_Smartpharma('FLL');
         $connFSM = FG_Conectar_Smartpharma('FSM');
         $connFEC = FG_Conectar_Smartpharma('FEC');
+        $connFLF = FG_Conectar_Smartpharma('FLF');
+        $connCDD = FG_Conectar_Smartpharma('CDD');
 
         while($row = sqlsrv_fetch_array($result,SQLSRV_FETCH_ASSOC)) {
             $Existencia = $row["Existencia"];
@@ -359,11 +363,15 @@ class ArticulosVencer extends Command
             $descripcion_sede_2 = '-';
             $descripcion_sede_3 = '-';
             $descripcion_sede_4 = '-';
+            $descripcion_sede_5 = '-';
+            $descripcion_sede_6 = '-';
 
             $existencia_sede_1 = '-';
             $existencia_sede_2 = '-';
             $existencia_sede_3 = '-';
             $existencia_sede_4 = '-';
+            $existencia_sede_5 = '-';
+            $existencia_sede_6 = '-';
 
             if (isset($SedeConnection) & ($SedeConnection == 'FAU' || $SedeConnection == 'DBs')) {
                 if ($conectividad_ftn == 1) {
@@ -401,6 +409,24 @@ class ArticulosVencer extends Command
 
                     $descripcion_sede_4 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                     $existencia_sede_4 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
+
+                if ($conectividad_flf == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connFLF,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_5 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_5 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
+
+                if ($conectividad_cdd == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connCDD,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_6 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_6 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
                 }
 
             }
@@ -441,6 +467,24 @@ class ArticulosVencer extends Command
                     $descripcion_sede_4 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                     $existencia_sede_4 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
                 }
+
+                if ($conectividad_flf == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connFLF,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_5 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_5 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
+
+                if ($conectividad_cdd == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connCDD,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_6 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_6 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
             }
 
             if (isset($SedeConnection) & $SedeConnection == 'FLL') {
@@ -478,6 +522,24 @@ class ArticulosVencer extends Command
 
                         $descripcion_sede_4 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                         $existencia_sede_4 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                    }
+
+                    if ($conectividad_flf == 1) {
+                        $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                        $result3 = sqlsrv_query($connFLF,$sql3);
+                        $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                        $descripcion_sede_5 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                        $existencia_sede_5 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                    }
+
+                    if ($conectividad_cdd == 1) {
+                        $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                        $result3 = sqlsrv_query($connCDD,$sql3);
+                        $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                        $descripcion_sede_6 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                        $existencia_sede_6 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
                     }
               }
 
@@ -517,6 +579,24 @@ class ArticulosVencer extends Command
                         $descripcion_sede_4 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                         $existencia_sede_4 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
                     }
+
+                    if ($conectividad_flf == 1) {
+                        $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                        $result3 = sqlsrv_query($connFLF,$sql3);
+                        $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                        $descripcion_sede_5 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                        $existencia_sede_5 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                    }
+
+                    if ($conectividad_cdd == 1) {
+                        $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                        $result3 = sqlsrv_query($connCDD,$sql3);
+                        $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                        $descripcion_sede_6 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                        $existencia_sede_6 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                    }
               }
 
               if (isset($SedeConnection) & $SedeConnection == 'FEC') {
@@ -555,7 +635,137 @@ class ArticulosVencer extends Command
                        $descripcion_sede_4 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
                        $existencia_sede_4 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
                    }
-             }
+
+                   if ($conectividad_flf == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connFLF,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_5 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_5 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
+
+                if ($conectividad_cdd == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connCDD,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_6 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_6 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
+              }
+
+              if (isset($SedeConnection) & $SedeConnection == 'FLF') {
+                if ($conectividad_ftn == 1) {
+                   $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                   $result3 = sqlsrv_query($connFTN,$sql3);
+                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                   $descripcion_sede_1 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                   $existencia_sede_1 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                 }
+
+                 if ($conectividad_fau == 1) {
+                   $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                   $result3 = sqlsrv_query($connFAU,$sql3);
+                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                   $descripcion_sede_2 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                   $existencia_sede_2 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                 }
+
+                 if ($conectividad_fll == 1) {
+                   $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                   $result3 = sqlsrv_query($connFLL,$sql3);
+                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                   $descripcion_sede_3 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                   $existencia_sede_3 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                 }
+
+                   if ($conectividad_fsm == 1) {
+                       $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                       $result3 = sqlsrv_query($connFSM,$sql3);
+                       $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                       $descripcion_sede_4 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                       $existencia_sede_4 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                   }
+
+                   if ($conectividad_fec == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connFEC,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_5 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_5 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                  }
+
+                  if ($conectividad_cdd == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connCDD,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_6 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_6 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
+              }
+
+              if (isset($SedeConnection) & $SedeConnection == 'CDD') {
+                if ($conectividad_ftn == 1) {
+                   $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                   $result3 = sqlsrv_query($connFTN,$sql3);
+                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                   $descripcion_sede_1 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                   $existencia_sede_1 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                 }
+
+                 if ($conectividad_fau == 1) {
+                   $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                   $result3 = sqlsrv_query($connFAU,$sql3);
+                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                   $descripcion_sede_2 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                   $existencia_sede_2 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                 }
+
+                 if ($conectividad_fll == 1) {
+                   $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                   $result3 = sqlsrv_query($connFLL,$sql3);
+                   $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                   $descripcion_sede_3 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                   $existencia_sede_3 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                 }
+
+                   if ($conectividad_fsm == 1) {
+                       $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                       $result3 = sqlsrv_query($connFSM,$sql3);
+                       $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                       $descripcion_sede_4 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                       $existencia_sede_4 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                   }
+
+                   if ($conectividad_fec == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connFEC,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_5 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_5 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                  }
+
+                  if ($conectividad_flf == 1) {
+                    $sql3 = $this->R27_Q_Descripcion_Existencia_Articulo($CodigoBarra);
+                    $result3 = sqlsrv_query($connFLF,$sql3);
+                    $row3 = sqlsrv_fetch_array($result3,SQLSRV_FETCH_ASSOC);
+
+                    $descripcion_sede_6 = ($row3['descripcion']) ? FG_Limpiar_Texto($row3['descripcion']) : '-';
+                    $existencia_sede_6 = ($row3['existencia']) ? intval($row3['existencia']) : '-';
+                }
+              }
 
             $ultimo_proveedor_nombre = !is_null($row["UltimoProveedorNombre"]) ? $row["UltimoProveedorNombre"] : '-';
             $ultimo_proveedor_id = !is_null($row["UltimoProveedorID"]) ? $row["UltimoProveedorID"] : '-';
@@ -595,6 +805,10 @@ class ArticulosVencer extends Command
                     'existencia_sede_3' => $existencia_sede_3,
                     'descripcion_sede_4' => $descripcion_sede_4,
                     'existencia_sede_4' => $existencia_sede_4,
+                    'descripcion_sede_5' => $descripcion_sede_5,
+                    'existencia_sede_5' => $existencia_sede_5,
+                    'descripcion_sede_6' => $descripcion_sede_6,
+                    'existencia_sede_6' => $existencia_sede_6,
                     'created_at' => date('Y-m-d h:i:s'),
                     'updated_At' => date('Y-m-d h:i:s'),
                 ]);

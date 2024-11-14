@@ -53,6 +53,14 @@
                         echo 'FARMACIA EL CALLEJON, C.A.';
                     }
 
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmaflf.com') {
+                        echo 'CENTRO DE DISTRIBUCION GP';
+                    }
+
+                    if ($_SERVER['HTTP_HOST'] == 'cpharmacdd.com') {
+                        echo 'FARMACIA LA FUSTA';
+                    }
+
                     if ($_SERVER['HTTP_HOST'] == 'cpharmakdi.com') {
                         echo 'FARMACIAS KD EXPRESS, C.A.';
                     }

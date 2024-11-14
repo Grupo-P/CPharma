@@ -272,6 +272,22 @@
         echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('FEC').'</h6>';
       }
 
+      if(FG_Validar_Conectividad('FLF')==1){
+        echo'</br></br><h6 align="center">La informacion a continuacion proviene de: '.FG_Nombre_Sede('FLF').'</h6>';
+        R17_Tri_Tienda_Articulo_Detalle('FLF',$Valor,$FInicial,$FFinal,$DiasPedido,$Flag);
+      }
+      else{
+        echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('FLF').'</h6>';
+      }
+
+      if(FG_Validar_Conectividad('CDD')==1){
+        echo'</br></br><h6 align="center">La informacion a continuacion proviene de: '.FG_Nombre_Sede('CDD').'</h6>';
+        R17_Tri_Tienda_Articulo_Detalle('CDD',$Valor,$FInicial,$FFinal,$DiasPedido,$Flag);
+      }
+      else{
+        echo'</br></br><h6 align="center">No existe conectividad con la sede: '.FG_Nombre_Sede('CDD').'</h6>';
+      }
+
    }
   /********************************************************************************/
   /*
